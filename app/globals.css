@@ -2,32 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom color theme generator: https://zippystarter.com/tools/shadcn-ui-theme-generator */
+/* HEX: #124e34 */
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background: 154 100% 100%;
+  --foreground: 154 5% 10%;
+  --card: 154 50% 100%;
+  --card-foreground: 154 5% 15%;
+  --popover: 154 100% 100%;
+  --popover-foreground: 154 100% 10%;
+  --primary: 154 62% 19%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 154 30% 90%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 116 30% 95%;
+  --muted-foreground: 154 5% 40%;
+  --accent: 116 30% 90%;
+  --accent-foreground: 154 5% 15%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 154 5% 100%;
+  --border: 154 30% 82%;
+  --input: 154 30% 50%;
+  --ring: 154 62% 19%;
+  --radius: 0.5rem;
+}
+.dark {
+  --background: 154 50% 10%;
+  --foreground: 154 5% 100%;
+  --card: 154 50% 10%;
+  --card-foreground: 154 5% 100%;
+  --popover: 154 50% 5%;
+  --popover-foreground: 154 5% 100%;
+  --primary: 154 62% 19%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 154 30% 20%;
+  --secondary-foreground: 0 0% 100%;
+  /* --muted: 116 30% 25%; */
+  --muted: 116 30% 95%;
+  --muted-foreground: 154 5% 65%;
+  --accent: 116 30% 25%;
+  --accent-foreground: 154 5% 95%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 154 5% 100%;
+  --border: 154 30% 50%;
+  --input: 154 30% 50%;
+  --ring: 154 62% 19%;
+  --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  * {
+    @apply border-border;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  body {
+    @apply bg-background text-foreground;
   }
 }
