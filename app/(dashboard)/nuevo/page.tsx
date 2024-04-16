@@ -1,7 +1,12 @@
+import NewItemForm from "@/components/NewItemForm";
 import React from "react";
 
-const NewProductPage: React.FC = () => {
-  return <div>Nuevo producto</div>;
+const NewItemPage: React.FC = () => {
+  return (
+    <>
+      <NewItemForm />
+    </>
+  );
 };
 
-export default NewProductPage;
+export default NewItemPage;

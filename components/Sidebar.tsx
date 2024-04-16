@@ -19,9 +19,9 @@ const Sidebar: React.FC = () => {
             <Button asChild key={link.href} variant={pathname === link.href ? "default" : "link"}>
               <Link
                 href={link.href}
-                className="grid items-center grid-cols-[auto,1fr] px-2 xl:px-4 gap-x-2 xl:gap-x-4 text-primary"
+                className="grid items-center grid-cols-[1fr,2fr] px-2 xl:px-4 gap-x-2 xl:gap-x-4 text-primary"
               >
-                <div>{link.icon}</div>
+                <div className="justify-self-end">{link.icon}</div>
                 <span className="capitalize">{link.label}</span>
               </Link>
             </Button>

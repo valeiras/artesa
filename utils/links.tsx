@@ -1,4 +1,4 @@
-import { AreaChart, Apple, Milk, BadgePlus } from "lucide-react";
+import { AreaChart, Apple, Milk, BadgePlus, Tractor } from "lucide-react";
 
 type NavLink = {
   href: string;
@@ -9,8 +9,13 @@ type NavLink = {
 const links: NavLink[] = [
   {
     href: "/nuevo",
-    label: "Añadir elemento",
+    label: "Añadir artículo",
     icon: <BadgePlus />,
+  },
+  {
+    href: "/productores",
+    label: "Productores",
+    icon: <Tractor />,
   },
   {
     href: "/materias-primas",
