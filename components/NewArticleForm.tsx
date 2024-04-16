@@ -7,22 +7,22 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CustomFormCheckbox, CustomFormField, CustomFormSelect } from "./FormComponents";
-import { ItemCategory, createAndEditItemSchema, createAndEditItemType } from "@/utils/types";
+import { Category, createAndEditArticleSchema, CreateAndEditArticleType } from "@/utils/types";
 
-function NewItemForm() {
-  const form = useForm<createAndEditItemType>({
-    resolver: zodResolver(createAndEditItemSchema),
+function NewArticleForm() {
+  const form = useForm<CreateAndEditArticleType>({
+    resolver: zodResolver(createAndEditArticleSchema),
     defaultValues: {
-      itemName: "",
+      name: "",
       origin: "",
-      producer: "",
+      supplierId: 0,
       traceability: "",
-      category: ItemCategory.Commodity,
+      category: Category.Commodity,
       isSalable: false,
     },
   });
 
-  function onSubmit(values: createAndEditItemType) {
+  function onSubmit(values: CreateAndEditArticleType) {
     console.log(values);
   }
 
@@ -32,7 +32,7 @@ function NewItemForm() {
         <h2 className="font-semibold text-4xl mb-6">Nuevo artículo</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 items-end mb-8">
           <CustomFormField
-            name="itemName"
+            name="name"
             control={form.control}
             label="Nombre del producto o materia prima"
             placeholder="tomate"
@@ -48,7 +48,7 @@ function NewItemForm() {
             name="category"
             control={form.control}
             label="Tipo de elemento"
-            items={Object.values(ItemCategory)}
+            items={Object.values(Category)}
             placeholder="Producto derivado o materia prima"
           />
           <CustomFormCheckbox name="isSalable" control={form.control} label="A la venta" />
@@ -60,4 +60,4 @@ function NewItemForm() {
     </Form>
   );
 }
-export default NewItemForm;
+export default NewArticleForm;

@@ -22,6 +22,8 @@ export type ArticleType = {
   category: string;
   traceability: string;
   isSalable: boolean;
+  componentsIds?: number[];
+  containedInIds?: number[];
 };
 
 export enum Category {
@@ -36,6 +38,8 @@ export const createAndEditArticleSchema = z.object({
   traceability: z.string().min(2, { message: "¿La trazabilidad qué es?" }),
   category: z.nativeEnum(Category),
   isSalable: z.boolean(),
+  composedById: z.array(z.number()).optional(),
+  containedInId: z.array(z.number()).optional(),
 });
 
 export type CreateAndEditArticleType = z.infer<typeof createAndEditArticleSchema>;

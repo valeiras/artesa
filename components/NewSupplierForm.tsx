@@ -7,22 +7,19 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CustomFormField } from "./FormComponents";
-import { ItemCategory, createAndEditItemSchema, createAndEditItemType } from "@/utils/types";
+import { createAndEditSupplierSchema, CreateAndEditSupplierType } from "@/utils/types";
 
 function NewSupplierForm() {
-  const form = useForm<createAndEditItemType>({
-    resolver: zodResolver(createAndEditItemSchema),
+  const form = useForm<CreateAndEditSupplierType>({
+    resolver: zodResolver(createAndEditSupplierSchema),
     defaultValues: {
-      itemName: "",
+      name: "",
+      email: "",
       origin: "",
-      producer: "",
-      traceability: "",
-      category: ItemCategory.Commodity,
-      isSalable: false,
     },
   });
 
-  function onSubmit(values: createAndEditItemType) {
+  function onSubmit(values: CreateAndEditSupplierType) {
     console.log(values);
   }
 
