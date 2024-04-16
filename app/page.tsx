@@ -22,7 +22,7 @@ export default function Home() {
             At, magni?
           </p>
           <Button asChild className="mt-4">
-            <Link href="/nuevo">Comenzar</Link>
+            <Link href="/articulos">Comenzar</Link>
           </Button>
         </div>
         <Image src={landingImg} alt="landing" className="hidden lg:block" />

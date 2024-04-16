@@ -8,28 +8,18 @@ type NavLink = {
 
 const links: NavLink[] = [
   {
-    href: "/nuevo",
-    label: "Añadir artículo",
-    icon: <BadgePlus />,
-  },
-  {
-    href: "/productores",
-    label: "Productores",
+    href: "/proveedores",
+    label: "Proveedores",
     icon: <Tractor />,
   },
   {
-    href: "/materias-primas",
-    label: "materias-primas",
+    href: "/articulos",
+    label: "Artículos",
     icon: <Apple />,
   },
   {
-    href: "/productos-finales",
-    label: "productos finales",
-    icon: <Milk />,
-  },
-  {
     href: "/estadisticas",
-    label: "estadísticas",
+    label: "Estadísticas",
     icon: <AreaChart />,
   },
 ];
