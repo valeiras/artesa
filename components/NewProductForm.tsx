@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import { CustomFormCheckbox, CustomFormField, CustomFormSelect } from "./FormComponents";
 import { Category, createAndEditArticleSchema, CreateAndEditArticleType } from "@/utils/types";
 
-function NewArticleForm() {
+function NewProductForm() {
   const form = useForm<CreateAndEditArticleType>({
     resolver: zodResolver(createAndEditArticleSchema),
     defaultValues: {
@@ -60,4 +60,4 @@ function NewArticleForm() {
     </Form>
   );
 }
-export default NewArticleForm;
+export default NewProductForm;

@@ -1,16 +1,15 @@
-import NewSupplierForm from "@/components/NewSupplierForm";
+import NewProductForm from "@/components/NewProductForm";
 import React from "react";
 
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-const NewSupplierPage: React.FC = () => {
+const NewProductPage: React.FC = () => {
   const queryClient = new QueryClient();
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NewSupplierForm />
+      <NewProductForm />
     </HydrationBoundary>
   );
 };
 
-export default NewSupplierPage;
+export default NewProductPage;

@@ -7,20 +7,38 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CustomFormField } from "./FormComponents";
-import { createAndEditSupplierSchema, CreateAndEditSupplierType } from "@/utils/types";
+import { supplierFormSchema, SupplierFormType } from "@/utils/types";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createSupplierAction } from "@/utils/actions";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 function NewSupplierForm() {
-  const form = useForm<CreateAndEditSupplierType>({
-    resolver: zodResolver(createAndEditSupplierSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      origin: "",
+  const form = useForm<SupplierFormType>({
+    resolver: zodResolver(supplierFormSchema),
+  });
+
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: SupplierFormType) => createSupplierAction(values),
+    onSuccess: (data) => {
+      if (!data) {
+        toast({ description: "Ha habido un error" });
+        return;
+      }
+      toast({ description: "Proveedor creado" });
+      queryClient.invalidateQueries({ queryKey: ["suppliers"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["charts"] });
+      router.push("/proveedores");
     },
   });
 
-  function onSubmit(values: CreateAndEditSupplierType) {
-    console.log(values);
+  function onSubmit(values: SupplierFormType) {
+    mutate(values);
   }
 
   return (
@@ -32,8 +50,8 @@ function NewSupplierForm() {
           <CustomFormField name="email" control={form.control} label="Email" placeholder="proveedor@mail.es" />
           <CustomFormField name="origin" control={form.control} label="Origen" placeholder="Málaga" />
         </div>
-        <Button type="submit" className="w-64 mx-auto">
-          Crear
+        <Button type="submit" className="w-64 mx-auto" disabled={isPending}>
+          {isPending ? "Cargando" : "Crear"}
         </Button>
       </form>
     </Form>

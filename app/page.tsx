@@ -13,16 +13,14 @@ export default function Home() {
       </header>
       <section className="max-w-6xl mx-auto px-4 sm:px-8 h-screen -mt-20 grid lg:grid-cols-[1fr,400px] items-center">
         <div>
-          <h1 className="capitalize text-4xl md:text-7xl font-bold">
-            gestión de <span className="text-primary">inventario</span>
+          <h1 className="text-4xl md:text-7xl font-bold">
+            Gestión de <span className="text-primary">trazabilidad</span>
           </h1>
-          <p className="leading-loose max-w-md mt-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio soluta, voluptates sapiente officia, corrupti
-            quis deserunt ullam fugiat ex, earum dignissimos iusto expedita eaque recusandae doloribus laboriosam dicta.
-            At, magni?
+          <p className="leading-loose max-w-md mt-4 text-lg">
+            Gestión simplificada de trazabilidad para pequeños y medianos productores.
           </p>
-          <Button asChild className="mt-4">
-            <Link href="/articulos">Comenzar</Link>
+          <Button asChild className="mt-4 text-lg">
+            <Link href="/materias-primas">Comenzar</Link>
           </Button>
         </div>
         <Image src={landingImg} alt="landing" className="hidden lg:block" />

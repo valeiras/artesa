@@ -16,12 +16,14 @@ const Sidebar: React.FC = () => {
       <div className="flex flex-col mt-20 gap-y-4">
         {links.map((link) => {
           return (
-            <Button asChild key={link.href} variant={pathname === link.href ? "default" : "link"}>
-              <Link
-                href={link.href}
-                className="grid items-center grid-cols-[1fr,2fr] px-2 xl:px-4 gap-x-2 xl:gap-x-4 text-primary"
-              >
-                <div className="justify-self-end">{link.icon}</div>
+            <Button
+              asChild
+              key={link.href}
+              variant={pathname === link.href ? "default" : "link"}
+              className="flex justify-start xl:px-4 gap-x-2"
+            >
+              <Link href={link.href}>
+                <div>{link.icon}</div>
                 <span className="capitalize">{link.label}</span>
               </Link>
             </Button>

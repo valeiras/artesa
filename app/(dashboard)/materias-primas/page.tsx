@@ -3,7 +3,7 @@ import React from "react";
 import { CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const ArticlesPage: React.FC = () => {
+const CommoditiesPage: React.FC = () => {
   return (
     <div>
       <h2 className="text-4xl font-bold">Artículos</h2>
@@ -17,4 +17,4 @@ const ArticlesPage: React.FC = () => {
   );
 };
 
-export default ArticlesPage;
+export default CommoditiesPage;

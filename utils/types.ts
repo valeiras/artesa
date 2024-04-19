@@ -1,53 +1,66 @@
 import * as z from "zod";
+import validator from "validator";
 
-export type SupplierType = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  clerkId: string;
-  name: string;
-  email: string | null;
-  origin: string;
-  articles?: ArticleType[];
+const esMobileValidator = (str: string) => {
+  return validator.isMobilePhone(str, [
+    "es-AR",
+    "es-BO",
+    "es-CL",
+    "es-CO",
+    "es-CR",
+    "es-DO",
+    "es-EC",
+    "es-ES",
+    "es-HN",
+    "es-MX",
+    "es-PA",
+    "es-PE",
+    "es-PY",
+    "es-UY",
+    "es-VE",
+    "et-EE",
+  ]);
 };
 
-export type ArticleType = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  clerkId: string;
-  name: string;
-  origin: string;
-  supplierId: number;
-  category: string;
-  traceability: string;
-  isSalable: boolean;
-  componentsIds?: number[];
-  containedInIds?: number[];
-};
-
-export enum Category {
-  Commodity = "Materia prima",
-  Derived = "Producto derivado",
-}
-
-export const createAndEditArticleSchema = z.object({
+export const productFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
-  origin: z.string().min(2, { message: "El nombre del lugar de origen debe tener al menos 2 caracteres" }),
-  supplierId: z.number(),
-  traceability: z.string().min(2, { message: "¿La trazabilidad qué es?" }),
-  category: z.nativeEnum(Category),
-  isSalable: z.boolean(),
-  composedById: z.array(z.number()).optional(),
-  containedInId: z.array(z.number()).optional(),
+  unit: z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]),
+  ingredientIds: z.string().array(),
 });
 
-export type CreateAndEditArticleType = z.infer<typeof createAndEditArticleSchema>;
+export type ProductFormType = z.infer<typeof productFormSchema>;
 
-export const createAndEditSupplierSchema = z.object({
+export const commodityFormSchema = z.object({
+  name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
+  unit: z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]),
+});
+
+export type CommodityFormType = z.infer<typeof commodityFormSchema>;
+
+export const commodityBatchFormSchema = z.object({
+  commodityId: z.string(),
+  supplierId: z.string(),
+  date: z.date(),
+  initialAmount: z.number(),
+  comments: z.string().nullable(),
+});
+
+export type CommodityBatchFormType = z.infer<typeof commodityBatchFormSchema>;
+
+export const supplierFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del productor debe tener al menos 2 caracteres" }),
-  email: z.string().email({ message: "El nombre del productor debe tener al menos 2 caracteres" }).nullable(),
-  origin: z.string().min(2, { message: "El nombre del lugar de origen debe tener al menos 2 caracteres" }),
+  address: z.string().nullable(),
+  phone: z.string().refine(esMobileValidator),
+  email: z.string().email({ message: "Por favor, introduce un email válido" }).nullable(),
 });
 
-export type CreateAndEditSupplierType = z.infer<typeof createAndEditSupplierSchema>;
+export type SupplierFormType = z.infer<typeof supplierFormSchema>;
+
+export const customerFormSchema = z.object({
+  name: z.string().min(2, { message: "El nombre del cliente debe tener al menos 2 caracteres" }),
+  address: z.string().nullable(),
+  phone: z.string().refine(esMobileValidator),
+  email: z.string().email({ message: "Por favor, introduce un email válido" }).nullable(),
+});
+
+export type CustomerFormType = z.infer<typeof customerFormSchema>;

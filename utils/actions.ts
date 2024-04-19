@@ -1,57 +1,37 @@
 "use server";
 
-import prisma from "./db";
-import { auth } from "@clerk/nextjs";
-import {
-  ArticleType,
-  CreateAndEditArticleType,
-  CreateAndEditSupplierType,
-  SupplierType,
-  createAndEditArticleSchema,
-  createAndEditSupplierSchema,
-} from "./types";
+import { auth, useAuth } from "@clerk/nextjs";
+import { SupplierFormType } from "./types";
 import { redirect } from "next/navigation";
+import { Database } from "@/utils/database.types";
+import { createSupabaseClient } from "@/lib/createSupabaseClient";
 
-function authenticateAndRedirect(): string {
+type SupplierDBType = Database["public"]["Tables"]["supplier"]["Insert"];
+
+async function authenticateAndRedirect() {
   const { userId } = auth();
-  if (!userId) {
-    redirect("/");
-  }
+  if (!userId) redirect("/");
+
   return userId;
 }
 
-export async function createArticleAction(values: CreateAndEditArticleType): Promise<ArticleType | null> {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+async function connectAndRedirect() {
+  const { getToken } = auth();
+  const supabaseAccessToken = await getToken({
+    template: "supabase",
+  });
+  if (!supabaseAccessToken) redirect("/");
 
-  const userId = authenticateAndRedirect();
-  try {
-    createAndEditArticleSchema.parse(values);
-    const article: ArticleType = await prisma.article.create({
-      data: {
-        ...values,
-        clerkId: userId,
-      },
-    });
-    return article;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  const supabase = await createSupabaseClient(supabaseAccessToken);
+  return supabase;
 }
 
-export async function createSupplierAction(values: CreateAndEditSupplierType): Promise<SupplierType | null> {
-  const userId = authenticateAndRedirect();
-  try {
-    createAndEditSupplierSchema.parse(values);
-    const supplier: SupplierType = await prisma.supplier.create({
-      data: {
-        ...values,
-        clerkId: userId,
-      },
-    });
-    return supplier;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+export async function createSupplierAction(values: SupplierFormType): Promise<SupplierDBType | null> {
+  const userId = await authenticateAndRedirect();
+  const supabase = await connectAndRedirect();
+  const newSupplier: SupplierDBType = { name: values.name, user_id: userId, email: values.email, phone: values.phone };
+
+  const { data } = await supabase.from("supplier").insert(newSupplier).select();
+  if (!data) return null;
+  return data[0];
 }
