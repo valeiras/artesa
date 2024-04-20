@@ -8,26 +8,13 @@ const layout: React.FC<Props> = async ({ children }) => {
   return (
     <main>
       <Navbar />
-      <div className="grid xl:grid-cols-6">
-        <div className="hidden xl:block xl:col-span-1 xl:min-h-screen">
+      <div className="grid xl:grid-cols-[auto_1fr]">
+        <div className="hidden xl:block xl:min-h-screen overflow-hidden">
           <Sidebar />
         </div>
-        <div className="xl:col-span-5">
-          <div className="py-16 px-4 sm:px-8 lg:px-16">{children}</div>
-        </div>
+        <div className="py-16 px-4 sm:px-8 lg:px-16 xl:px-32">{children}</div>
       </div>
     </main>
-    // <main className="grid xl:grid-cols-6">
-    //   {/* first-col hide on small screen */}
-    //   <div className="hidden xl:block xl:col-span-1 xl:min-h-screen">
-    //     <Sidebar />
-    //   </div>
-    //   {/* second-col hide dropdown on big screen */}
-    //   <div className="xl:col-span-5">
-    //     <Navbar />
-    //     <div className="py-16 px-4 sm:px-8 lg:px-16">{children}</div>
-    //   </div>
-    // </main>
   );
 };
 
