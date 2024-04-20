@@ -1,12 +1,11 @@
 "use server";
 
 import { auth, useAuth } from "@clerk/nextjs";
-import { SupplierFormType } from "./types";
+import { CreateSupplierDBType, ReadSupplierDBType, SupplierFormType } from "./types";
 import { redirect } from "next/navigation";
 import { Database } from "@/utils/database.types";
 import { createSupabaseClient } from "@/lib/createSupabaseClient";
-
-type SupplierDBType = Database["public"]["Tables"]["supplier"]["Insert"];
+import { PostgrestError } from "@supabase/supabase-js";
 
 async function authenticateAndRedirect() {
   const { userId } = auth();
@@ -26,12 +25,26 @@ async function connectAndRedirect() {
   return supabase;
 }
 
-export async function createSupplierAction(values: SupplierFormType): Promise<SupplierDBType | null> {
+export async function createSupplierAction(values: SupplierFormType): Promise<ReadSupplierDBType[] | PostgrestError> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
-  const newSupplier: SupplierDBType = { name: values.name, user_id: userId, email: values.email, phone: values.phone };
+  const newSupplier: CreateSupplierDBType = {
+    name: values.name,
+    user_id: userId,
+    email: values.email,
+    phone: values.phone,
+    address: values.address,
+  };
 
-  const { data } = await supabase.from("supplier").insert(newSupplier).select();
+  const { data, error } = await supabase.from("supplier").insert(newSupplier).select();
+  if (!data) return error;
+  return data;
+}
+
+export async function getAllSuppliersAction(): Promise<ReadSupplierDBType[] | null> {
+  const supabase = await connectAndRedirect();
+
+  const { data } = await supabase.from("supplier").select();
   if (!data) return null;
-  return data[0];
+  return data;
 }

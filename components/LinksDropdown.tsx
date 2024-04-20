@@ -15,13 +15,13 @@ import { AlignLeft } from "lucide-react";
 const LinksDropdown: React.FC = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="lg:hidden">
+      <DropdownMenuTrigger asChild className="xl:hidden">
         <Button variant="outline" size="icon">
           <AlignLeft />
           <span className="sr-only">Activar enlaces</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-52 lg:hidden" align="start" sideOffset={25}>
+      <DropdownMenuContent className="w-52 xl:hidden" align="start" sideOffset={25}>
         {links.map((link) => {
           return (
             <DropdownMenuItem key={link.href} className="flex items-center gap-x-2">

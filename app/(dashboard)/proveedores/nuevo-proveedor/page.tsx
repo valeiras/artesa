@@ -1,4 +1,4 @@
-import NewSupplierForm from "@/components/NewSupplierForm";
+import NewSupplierForm from "@/components/suppliers/NewSupplierForm";
 import React from "react";
 
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";

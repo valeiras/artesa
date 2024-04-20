@@ -36,7 +36,7 @@ export function CustomFormField({ name, control, label, placeholder }: CustomFor
           <FormControl>
             <Input placeholder={placeholder} {...field} />
           </FormControl>
-          <FormMessage />
+          <FormMessage className="absolute" />
         </FormItem>
       )}
     />

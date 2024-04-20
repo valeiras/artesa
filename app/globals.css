@@ -60,3 +60,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .item-list-header {
+    @apply text-2xl font-medium;
+  }
+
+  .item-list-grid {
+    @apply grid md:grid-cols-2 gap-8;
+  }
+
+  .new-item-btn {
+  }
+}
