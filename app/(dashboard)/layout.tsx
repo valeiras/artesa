@@ -12,7 +12,9 @@ const layout: React.FC<Props> = async ({ children }) => {
         <div className="hidden xl:block xl:min-h-screen overflow-hidden">
           <Sidebar />
         </div>
-        <div className="py-16 px-4 sm:px-8 lg:px-16 xl:px-32">{children}</div>
+        <div className="py-14 px-4 sm:px-8 lg:px-16 xl:px-16">
+          <div className="w-full xl:w-4/5 mx-auto">{children}</div>
+        </div>
       </div>
     </main>
   );

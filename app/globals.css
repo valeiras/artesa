@@ -63,13 +63,10 @@
 
 @layer components {
   .item-list-header {
-    @apply text-2xl font-medium;
+    @apply text-4xl font-bold;
   }
 
   .item-list-grid {
     @apply grid md:grid-cols-2 gap-8;
-  }
-
-  .new-item-btn {
   }
 }

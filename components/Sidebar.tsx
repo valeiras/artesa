@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 
-import links from "@/utils/links";
+import links from "@/lib/links";
 
 import SidebarButton from "./SidebarButton";
 

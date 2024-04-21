@@ -1,74 +1,75 @@
 "use client";
 
-import { ReadSupplierDBType } from "@/utils/types";
+import { ReadSupplierDBType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { getAllSuppliersAction } from "@/utils/actions";
+import { deleteSupplier, getAllSuppliers } from "@/lib/actions/supplierActions";
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import DataTable from "@/components/DataTable";
 
-import { MoreHorizontal } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const columns: ColumnDef<ReadSupplierDBType>[] = [
-  {
-    accessorKey: "name",
-    header: "Nombre",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "phone",
-    header: "Teléfono",
-  },
-  {
-    accessorKey: "address",
-    header: "Dirección",
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.name)}>
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import RowActions from "../RowActions";
+import { useToast } from "../ui/use-toast";
+import SuccessMessage from "../SuccesMessage";
+import getSortableHeader from "@/lib/getSortableHeader";
 
 const SuppliersDataTable: React.FC = () => {
-  const { data, isPending } = useQuery({
-    queryKey: ["suppliers"],
-    queryFn: () => getAllSuppliersAction(),
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const { mutate, isPending: isMutationPending } = useMutation({
+    mutationFn: (id: number) => deleteSupplier(id),
+    onSuccess: (dataOrError) => {
+      if (dataOrError && "message" in dataOrError) {
+        const error = dataOrError;
+        toast({ title: "Ha habido un error", variant: "destructive", description: error.message });
+        return;
+      }
+
+      toast({
+        description: <SuccessMessage text="Proveedor eliminado con éxito" />,
+      });
+      queryClient.invalidateQueries({ queryKey: ["suppliers"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["charts"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
   });
+
+  const columns: ColumnDef<ReadSupplierDBType>[] = [
+    {
+      accessorKey: "name",
+      header: getSortableHeader("Nombre"),
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "phone",
+      header: "Teléfono",
+    },
+    {
+      accessorKey: "address",
+      header: "Dirección",
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <RowActions id={item.id} deleteItemMutation={mutate} />;
+      },
+      size: 10,
+    },
+  ];
+
+  const { data, isPending: isDataPending } = useQuery({
+    queryKey: ["suppliers"],
+    queryFn: () => getAllSuppliers(),
+  });
+
+  if (isDataPending) return <h2>Cargando...</h2>;
   if (!data) return null;
   return <DataTable columns={columns} data={data} />;
 };

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CustomFormCheckbox, CustomFormField, CustomFormSelect } from "./FormComponents";
-import { Category, createAndEditArticleSchema, CreateAndEditArticleType } from "@/utils/types";
+import { Category, createAndEditArticleSchema, CreateAndEditArticleType } from "@/lib/types";
 
 function NewProductForm() {
   const form = useForm<CreateAndEditArticleType>({

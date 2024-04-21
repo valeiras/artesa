@@ -6,10 +6,10 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CustomFormField } from "../FormComponents";
-import { supplierFormSchema, SupplierFormType } from "@/utils/types";
+import { supplierFormSchema, SupplierFormType } from "@/lib/types";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createSupplierAction } from "@/utils/actions";
+import { createSupplier } from "@/lib/actions/supplierActions";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import SuccessMessage from "../SuccesMessage";
@@ -24,7 +24,7 @@ function NewSupplierForm() {
   const { toast } = useToast();
   const router = useRouter();
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: SupplierFormType) => createSupplierAction(values),
+    mutationFn: (values: SupplierFormType) => createSupplier(values),
     onSuccess: (dataOrError) => {
       if ("message" in dataOrError) {
         const error = dataOrError;

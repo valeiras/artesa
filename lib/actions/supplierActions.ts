@@ -1,9 +1,8 @@
 "use server";
 
-import { auth, useAuth } from "@clerk/nextjs";
-import { CreateSupplierDBType, ReadSupplierDBType, SupplierFormType } from "./types";
+import { auth } from "@clerk/nextjs";
+import { CreateSupplierDBType, ReadSupplierDBType, SupplierFormType } from "../types";
 import { redirect } from "next/navigation";
-import { Database } from "@/utils/database.types";
 import { createSupabaseClient } from "@/lib/createSupabaseClient";
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -25,7 +24,7 @@ async function connectAndRedirect() {
   return supabase;
 }
 
-export async function createSupplierAction(values: SupplierFormType): Promise<ReadSupplierDBType[] | PostgrestError> {
+export async function createSupplier(values: SupplierFormType): Promise<ReadSupplierDBType[] | PostgrestError> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   const newSupplier: CreateSupplierDBType = {
@@ -41,10 +40,19 @@ export async function createSupplierAction(values: SupplierFormType): Promise<Re
   return data;
 }
 
-export async function getAllSuppliersAction(): Promise<ReadSupplierDBType[] | null> {
+export async function getAllSuppliers(): Promise<ReadSupplierDBType[] | null> {
   const supabase = await connectAndRedirect();
 
   const { data } = await supabase.from("supplier").select();
   if (!data) return null;
+  return data;
+}
+
+export async function deleteSupplier(id: number): Promise<PostgrestError | null> {
+  const supabase = await connectAndRedirect();
+
+  const response = await supabase.from("supplier").delete().eq("id", id);
+  const { error, data } = response;
+  if (error) return error;
   return data;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import links from "@/utils/links";
+import links from "@/lib/links";
 
 import {
   DropdownMenu,

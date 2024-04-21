@@ -6,36 +6,38 @@ type NavLink = {
   icon: React.ReactNode;
 };
 
+const strokeWidth = 1.25;
+
 const links: NavLink[] = [
   {
     href: "/materias-primas",
     label: "Materias primas",
-    icon: <Apple />,
+    icon: <Apple strokeWidth={strokeWidth} />,
   },
   {
     href: "/productos-finales",
     label: "Productos finales",
-    icon: <Milk />,
+    icon: <Milk strokeWidth={strokeWidth} />,
   },
   {
     href: "/proveedores",
     label: "Proveedores",
-    icon: <Tractor />,
+    icon: <Tractor strokeWidth={strokeWidth} />,
   },
   {
     href: "/clientes",
     label: "Clientes",
-    icon: <User />,
+    icon: <User strokeWidth={strokeWidth} />,
   },
   {
     href: "/ventas",
     label: "Ventas",
-    icon: <Handshake />,
+    icon: <Handshake strokeWidth={strokeWidth} />,
   },
   {
     href: "/estadisticas",
     label: "Estadísticas",
-    icon: <AreaChart />,
+    icon: <AreaChart strokeWidth={strokeWidth} />,
   },
 ];
 
