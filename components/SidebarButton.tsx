@@ -12,11 +12,9 @@ const SidebarButton: React.FC<Props> = ({ children, href }) => {
       asChild
       key={href}
       variant={pathname.startsWith(href) ? "default" : "link"}
-      className="flex justify-start xl:px-2 gap-x-2"
+      className="flex flex-row justify-start xl:px-2"
     >
-      <Link href={href}>
-        <div>{children}</div>
-      </Link>
+      <Link href={href}>{children}</Link>
     </Button>
   );
 };
