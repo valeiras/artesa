@@ -60,6 +60,7 @@ export const supplierFormSchema = z.object({
 export type SupplierFormType = z.infer<typeof supplierFormSchema>;
 export type ReadSupplierDBType = Database["public"]["Tables"]["supplier"]["Row"];
 export type CreateSupplierDBType = Database["public"]["Tables"]["supplier"]["Insert"];
+export type UpdateSupplierDBType = Database["public"]["Tables"]["supplier"]["Update"];
 
 export const customerFormSchema = z.object({
   name: z

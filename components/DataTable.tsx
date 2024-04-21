@@ -12,6 +12,11 @@ import {
   getSortedRowModel,
   VisibilityState,
 } from "@tanstack/react-table";
+
+import Link from "next/link";
+import { CirclePlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useEffect, useState } from "react";
@@ -24,7 +29,12 @@ interface DataTableProps<TData, TValue> {
 
 const pageSize = 10;
 
-function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+function DataTable<TData, TValue>({
+  columns,
+  data,
+  newItemLabel,
+  newItemLink,
+}: DataTableProps<TData, TValue> & { newItemLabel: string; newItemLink: string }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -95,15 +105,14 @@ function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValu
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
-        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          Anterior
+      <div className="flex flex-row justify-between mt-5">
+        <Button asChild variant="default">
+          <Link href={newItemLink} className="flex flex-row gap-x-2">
+            <CirclePlus strokeWidth={1.5} /> <span>{newItemLabel}</span>
+          </Link>
         </Button>
-        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Siguiente
-        </Button>
-      </div> */}
+        <DataTablePagination table={table} />
+      </div>
     </div>
   );
 }

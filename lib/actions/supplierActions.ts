@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@clerk/nextjs";
-import { CreateSupplierDBType, ReadSupplierDBType, SupplierFormType } from "../types";
+import { CreateSupplierDBType, ReadSupplierDBType, UpdateSupplierDBType, SupplierFormType } from "../types";
 import { redirect } from "next/navigation";
 import { createSupabaseClient } from "@/lib/createSupabaseClient";
 import { PostgrestError } from "@supabase/supabase-js";
@@ -40,11 +40,41 @@ export async function createSupplier(values: SupplierFormType): Promise<ReadSupp
   return data;
 }
 
+export async function updateSupplier(
+  values: SupplierFormType,
+  id: string
+): Promise<UpdateSupplierDBType[] | PostgrestError> {
+  const userId = await authenticateAndRedirect();
+  const supabase = await connectAndRedirect();
+  const updatedSupplier: UpdateSupplierDBType = {
+    name: values.name,
+    user_id: userId,
+    email: values.email,
+    phone: values.phone,
+    address: values.address,
+  };
+
+  const { data, error } = await supabase.from("supplier").update(updatedSupplier).eq("id", id).select();
+  if (error) return error;
+  return data;
+}
+
 export async function getAllSuppliers(): Promise<ReadSupplierDBType[] | null> {
   const supabase = await connectAndRedirect();
 
   const { data } = await supabase.from("supplier").select();
   if (!data) return null;
+  return data;
+}
+
+export async function getSingleSupplier(id: string): Promise<ReadSupplierDBType | null> {
+  const supabase = await connectAndRedirect();
+
+  const { data, error } = await supabase.from("supplier").select().eq("id", id).maybeSingle();
+  if (error) {
+    console.log(error);
+    return null;
+  }
   return data;
 }
 

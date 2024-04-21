@@ -16,7 +16,7 @@ const SuppliersDataTable: React.FC = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const { mutate, isPending: isMutationPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (id: number) => deleteSupplier(id),
     onSuccess: (dataOrError) => {
       if (dataOrError && "message" in dataOrError) {
@@ -71,7 +71,14 @@ const SuppliersDataTable: React.FC = () => {
 
   if (isDataPending) return <h2>Cargando...</h2>;
   if (!data) return null;
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      newItemLabel="Nuevo proveedor"
+      newItemLink="/proveedores/nuevo-proveedor"
+    />
+  );
 };
 
 export default SuppliersDataTable;

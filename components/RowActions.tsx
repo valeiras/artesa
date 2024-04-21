@@ -33,7 +33,7 @@ const RowActions: React.FC<Props> = ({ id, deleteItemMutation }) => {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <div
-              className="flex flex-row gap-2 items-center"
+              className="flex flex-row gap-2 items-center cursor-pointer"
               onClick={() => {
                 setIsAlertOpen(true);
               }}
