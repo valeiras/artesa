@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData extends unknown, TValue> {
     columnName: string;
+    hasFixedWidth?: boolean;
   }
 }
 
@@ -54,7 +55,6 @@ function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-
     state: {
       sorting,
       columnFilters,
@@ -85,7 +85,10 @@ function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} style={{ width: `${header.getSize()}px` }}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: header.column.columnDef.meta?.hasFixedWidth ? `${header.getSize()}px` : "" }}
+                    >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );

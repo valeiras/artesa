@@ -46,7 +46,6 @@ const SuppliersDataTable: React.FC = () => {
     {
       accessorKey: "email",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
-      enableSorting: false,
       meta: { columnName: "Email" },
     },
     {
@@ -67,10 +66,11 @@ const SuppliersDataTable: React.FC = () => {
         const item = row.original;
         return <RowActions id={item.id} deleteItemMutation={mutate} />;
       },
-      size: 10,
+      size: 5,
+      minSize: 5,
       enableHiding: false,
       enableSorting: false,
-      meta: { columnName: "Acciones" },
+      meta: { columnName: "Acciones", hasFixedWidth: true },
     },
   ];
 
