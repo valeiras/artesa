@@ -23,9 +23,13 @@ const esMobileValidator = (str: string) => {
   ]);
 };
 
+const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml", ""]);
+export const availableUnits = unitEnum.options;
+export type UnitType = z.infer<typeof unitEnum>;
+
 export const productFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
-  unit: z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]),
+  unit: unitEnum,
   ingredientIds: z.string().array(),
 });
 
@@ -36,7 +40,7 @@ export type UpdateProductDBType = Database["public"]["Tables"]["product"]["Updat
 
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
-  unit: z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]),
+  unit: unitEnum,
 });
 
 export type CommodityFormType = z.infer<typeof commodityFormSchema>;
@@ -58,15 +62,11 @@ export type CreateCommodityBatchDBType = Database["public"]["Tables"]["commodity
 export type UpdateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
 
 export const supplierFormSchema = z.object({
-  name: z
-    .string({ required_error: "Parámetro requerido" })
-    .min(2, { message: "Introduce al menos 2 caracteres" })
-    .default(""),
-  address: z.string().default("").optional(),
+  name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
+  address: z.string().optional(),
   phone: z
     .string()
     .refine(esMobileValidator, { message: "Introduce un número de teléfono válido" })
-    .default("")
     .optional()
     .or(z.literal("")),
   email: z.string().email({ message: "Introduce un email válido" }).optional().or(z.literal("")),
@@ -78,15 +78,11 @@ export type CreateSupplierDBType = Database["public"]["Tables"]["supplier"]["Ins
 export type UpdateSupplierDBType = Database["public"]["Tables"]["supplier"]["Update"];
 
 export const customerFormSchema = z.object({
-  name: z
-    .string({ required_error: "Parámetro requerido" })
-    .min(2, { message: "Introduce al menos 2 caracteres" })
-    .default(""),
-  address: z.string().default("").optional(),
+  name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
+  address: z.string().optional(),
   phone: z
     .string()
     .refine(esMobileValidator, { message: "Introduce un número de teléfono válido" })
-    .default("")
     .optional()
     .or(z.literal("")),
   email: z.string().email({ message: "Introduce un email válido" }).optional().or(z.literal("")),

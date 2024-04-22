@@ -8,15 +8,16 @@ type Props = { params: { id: string } };
 
 const UpdateSupplierPage: React.FC<Props> = async ({ params }) => {
   const queryClient = new QueryClient();
+  const supplierId = parseInt(params.id);
 
   await queryClient.prefetchQuery({
-    queryKey: ["supplier", params.id],
-    queryFn: () => getSingleSupplier(params.id),
+    queryKey: ["supplier", supplierId],
+    queryFn: () => getSingleSupplier(supplierId),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <UpdateSupplierForm supplierId={params.id} />
+      <UpdateSupplierForm supplierId={supplierId} />
     </HydrationBoundary>
   );
 };

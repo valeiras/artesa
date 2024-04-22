@@ -23,7 +23,6 @@ const Sidebar: React.FC = () => {
     <aside
       className="hidden xl:min-h-screen overflow-hidden fixed top-0 py-4 px-2 bg-muted h-full xl:flex flex-row"
       onMouseEnter={() => {
-        if (linksContainerRef) console.log(linksContainerRef);
         setShowLinks(true);
       }}
       onMouseLeave={() => {

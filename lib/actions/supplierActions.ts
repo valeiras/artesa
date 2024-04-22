@@ -2,10 +2,15 @@
 
 import { CreateSupplierDBType, ReadSupplierDBType, UpdateSupplierDBType, SupplierFormType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect } from "../supabaseUtils";
+import {
+  authenticateAndRedirect,
+  connectAndRedirect,
+  getAllRecords,
+  getsingleRecord,
+  deleteRecord,
+} from "../supabaseUtils";
 
 export async function createSupplier(values: SupplierFormType): Promise<{
-  dbData: ReadSupplierDBType[] | null;
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -18,15 +23,14 @@ export async function createSupplier(values: SupplierFormType): Promise<{
     address: values.address,
   };
 
-  const { data: dbData, error: dbError } = await supabase.from("supplier").insert(newSupplier);
-  return { dbData, dbError };
+  const { error: dbError } = await supabase.from("supplier").insert(newSupplier);
+  return { dbError };
 }
 
 export async function updateSupplier(
   values: SupplierFormType,
-  id: string
+  id: number
 ): Promise<{
-  dbData: ReadSupplierDBType[] | null;
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -39,36 +43,18 @@ export async function updateSupplier(
     address: values.address,
   };
 
-  const { data: dbData, error: dbError } = await supabase.from("supplier").update(updatedSupplier).eq("id", id);
-  return { dbData, dbError };
+  const { error: dbError } = await supabase.from("supplier").update(updatedSupplier).eq("id", id);
+  return { dbError };
 }
 
-export async function getAllSuppliers(): Promise<{
-  dbData: ReadSupplierDBType[] | null;
-  dbError: PostgrestError | null;
-}> {
-  const supabase = await connectAndRedirect();
-
-  const { data: dbData, error: dbError } = await supabase.from("supplier").select();
-  return { dbData, dbError };
+export async function getAllSuppliers() {
+  return getAllRecords("supplier") as Promise<{ dbData: ReadSupplierDBType[]; dbError: PostgrestError }>;
 }
 
-export async function getSingleSupplier(id: string): Promise<{
-  dbData: ReadSupplierDBType | null;
-  dbError: PostgrestError | null;
-}> {
-  const supabase = await connectAndRedirect();
-
-  const { data: dbData, error: dbError } = await supabase.from("supplier").select().eq("id", id).maybeSingle();
-  return { dbData, dbError };
+export async function getSingleSupplier(id: number) {
+  return getsingleRecord("supplier", id) as Promise<{ dbData: ReadSupplierDBType; dbError: PostgrestError }>;
 }
 
-export async function deleteSupplier(id: number): Promise<{
-  dbData: ReadSupplierDBType[] | null;
-  dbError: PostgrestError | null;
-}> {
-  const supabase = await connectAndRedirect();
-
-  const { data: dbData, error: dbError } = await supabase.from("supplier").delete().eq("id", id);
-  return { dbData, dbError };
+export async function deleteSupplier(id: number) {
+  return deleteRecord("supplier", id);
 }

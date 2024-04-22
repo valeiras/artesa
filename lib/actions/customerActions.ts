@@ -1,11 +1,16 @@
 "use server";
 
-import { CreateCustomerDBType, ReadCustomerDBType, UpdateCustomerDBType, CustomerFormType } from "../types";
+import { CreateCustomerDBType, UpdateCustomerDBType, CustomerFormType, ReadCustomerDBType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect } from "../supabaseUtils";
+import {
+  authenticateAndRedirect,
+  connectAndRedirect,
+  getAllRecords,
+  getsingleRecord,
+  deleteRecord,
+} from "../supabaseUtils";
 
 export async function createCustomer(values: CustomerFormType): Promise<{
-  dbData: ReadCustomerDBType[] | null;
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -18,15 +23,14 @@ export async function createCustomer(values: CustomerFormType): Promise<{
     address: values.address,
   };
 
-  const { data: dbData, error: dbError } = await supabase.from("customer").insert(newCustomer);
-  return { dbData, dbError };
+  const { error: dbError } = await supabase.from("customer").insert(newCustomer);
+  return { dbError };
 }
 
 export async function updateCustomer(
   values: CustomerFormType,
-  id: string
+  id: number
 ): Promise<{
-  dbData: ReadCustomerDBType[] | null;
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -39,36 +43,18 @@ export async function updateCustomer(
     address: values.address,
   };
 
-  const { data: dbData, error: dbError } = await supabase.from("customer").update(updatedCustomer).eq("id", id);
-  return { dbData, dbError };
+  const { error: dbError } = await supabase.from("customer").update(updatedCustomer).eq("id", id);
+  return { dbError };
 }
 
-export async function getAllCustomers(): Promise<{
-  dbData: ReadCustomerDBType[] | null;
-  dbError: PostgrestError | null;
-}> {
-  const supabase = await connectAndRedirect();
-
-  const { data: dbData, error: dbError } = await supabase.from("customer").select();
-  return { dbData, dbError };
+export async function getAllCustomers() {
+  return getAllRecords("customer") as Promise<{ dbData: ReadCustomerDBType[]; dbError: PostgrestError }>;
 }
 
-export async function getSingleCustomer(id: string): Promise<{
-  dbData: ReadCustomerDBType | null;
-  dbError: PostgrestError | null;
-}> {
-  const supabase = await connectAndRedirect();
-
-  const { data: dbData, error: dbError } = await supabase.from("customer").select().eq("id", id).maybeSingle();
-  return { dbData, dbError };
+export async function getSingleCustomer(id: number) {
+  return getsingleRecord("customer", id) as Promise<{ dbData: ReadCustomerDBType; dbError: PostgrestError }>;
 }
 
-export async function deleteCustomer(id: number): Promise<{
-  dbData: ReadCustomerDBType[] | null;
-  dbError: PostgrestError | null;
-}> {
-  const supabase = await connectAndRedirect();
-
-  const { data: dbData, error: dbError } = await supabase.from("customer").delete().eq("id", id);
-  return { dbData, dbError };
+export async function deleteCustomer(id: number) {
+  return deleteRecord("customer", id);
 }

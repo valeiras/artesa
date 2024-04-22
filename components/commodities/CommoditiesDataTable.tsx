@@ -1,34 +1,42 @@
 "use client";
 
-import { ReadCustomerDBType } from "@/lib/types";
+import { ReadCommodityDBType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { deleteCustomer, getAllCustomers } from "@/lib/actions/customerActions";
+import { deleteCommodity, getAllCommodities } from "@/lib/actions/commodityActions";
 import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import DataTable from "@/components/DataTable";
 
 import RowActions from "../RowActions";
 import { useToast } from "../ui/use-toast";
+import SuccessMessage from "../SuccesMessage";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 
-const CustomersDataTable: React.FC = () => {
+const CommoditiesDataTable: React.FC = () => {
+  const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const successHandler = useQuerySuccessHandler({
-    successToastMessage: "Cliente eliminado con éxito",
-    queryKeys: [["customers"], ["stats"], ["charts"]],
-  });
-
   const { mutate } = useMutation({
-    mutationFn: (id: number) => deleteCustomer(id),
-    onSuccess: successHandler,
+    mutationFn: (id: number) => deleteCommodity(id),
+    onSuccess: ({ dbError }) => {
+      if (dbError) {
+        toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
+        return;
+      }
+
+      toast({
+        description: <SuccessMessage text="Materia prima eliminado con éxito" />,
+      });
+      queryClient.invalidateQueries({ queryKey: ["commodities"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["charts"] });
+    },
     onError: (error) => {
       console.log(error);
     },
   });
 
-  const columns: ColumnDef<ReadCustomerDBType>[] = [
+  const columns: ColumnDef<ReadCommodityDBType>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
@@ -65,7 +73,7 @@ const CustomersDataTable: React.FC = () => {
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <RowActions id={item.id} deleteItemMutation={mutate} itemAddress="clientes" />;
+        return <RowActions id={item.id} deleteItemMutation={mutate} itemAddress="materias-primas" />;
       },
       size: 5,
       minSize: 5,
@@ -76,8 +84,8 @@ const CustomersDataTable: React.FC = () => {
   ];
 
   const { data, isPending: isDataPending } = useQuery({
-    queryKey: ["customers"],
-    queryFn: () => getAllCustomers(),
+    queryKey: ["commodities"],
+    queryFn: () => getAllCommodities(),
   });
 
   if (isDataPending) return <h2>Cargando...</h2>;
@@ -93,7 +101,7 @@ const CustomersDataTable: React.FC = () => {
     return null;
   }
 
-  return <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo cliente" newItemLink="/clientes/nuevo" />;
+  return <DataTable columns={columns} data={dbData || []} newItemLabel="Nueva materia prima" newItemLink="/materias-primas/nueva" />;
 };
 
-export default CustomersDataTable;
+export default CommoditiesDataTable;
