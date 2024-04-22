@@ -10,7 +10,7 @@ const UpdateSupplierPage: React.FC<Props> = async ({ params }) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["job", params.id],
+    queryKey: ["supplier", params.id],
     queryFn: () => getSingleSupplier(params.id),
   });
 

@@ -1,7 +1,16 @@
+import NewCustomerForm from "@/components/customers/NewCustomerForm";
 import React from "react";
 
-const page: React.FC = () => {
-  return <div>page</div>;
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+
+const NewCustomerPage: React.FC = () => {
+  const queryClient = new QueryClient();
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NewCustomerForm />
+    </HydrationBoundary>
+  );
 };
 
-export default page;
+export default NewCustomerPage;

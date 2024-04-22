@@ -80,10 +80,16 @@ export type UpdateSupplierDBType = Database["public"]["Tables"]["supplier"]["Upd
 export const customerFormSchema = z.object({
   name: z
     .string({ required_error: "Parámetro requerido" })
-    .min(2, { message: "El nombre del cliente debe tener al menos 2 caracteres" }),
-  address: z.string().nullable(),
-  phone: z.string().refine(esMobileValidator, { message: "Por favor, introduce un número de teléfono" }).nullable(),
-  email: z.string().email({ message: "Por favor, introduce un email válido" }).nullable(),
+    .min(2, { message: "Introduce al menos 2 caracteres" })
+    .default(""),
+  address: z.string().default("").optional(),
+  phone: z
+    .string()
+    .refine(esMobileValidator, { message: "Introduce un número de teléfono válido" })
+    .default("")
+    .optional()
+    .or(z.literal("")),
+  email: z.string().email({ message: "Introduce un email válido" }).optional().or(z.literal("")),
 });
 
 export type CustomerFormType = z.infer<typeof customerFormSchema>;

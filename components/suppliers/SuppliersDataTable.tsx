@@ -73,7 +73,7 @@ const SuppliersDataTable: React.FC = () => {
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <RowActions id={item.id} deleteItemMutation={mutate} />;
+        return <RowActions id={item.id} deleteItemMutation={mutate} itemAddress="proveedores" />;
       },
       size: 5,
       minSize: 5,

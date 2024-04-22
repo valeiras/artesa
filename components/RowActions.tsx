@@ -12,8 +12,8 @@ import Link from "next/link";
 
 import DeleteAlertDialog from "@/components/DeleteAlertDialog";
 
-type Props = { id: number; deleteItemMutation: (id: number) => void };
-const RowActions: React.FC<Props> = ({ id, deleteItemMutation }) => {
+type Props = { id: number; deleteItemMutation: (id: number) => void; itemAddress: string };
+const RowActions: React.FC<Props> = ({ id, deleteItemMutation, itemAddress }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   return (
@@ -27,7 +27,7 @@ const RowActions: React.FC<Props> = ({ id, deleteItemMutation }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
-            <Link href={`/proveedores/${id}`} className="flex flex-row gap-2 items-center">
+            <Link href={`/${itemAddress}/${id}`} className="flex flex-row gap-2 items-center">
               <Pencil size={16} strokeWidth={1} /> Editar
             </Link>
           </DropdownMenuItem>

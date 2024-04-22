@@ -8,7 +8,7 @@ const CustomersPage: React.FC = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["Customers"],
+    queryKey: ["customers"],
     queryFn: () => getAllCustomers(),
   });
 
