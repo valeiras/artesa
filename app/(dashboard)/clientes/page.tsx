@@ -1,19 +1,24 @@
 import React from "react";
-import Link from "next/link";
-import { CirclePlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
-const CustomersPage: React.FC = () => {
+import { getAllCustomers } from "@/lib/actions/customerActions";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import CustomersDataTable from "@/components/customers/CustomersDataTable";
+
+const CustomersPage: React.FC = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["Customers"],
+    queryFn: () => getAllCustomers(),
+  });
+
   return (
-    <div>
-      <h2 className="text-4xl font-bold">Proveedores </h2>
-      <div className="flex flex-col my-8">Lista de proveedores</div>
-      <Button asChild variant="default">
-        <Link href="/nuevo-proveedor" className="flex flex-row gap-x-2">
-          <CirclePlus /> <span>Nuevo proveedor</span>
-        </Link>
-      </Button>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex flex-row justify-between items-center mb-8">
+        <h2 className="item-list-header">Clientes:</h2>
+      </div>
+      <CustomersDataTable />
+    </HydrationBoundary>
   );
 };
 

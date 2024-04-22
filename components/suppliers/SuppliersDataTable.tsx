@@ -18,10 +18,9 @@ const SuppliersDataTable: React.FC = () => {
 
   const { mutate } = useMutation({
     mutationFn: (id: number) => deleteSupplier(id),
-    onSuccess: (dataOrError) => {
-      if (dataOrError && "message" in dataOrError) {
-        const error = dataOrError;
-        toast({ title: "Ha habido un error", variant: "destructive", description: error.message });
+    onSuccess: ({ dbError }) => {
+      if (dbError) {
+        toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
         return;
       }
 
@@ -70,14 +69,20 @@ const SuppliersDataTable: React.FC = () => {
   });
 
   if (isDataPending) return <h2>Cargando...</h2>;
-  if (!data) return null;
+
+  if (!data) {
+    toast({ title: "Ha habido un error", variant: "destructive" });
+    return null;
+  }
+  const { dbData, dbError } = data;
+
+  if (dbError) {
+    toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
+    return null;
+  }
+
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-      newItemLabel="Nuevo proveedor"
-      newItemLink="/proveedores/nuevo-proveedor"
-    />
+    <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" newItemLink="/proveedores/nuevo" />
   );
 };
 

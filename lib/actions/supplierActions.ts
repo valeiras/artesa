@@ -1,30 +1,13 @@
 "use server";
 
-import { auth } from "@clerk/nextjs";
 import { CreateSupplierDBType, ReadSupplierDBType, UpdateSupplierDBType, SupplierFormType } from "../types";
-import { redirect } from "next/navigation";
-import { createSupabaseClient } from "@/lib/createSupabaseClient";
 import { PostgrestError } from "@supabase/supabase-js";
+import { authenticateAndRedirect, connectAndRedirect } from "../supabaseUtils";
 
-async function authenticateAndRedirect() {
-  const { userId } = auth();
-  if (!userId) redirect("/");
-
-  return userId;
-}
-
-async function connectAndRedirect() {
-  const { getToken } = auth();
-  const supabaseAccessToken = await getToken({
-    template: "supabase",
-  });
-  if (!supabaseAccessToken) redirect("/");
-
-  const supabase = await createSupabaseClient(supabaseAccessToken);
-  return supabase;
-}
-
-export async function createSupplier(values: SupplierFormType): Promise<ReadSupplierDBType[] | PostgrestError> {
+export async function createSupplier(values: SupplierFormType): Promise<{
+  dbData: ReadSupplierDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   const newSupplier: CreateSupplierDBType = {
@@ -35,15 +18,17 @@ export async function createSupplier(values: SupplierFormType): Promise<ReadSupp
     address: values.address,
   };
 
-  const { data, error } = await supabase.from("supplier").insert(newSupplier).select();
-  if (!data) return error;
-  return data;
+  const { data: dbData, error: dbError } = await supabase.from("supplier").insert(newSupplier);
+  return { dbData, dbError };
 }
 
 export async function updateSupplier(
   values: SupplierFormType,
   id: string
-): Promise<UpdateSupplierDBType[] | PostgrestError> {
+): Promise<{
+  dbData: ReadSupplierDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   const updatedSupplier: UpdateSupplierDBType = {
@@ -54,35 +39,36 @@ export async function updateSupplier(
     address: values.address,
   };
 
-  const { data, error } = await supabase.from("supplier").update(updatedSupplier).eq("id", id).select();
-  if (error) return error;
-  return data;
+  const { data: dbData, error: dbError } = await supabase.from("supplier").update(updatedSupplier).eq("id", id);
+  return { dbData, dbError };
 }
 
-export async function getAllSuppliers(): Promise<ReadSupplierDBType[] | null> {
+export async function getAllSuppliers(): Promise<{
+  dbData: ReadSupplierDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
   const supabase = await connectAndRedirect();
 
-  const { data } = await supabase.from("supplier").select();
-  if (!data) return null;
-  return data;
+  const { data: dbData, error: dbError } = await supabase.from("supplier").select();
+  return { dbData, dbError };
 }
 
-export async function getSingleSupplier(id: string): Promise<ReadSupplierDBType | null> {
+export async function getSingleSupplier(id: string): Promise<{
+  dbData: ReadSupplierDBType | null;
+  dbError: PostgrestError | null;
+}> {
   const supabase = await connectAndRedirect();
 
-  const { data, error } = await supabase.from("supplier").select().eq("id", id).maybeSingle();
-  if (error) {
-    console.log(error);
-    return null;
-  }
-  return data;
+  const { data: dbData, error: dbError } = await supabase.from("supplier").select().eq("id", id).maybeSingle();
+  return { dbData, dbError };
 }
 
-export async function deleteSupplier(id: number): Promise<PostgrestError | null> {
+export async function deleteSupplier(id: number): Promise<{
+  dbData: ReadSupplierDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
   const supabase = await connectAndRedirect();
 
-  const response = await supabase.from("supplier").delete().eq("id", id);
-  const { error, data } = response;
-  if (error) return error;
-  return data;
+  const { data: dbData, error: dbError } = await supabase.from("supplier").delete().eq("id", id);
+  return { dbData, dbError };
 }

@@ -17,7 +17,6 @@ import SuccessMessage from "../SuccesMessage";
 const NewSupplierForm: React.FC = () => {
   const form = useForm<SupplierFormType>({
     resolver: zodResolver(supplierFormSchema),
-    defaultValues: { name: "", phone: null, email: null, address: null },
   });
 
   const queryClient = useQueryClient();
@@ -25,10 +24,9 @@ const NewSupplierForm: React.FC = () => {
   const router = useRouter();
   const { mutate, isPending } = useMutation({
     mutationFn: (values: SupplierFormType) => createSupplier(values),
-    onSuccess: (dataOrError) => {
-      if ("message" in dataOrError) {
-        const error = dataOrError;
-        toast({ title: "Ha habido un error", variant: "destructive", description: error.message });
+    onSuccess: ({ dbError }) => {
+      if (dbError) {
+        toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
         return;
       }
 

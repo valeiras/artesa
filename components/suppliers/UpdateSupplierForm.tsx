@@ -24,14 +24,16 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierId }) => {
 
   const form = useForm<SupplierFormType>({
     resolver: zodResolver(supplierFormSchema),
-    defaultValues: { name: "", phone: null, email: null, address: null },
   });
 
   useEffect(() => {
-    if (data?.name) form.setValue("name", data.name);
-    if (data?.email) form.setValue("email", data.email);
-    if (data?.phone) form.setValue("phone", data.phone);
-    if (data?.address) form.setValue("address", data.address);
+    if (data) {
+      const { dbData } = data;
+      form.setValue("name", dbData?.name || "");
+      form.setValue("email", dbData?.email || "");
+      form.setValue("phone", dbData?.phone || "");
+      form.setValue("address", dbData?.address || "");
+    }
   }, [data, form]);
 
   const queryClient = useQueryClient();
@@ -39,10 +41,9 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierId }) => {
   const router = useRouter();
   const { mutate, isPending } = useMutation({
     mutationFn: (values: SupplierFormType) => updateSupplier(values, supplierId),
-    onSuccess: (dataOrError) => {
-      if ("message" in dataOrError) {
-        const error = dataOrError;
-        toast({ title: "Ha habido un error", variant: "destructive", description: error.message });
+    onSuccess: ({ dbError }) => {
+      if (dbError) {
+        toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
         return;
       }
 

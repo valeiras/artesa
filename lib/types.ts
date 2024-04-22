@@ -30,6 +30,9 @@ export const productFormSchema = z.object({
 });
 
 export type ProductFormType = z.infer<typeof productFormSchema>;
+export type ReadProductDBType = Database["public"]["Tables"]["product"]["Row"];
+export type CreateProductDBType = Database["public"]["Tables"]["product"]["Insert"];
+export type UpdateProductDBType = Database["public"]["Tables"]["product"]["Update"];
 
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
@@ -37,6 +40,9 @@ export const commodityFormSchema = z.object({
 });
 
 export type CommodityFormType = z.infer<typeof commodityFormSchema>;
+export type ReadCommodityDBType = Database["public"]["Tables"]["commodity"]["Row"];
+export type CreateCommodityDBType = Database["public"]["Tables"]["commodity"]["Insert"];
+export type UpdateCommodityDBType = Database["public"]["Tables"]["commodity"]["Update"];
 
 export const commodityBatchFormSchema = z.object({
   commodityId: z.string({ required_error: "Especifica una materia prima" }),
@@ -47,14 +53,23 @@ export const commodityBatchFormSchema = z.object({
 });
 
 export type CommodityBatchFormType = z.infer<typeof commodityBatchFormSchema>;
+export type ReadCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Row"];
+export type CreateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
+export type UpdateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
 
 export const supplierFormSchema = z.object({
   name: z
     .string({ required_error: "Parámetro requerido" })
-    .min(2, { message: "El nombre del productor debe tener al menos 2 caracteres" }),
-  address: z.string().nullable(),
-  phone: z.string().refine(esMobileValidator).nullable(),
-  email: z.string().email({ message: "Por favor, introduce un email válido" }).nullable(),
+    .min(2, { message: "Introduce al menos 2 caracteres" })
+    .default(""),
+  address: z.string().default("").optional(),
+  phone: z
+    .string()
+    .refine(esMobileValidator, { message: "Introduce un número de teléfono válido" })
+    .default("")
+    .optional()
+    .or(z.literal("")),
+  email: z.string().email({ message: "Introduce un email válido" }).optional().or(z.literal("")),
 });
 
 export type SupplierFormType = z.infer<typeof supplierFormSchema>;
@@ -66,9 +81,24 @@ export const customerFormSchema = z.object({
   name: z
     .string({ required_error: "Parámetro requerido" })
     .min(2, { message: "El nombre del cliente debe tener al menos 2 caracteres" }),
-  address: z.string().optional(),
-  phone: z.string().refine(esMobileValidator),
-  email: z.string().email({ message: "Por favor, introduce un email válido" }).optional(),
+  address: z.string().nullable(),
+  phone: z.string().refine(esMobileValidator, { message: "Por favor, introduce un número de teléfono" }).nullable(),
+  email: z.string().email({ message: "Por favor, introduce un email válido" }).nullable(),
 });
 
 export type CustomerFormType = z.infer<typeof customerFormSchema>;
+export type ReadCustomerDBType = Database["public"]["Tables"]["customer"]["Row"];
+export type CreateCustomerDBType = Database["public"]["Tables"]["customer"]["Insert"];
+export type UpdateCustomerDBType = Database["public"]["Tables"]["customer"]["Update"];
+
+export const saleFormSchema = z.object({
+  productId: z.string({ required_error: "Especifica un producto" }),
+  clientId: z.string({ required_error: "Especifica un cliente" }),
+  amount: z.number({ required_error: "Especifica una cantidad" }),
+  date: z.date({ required_error: "Especifica una fecha de venta" }),
+});
+
+export type SaleFormType = z.infer<typeof saleFormSchema>;
+export type ReadSaleDBType = Database["public"]["Tables"]["sale"]["Row"];
+export type CreateSaleDBType = Database["public"]["Tables"]["sale"]["Insert"];
+export type UpdateSaleDBType = Database["public"]["Tables"]["sale"]["Update"];
