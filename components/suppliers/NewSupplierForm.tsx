@@ -13,6 +13,7 @@ import { createSupplier } from "@/lib/actions/supplierActions";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import SuccessMessage from "../SuccesMessage";
+import FormButtons from "../FormButtons";
 
 const NewSupplierForm: React.FC = () => {
   const form = useForm<SupplierFormType>({
@@ -57,9 +58,7 @@ const NewSupplierForm: React.FC = () => {
           <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />
           <CustomFormField name="address" control={form.control} label="Dirección" placeholder="C/" />
         </div>
-        <Button type="submit" className="w-64 mx-auto" disabled={isPending}>
-          {isPending ? "Cargando" : "Crear"}
-        </Button>
+        <FormButtons isPending={isPending} submitButtonLabel="Crear" cancelButtonHref="/proveedores" />
       </form>
     </Form>
   );

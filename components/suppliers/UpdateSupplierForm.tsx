@@ -14,6 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import SuccessMessage from "../SuccesMessage";
 import { useEffect } from "react";
+import FormButtons from "../FormButtons";
 
 type Props = { supplierId: string };
 const UpdateSupplierForm: React.FC<Props> = ({ supplierId }) => {
@@ -76,9 +77,7 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierId }) => {
           <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />
           <CustomFormField name="address" control={form.control} label="Dirección" placeholder="C/" />
         </div>
-        <Button type="submit" className="w-64 mx-auto" disabled={isPending}>
-          {isPending ? "Cargando" : "Editar"}
-        </Button>
+        <FormButtons isPending={isPending} submitButtonLabel="Editar" cancelButtonHref="/proveedores" />
       </form>
     </Form>
   );

@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CustomFormField } from "../FormComponents";
 import { customerFormSchema, CustomerFormType } from "@/lib/types";
@@ -13,6 +12,7 @@ import { createCustomer } from "@/lib/actions/customerActions";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import SuccessMessage from "../SuccesMessage";
+import FormButtons from "../FormButtons";
 
 const NewCustomerForm: React.FC = () => {
   const form = useForm<CustomerFormType>({
@@ -57,9 +57,7 @@ const NewCustomerForm: React.FC = () => {
           <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />
           <CustomFormField name="address" control={form.control} label="Dirección" placeholder="C/" />
         </div>
-        <Button type="submit" className="w-64 mx-auto" disabled={isPending}>
-          {isPending ? "Cargando" : "Crear"}
-        </Button>
+        <FormButtons isPending={isPending} submitButtonLabel="Crear" cancelButtonHref="/clientes" />
       </form>
     </Form>
   );
