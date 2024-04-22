@@ -10,7 +10,6 @@ import DataTable from "@/components/DataTable";
 import RowActions from "../RowActions";
 import { useToast } from "../ui/use-toast";
 import SuccessMessage from "../SuccesMessage";
-import getSortableHeader from "@/lib/getSortableHeader";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 
 const SuppliersDataTable: React.FC = () => {
@@ -44,9 +43,19 @@ const SuppliersDataTable: React.FC = () => {
       meta: { columnName: "Nombre" },
     },
     {
+      accessorKey: "created_at",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
+      meta: { columnName: "Fecha" },
+      cell: ({ row }) => {
+        const formattedDate = new Date(row.getValue("created_at")).toLocaleDateString();
+        return <>{formattedDate}</>;
+      },
+    },
+    {
       accessorKey: "email",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
       meta: { columnName: "Email" },
+      enableSorting: false,
     },
     {
       accessorKey: "phone",
@@ -85,7 +94,7 @@ const SuppliersDataTable: React.FC = () => {
     toast({ title: "Ha habido un error", variant: "destructive" });
     return null;
   }
-  const { dbData, dbError } = data;
+  let { dbData, dbError } = data;
 
   if (dbError) {
     toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });

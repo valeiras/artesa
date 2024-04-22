@@ -8,9 +8,9 @@ import ThemeToggle from "./ThemeToggle";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="bg-muted px-8 lg:px-16 xl:px-14 py-4 flex items-center justify-between">
+    <nav className="bg-muted px-8 lg:px-16 xl:px-14 py-4 flex items-center justify-between sticky top-0 z-50">
       <LinksDropdown />
-      <Image src={logo} alt="logo" />
+      <Image src={logo} alt="logo" className="hidden sm:block" />
       <div className="flex items-center gap-x-4">
         <ThemeToggle />
         <UserButton afterSignOutUrl="/" />

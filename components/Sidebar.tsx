@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className="py-4 px-2 bg-muted h-full flex flex-row absolute"
+      className="hidden xl:min-h-screen overflow-hidden fixed top-0 py-4 px-2 bg-muted h-full xl:flex flex-row"
       onMouseEnter={() => {
         if (linksContainerRef) console.log(linksContainerRef);
         setShowLinks(true);
@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => {
         setShowLinks(false);
       }}
     >
-      <div className="flex flex-col mt-10 gap-y-4">
+      <div className="flex flex-col mt-32 gap-y-4">
         {links.map((link, idx) => {
           return (
             <SidebarButton href={link.href} key={link.href}>
