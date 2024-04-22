@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityForm from "./CommodityForm";
 
-type Props = { commodityId: string };
+type Props = { commodityId: number };
 const UpdateCommodityForm: React.FC<Props> = ({ commodityId }) => {
   const { data } = useQuery({
     queryKey: ["commodity", commodityId],
@@ -20,14 +20,14 @@ const UpdateCommodityForm: React.FC<Props> = ({ commodityId }) => {
 
   const form = useForm<CommodityFormType>({
     resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: "", unit: "" },
+    defaultValues: { name: "", unit: "kg" },
   });
 
   useEffect(() => {
     if (data) {
       const { dbData } = data;
       form.setValue("name", dbData?.name || "");
-      form.setValue("unit", dbData?.unit || "");
+      form.setValue("unit", dbData?.unit || "kg");
     }
   }, [data, form]);
 

@@ -16,12 +16,12 @@ import CommodityForm from "./CommodityForm";
 const NewCommodityForm: React.FC = () => {
   const form = useForm<CommodityFormType>({
     resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: "", unit: "" },
+    defaultValues: { name: "", unit: "kg" },
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/clientes",
-    successToastMessage: "Cliente creado con éxito",
+    destinationAfterSuccess: "/materias-primas",
+    successToastMessage: "Materia prima creada con éxito",
     queryKeys: [["commodities"], ["stats"], ["charts"]],
   });
   const { mutate, isPending } = useMutation({

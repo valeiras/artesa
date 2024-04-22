@@ -17,7 +17,7 @@ const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, cancelButt
           </>
         )}
       </Button>
-      <Button variant="destructive" className="w-32" disabled={isPending} asChild>
+      <Button variant="destructive" className="w-32" disabled={isPending}>
         <Link href={cancelButtonHref} className="flex flex-row gap-x-1">
           <X strokeWidth={1.5} /> Cancelar
         </Link>
