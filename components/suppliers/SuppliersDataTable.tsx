@@ -11,6 +11,7 @@ import RowActions from "../RowActions";
 import { useToast } from "../ui/use-toast";
 import SuccessMessage from "../SuccesMessage";
 import getSortableHeader from "@/lib/getSortableHeader";
+import { DataTableColumnHeader } from "../DataTableColumnHeader";
 
 const SuppliersDataTable: React.FC = () => {
   const queryClient = useQueryClient();
@@ -39,19 +40,26 @@ const SuppliersDataTable: React.FC = () => {
   const columns: ColumnDef<ReadSupplierDBType>[] = [
     {
       accessorKey: "name",
-      header: getSortableHeader("Nombre"),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
+      meta: { columnName: "Nombre" },
     },
     {
       accessorKey: "email",
-      header: "Email",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
+      enableSorting: false,
+      meta: { columnName: "Email" },
     },
     {
       accessorKey: "phone",
-      header: "Teléfono",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Teléfono" />,
+      enableSorting: false,
+      meta: { columnName: "Teléfono" },
     },
     {
       accessorKey: "address",
-      header: "Dirección",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Dirección" />,
+      enableSorting: false,
+      meta: { columnName: "Dirección" },
     },
     {
       id: "actions",
@@ -60,6 +68,9 @@ const SuppliersDataTable: React.FC = () => {
         return <RowActions id={item.id} deleteItemMutation={mutate} />;
       },
       size: 10,
+      enableHiding: false,
+      enableSorting: false,
+      meta: { columnName: "Acciones" },
     },
   ];
 

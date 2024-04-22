@@ -21,10 +21,15 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { DataTablePagination } from "./DataTablePagination";
-
+import DataTableColumnSelector from "./DataTableColumnSelector";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+}
+declare module "@tanstack/react-table" {
+  interface ColumnMeta<TData extends unknown, TValue> {
+    columnName: string;
+  }
 }
 
 const pageSize = 10;
@@ -70,7 +75,9 @@ function DataTable<TData, TValue>({
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
+        <DataTableColumnSelector table={table} />
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
