@@ -7,6 +7,8 @@ import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import CustomTooltip from "./CustomTooltip";
+import CustomDialog from "./CustomDialog";
+import NewCommodityBatchForm from "./commodityBatches/NewCommodityBatchForm";
 
 type Props = { row: Row<ReadCommodityWithBatches | ReadProductWithBatches>; itemAddress: string };
 const BatchesContainer: React.FC<Props> = ({ row, itemAddress }) => {
@@ -27,11 +29,15 @@ const BatchesContainer: React.FC<Props> = ({ row, itemAddress }) => {
       </ScrollArea>
       <div className="-mb-3 -ml-3 z-50">
         <CustomTooltip tooltipContent="Crear nuevo lote">
-          <Button className="w-6 h-6 p-0.5 rounded-full" asChild>
-            <Link href={`/${itemAddress}/${row.original["id"]}/nuevo-lote`}>
-              <Plus strokeWidth={2.5} size={16} />
-            </Link>
-          </Button>
+          <CustomDialog
+            dialogTrigger={
+              <Button className="w-6 h-6 p-0.5 rounded-full" asChild>
+                <Plus strokeWidth={2.5} size={16} />
+              </Button>
+            }
+          >
+            <NewCommodityBatchForm commodityId={row.original["id"]} />
+          </CustomDialog>
         </CustomTooltip>
       </div>
     </div>
