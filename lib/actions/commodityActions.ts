@@ -1,6 +1,13 @@
 "use server";
 
-import { CreateCommodityDBType, ReadCommodityDBType, UpdateCommodityDBType, CommodityFormType } from "../types";
+import {
+  CreateCommodityDBType,
+  ReadCommodityDBType,
+  ReadCommodityBatchDBType,
+  UpdateCommodityDBType,
+  CommodityFormType,
+  ReadCommodityWithBatches,
+} from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
@@ -45,6 +52,29 @@ export async function updateCommodity(
 
 export async function getAllCommodities() {
   return getAllRecords("commodity") as Promise<{ dbData: ReadCommodityDBType[]; dbError: PostgrestError }>;
+}
+
+export async function getAllCommoditiesWithBatches(): Promise<{
+  dbData: ReadCommodityWithBatches[];
+  dbError: PostgrestError;
+}> {
+  let dbData: ReadCommodityWithBatches[], dbError: PostgrestError, dbDataBatches: ReadCommodityBatchDBType[];
+  ({ dbData, dbError } = (await getAllRecords("commodity")) as {
+    dbData: ReadCommodityWithBatches[];
+    dbError: PostgrestError;
+  });
+  if (dbError) return { dbData, dbError };
+
+  ({ dbData: dbDataBatches, dbError } = (await getAllRecords("commodity_batch")) as {
+    dbData: ReadCommodityBatchDBType[];
+    dbError: PostgrestError;
+  });
+
+  dbData = dbData.map((item) => {
+    const commodityBatches = dbDataBatches.filter(({ commodity_id }) => item.id === commodity_id);
+    return { ...item, batches: commodityBatches };
+  });
+  return { dbData, dbError };
 }
 
 export async function getSingleCommodity(id: number) {

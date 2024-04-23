@@ -37,6 +37,21 @@ export type ReadProductDBType = Database["public"]["Tables"]["product"]["Row"];
 export type CreateProductDBType = Database["public"]["Tables"]["product"]["Insert"];
 export type UpdateProductDBType = Database["public"]["Tables"]["product"]["Update"];
 
+export const productBatchFormSchema = z.object({
+  productId: z.string({ required_error: "Especifica un producto" }),
+  externalId: z.string({ required_error: "Asigna un identificador al lote" }),
+  date: z.date(),
+  initialAmount: z.number(),
+  comments: z.string().optional(),
+});
+
+export type ProductBatchFormType = z.infer<typeof productBatchFormSchema>;
+export type ReadProductBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Row"];
+export type CreateProductBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
+export type UpdateProductBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
+
+export type ReadProductWithBatches = ReadProductDBType & { batches?: ReadProductBatchDBType[] };
+
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
   unit: unitEnum,
@@ -50,6 +65,7 @@ export type UpdateCommodityDBType = Database["public"]["Tables"]["commodity"]["U
 export const commodityBatchFormSchema = z.object({
   commodityId: z.string({ required_error: "Especifica una materia prima" }),
   supplierId: z.string({ required_error: "Especifica un productor" }),
+  externalId: z.string({ required_error: "Asigna un identificador al lote" }),
   date: z.date(),
   initialAmount: z.number(),
   comments: z.string().optional(),
@@ -59,6 +75,8 @@ export type CommodityBatchFormType = z.infer<typeof commodityBatchFormSchema>;
 export type ReadCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Row"];
 export type CreateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
 export type UpdateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
+
+export type ReadCommodityWithBatches = ReadCommodityDBType & { batches?: ReadCommodityBatchDBType[] };
 
 export const supplierFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),

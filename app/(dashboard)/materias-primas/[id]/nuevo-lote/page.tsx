@@ -1,7 +1,9 @@
 import React from "react";
 
-const page: React.FC = () => {
-  return <div>page</div>;
+type Props = { params: { id: string } };
+
+const page: React.FC<Props> = ({ params }) => {
+  return <div>{params.id}</div>;
 };
 
 export default page;

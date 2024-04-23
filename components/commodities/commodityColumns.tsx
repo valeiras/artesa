@@ -1,15 +1,16 @@
-import { ReadCommodityDBType, UnitType } from "@/lib/types";
+import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadCommodityWithBatches, UnitType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import RowActions from "../RowActions";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
+import BatchesContainer from "../BatchesContainer";
 
 export function commodityColumns(
   mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>
 ) {
-  const columns: ColumnDef<ReadCommodityDBType>[] = [
+  const columns: ColumnDef<ReadCommodityWithBatches>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
@@ -21,9 +22,17 @@ export function commodityColumns(
       enableSorting: false,
       meta: { columnName: "Unidad" },
       cell: ({ row }) => {
-        const unitValue = row.getValue("unit") as UnitType;
+        const unitValue = row.original["unit"];
+        if (!unitValue) return null;
         return <>{valueToLabel[unitValue]}</>;
       },
+    },
+    {
+      accessorKey: "batches",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Lotes" />,
+      enableSorting: false,
+      meta: { columnName: "Lotes" },
+      cell: ({ row }) => <BatchesContainer row={row} itemAddress="materias-primas" />,
     },
     {
       accessorKey: "created_at",

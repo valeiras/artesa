@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getAllCommodities } from "@/lib/actions/commodityActions";
+import { getAllCommodities, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import CommoditiesDataTable from "@/components/commodities/CommoditiesDataTable";
 
@@ -9,7 +9,7 @@ const CommoditiesPage: React.FC = async () => {
 
   await queryClient.prefetchQuery({
     queryKey: ["commodities"],
-    queryFn: () => getAllCommodities(),
+    queryFn: () => getAllCommoditiesWithBatches(),
   });
 
   return (

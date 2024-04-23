@@ -4,9 +4,7 @@ import { deleteCustomer, getAllCustomers } from "@/lib/actions/customerActions";
 import React from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import DataTable from "@/components/DataTable";
-
 import { useToast } from "../ui/use-toast";
-
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { customerColumns } from "./customerColumns";
 
