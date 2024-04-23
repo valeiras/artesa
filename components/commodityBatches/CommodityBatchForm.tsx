@@ -1,26 +1,37 @@
-import { CommodityFormType } from "@/lib/types";
+import { CommodityBatchFormType } from "@/lib/types";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
-
+import { useQuery } from "@tanstack/react-query";
 import { Form } from "@/components/ui/form";
-import { CustomFormField, CustomFormSelect } from "../FormComponents";
+import { CustomFormDatePicker, CustomFormField, CustomFormSelect } from "../FormComponents";
 import FormButtons from "../FormButtons";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { availableUnits } from "@/lib/units";
+import { getAllSuppliers } from "@/lib/actions/supplierActions";
 
 type Props = {
-  form: UseFormReturn<CommodityFormType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, CommodityFormType, unknown>;
+  form: UseFormReturn<CommodityBatchFormType>;
+  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, CommodityBatchFormType, unknown>;
   isPending: boolean;
   formHeader: string;
   submitButtonLabel: string;
 };
 
-const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
-  function onSubmit(values: CommodityFormType) {
+const CommodityBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+  const { data: suppliersData } = useQuery({
+    queryKey: ["suppliers"],
+    queryFn: () => getAllSuppliers(),
+  });
+
+  function onSubmit(values: CommodityBatchFormType) {
     mutate(values);
   }
+
+  const availableSuppliers =
+    suppliersData?.dbData.map(({ name, id }) => {
+      return { value: id.toString(), label: name };
+    }) || [];
 
   return (
     <Form {...form}>
@@ -28,18 +39,23 @@ const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, s
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
         <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3 items-start mb-8 content-start">
           <CustomFormField
-            name="name"
+            name="commodityName"
             control={form.control}
-            label="Nombre de la materia prima"
+            label="Materia prima"
             placeholder="Manzana"
+            disabled={true}
           />
           <CustomFormSelect
-            name="unit"
-            items={availableUnits}
+            name="supplierId"
+            items={availableSuppliers}
             control={form.control}
-            label="Unidad de medida"
-            placeholder="kg"
+            label="Proveedor"
+            placeholder="Selecciona un proveedor"
           />
+          <CustomFormDatePicker name="date" control={form.control} label="Fecha" />
+          <CustomFormField name="externalId" control={form.control} label="Identificador del lote" />
+          <CustomFormField name="initialAmount" control={form.control} label="Cantidad" placeholder="0" type="number" />
+          <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} cancelButtonHref="/materias-primas" />
       </form>
@@ -47,4 +63,4 @@ const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, s
   );
 };
 
-export default CommodityForm;
+export default CommodityBatchForm;

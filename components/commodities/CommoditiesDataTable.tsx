@@ -1,8 +1,8 @@
 "use client";
 
-import { deleteCommodity, getAllCommodities } from "@/lib/actions/commodityActions";
+import { deleteCommodity, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
 import React from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import DataTable from "@/components/DataTable";
 
 import { useToast } from "../ui/use-toast";
@@ -29,7 +29,7 @@ const CommoditiesDataTable: React.FC = () => {
 
   const { data, isPending: isDataPending } = useQuery({
     queryKey: ["commodities"],
-    queryFn: () => getAllCommodities(),
+    queryFn: () => getAllCommoditiesWithBatches(),
   });
 
   if (isDataPending) return <h2>Cargando...</h2>;

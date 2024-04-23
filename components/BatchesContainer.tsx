@@ -4,24 +4,43 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Props = { row: Row<ReadCommodityWithBatches | ReadProductWithBatches>; itemAddress: string };
 const BatchesContainer: React.FC<Props> = ({ row, itemAddress }) => {
   const batches = row.original["batches"];
   return (
-    <div className="flex flex-row items-start p-0.5 gap-x-4">
-      <div className="flex flex-col">
-        {!batches || batches.length === 0
-          ? "No hay lotes disponibles"
-          : batches.map((batch) => {
-              return batch.id;
-            })}
+    <div className="flex flex-row items-end justify-start">
+      <ScrollArea className="h-[72px] w-64 rounded-md border">
+        <div className="p-2">
+          {!batches || batches.length === 0
+            ? "No hay lotes disponibles"
+            : batches.map((batch, idx) => (
+                <React.Fragment key={batch.id}>
+                  {idx !== 0 && <Separator className="my-2" />}
+                  <div className="text-sm">{batch.external_id}</div>
+                </React.Fragment>
+              ))}
+        </div>
+      </ScrollArea>
+      <div className="-mb-3 -ml-3 z-50">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button className="w-6 h-6 p-0.5 rounded-full" asChild>
+                <Link href={`/${itemAddress}/${row.original["id"]}/nuevo-lote`}>
+                  <Plus strokeWidth={2.5} size={16} />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Crear nuevo lote</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
-      <Button className="w-fit h-fit p-0.5 rounded-full" asChild>
-        <Link href={`/${itemAddress}/${row.original["id"]}/nuevo-lote`}>
-          <Plus strokeWidth={2.5} size={16} />
-        </Link>
-      </Button>
     </div>
   );
 };

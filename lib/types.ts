@@ -63,11 +63,16 @@ export type CreateCommodityDBType = Database["public"]["Tables"]["commodity"]["I
 export type UpdateCommodityDBType = Database["public"]["Tables"]["commodity"]["Update"];
 
 export const commodityBatchFormSchema = z.object({
-  commodityId: z.string({ required_error: "Especifica una materia prima" }),
-  supplierId: z.string({ required_error: "Especifica un productor" }),
-  externalId: z.string({ required_error: "Asigna un identificador al lote" }),
+  commodityId: z.number({ required_error: "Especifica una materia prima" }),
+  commodityName: z.string({ required_error: "Especifica una materia prima" }),
+  supplierId: z.string().min(1, { message: "Especifica un productor" }),
+  externalId: z
+    .string({ required_error: "Asigna un identificador al lote" })
+    .min(2, { message: "El identificador debe tener al menos 2 caracteres" }),
   date: z.date(),
-  initialAmount: z.number(),
+  initialAmount: z.coerce
+    .number({ invalid_type_error: "Especifica la cantidad" })
+    .positive({ message: "Especifica una cantidad positiva" }),
   comments: z.string().optional(),
 });
 

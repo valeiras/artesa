@@ -2,26 +2,41 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { commodityFormSchema, CommodityFormType } from "@/lib/types";
-
-import { useMutation } from "@tanstack/react-query";
-import { createCommodity } from "@/lib/actions/commodityActions";
+import { commodityBatchFormSchema, CommodityBatchFormType } from "@/lib/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import CommodityForm from "./CommodityBatchForm";
+import CommodityBatchForm from "./CommodityBatchForm";
+import { getSingleCommodity } from "@/lib/actions/commodityActions";
 
-const NewCommodityForm: React.FC = () => {
-  const form = useForm<CommodityFormType>({
-    resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: "", unit: "kg" },
+type Props = { commodityId: number };
+const NewCommodityBatchForm: React.FC<Props> = ({ commodityId }) => {
+  const { data: commodityData } = useQuery({
+    queryKey: ["commodity", commodityId],
+    queryFn: () => getSingleCommodity(commodityId),
+  });
+
+  const form = useForm<CommodityBatchFormType>({
+    resolver: zodResolver(commodityBatchFormSchema),
+    defaultValues: {
+      commodityId: commodityData?.dbData.id,
+      commodityName: commodityData?.dbData.name,
+      supplierId: "",
+      externalId: "",
+      date: new Date(),
+      initialAmount: undefined,
+      comments: "",
+    },
   });
 
   const successHandler = useQuerySuccessHandler({
     destinationAfterSuccess: "/materias-primas",
-    successToastMessage: "Materia prima creada con éxito",
+    successToastMessage: "Lote creado con éxito",
     queryKeys: [["commodities"], ["stats"], ["charts"]],
   });
+
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: CommodityFormType) => createCommodity(values),
+    mutationFn: (values: CommodityBatchFormType) => createCommodityBatch(values),
     onSuccess: successHandler,
     onError: (error) => {
       console.log(error);
@@ -29,13 +44,13 @@ const NewCommodityForm: React.FC = () => {
   });
 
   return (
-    <CommodityForm
+    <CommodityBatchForm
       form={form}
       mutate={mutate}
       isPending={isPending}
-      formHeader="Nueva materia prima"
+      formHeader="Nuevo lote"
       submitButtonLabel="Crear"
     />
   );
 };
-export default NewCommodityForm;
+export default NewCommodityBatchForm;
