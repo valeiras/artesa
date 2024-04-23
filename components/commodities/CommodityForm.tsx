@@ -1,4 +1,4 @@
-import { CommodityFormType, availableUnits } from "@/lib/types";
+import { CommodityFormType } from "@/lib/types";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 
@@ -7,15 +7,17 @@ import { CustomFormField, CustomFormSelect } from "../FormComponents";
 import FormButtons from "../FormButtons";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
+import { availableUnits } from "@/lib/units";
 
 type Props = {
   form: UseFormReturn<CommodityFormType>;
   mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, CommodityFormType, unknown>;
   isPending: boolean;
   formHeader: string;
+  submitButtonLabel: string;
 };
 
-const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader }) => {
+const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
   function onSubmit(values: CommodityFormType) {
     mutate(values);
   }
@@ -39,7 +41,7 @@ const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader })
             placeholder="kg"
           />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel="Crear" cancelButtonHref="/materias-primas" />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} cancelButtonHref="/materias-primas" />
       </form>
     </Form>
   );

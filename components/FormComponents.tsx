@@ -14,7 +14,7 @@ type CustomFormFieldProps = {
 type CustomFormSelectProps = {
   name: string;
   control: Control<any>;
-  items: string[];
+  items: { value: string; label?: string }[];
   label?: string;
   placeholder?: string;
 };
@@ -54,14 +54,14 @@ export function CustomFormSelect({ name, control, items, label, placeholder }: C
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder={placeholder || items[0]} />
+                <SelectValue placeholder={placeholder || items[0].label || items[0].value} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {items.map((item) => {
+              {items.map(({ value, label }) => {
                 return (
-                  <SelectItem key={item} value={item}>
-                    {item}
+                  <SelectItem key={value} value={value}>
+                    {label || value}
                   </SelectItem>
                 );
               })}

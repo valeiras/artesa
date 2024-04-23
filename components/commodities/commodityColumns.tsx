@@ -1,9 +1,10 @@
-import { ReadCommodityDBType } from "@/lib/types";
+import { ReadCommodityDBType, UnitType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import RowActions from "../RowActions";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
+import { valueToLabel } from "@/lib/units";
 
 export function commodityColumns(
   mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>
@@ -15,6 +16,16 @@ export function commodityColumns(
       meta: { columnName: "Nombre" },
     },
     {
+      accessorKey: "unit",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Unidad de medida" />,
+      enableSorting: false,
+      meta: { columnName: "Unidad" },
+      cell: ({ row }) => {
+        const unitValue = row.getValue("unit") as UnitType;
+        return <>{valueToLabel[unitValue]}</>;
+      },
+    },
+    {
       accessorKey: "created_at",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
       meta: { columnName: "Fecha" },
@@ -22,12 +33,6 @@ export function commodityColumns(
         const formattedDate = new Date(row.getValue("created_at")).toLocaleDateString();
         return <>{formattedDate}</>;
       },
-    },
-    {
-      accessorKey: "unit",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Unidad de medida" />,
-      enableSorting: false,
-      meta: { columnName: "Unidad" },
     },
     {
       id: "actions",

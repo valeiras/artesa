@@ -19,18 +19,13 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierId }) => {
 
   const form = useForm<SupplierFormType>({
     resolver: zodResolver(supplierFormSchema),
-    defaultValues: { name: "", email: "", phone: "", address: "" },
+    defaultValues: {
+      name: data?.dbData?.name,
+      email: data?.dbData?.email || "",
+      phone: data?.dbData?.phone || "",
+      address: data?.dbData?.address || "",
+    },
   });
-
-  useEffect(() => {
-    if (data) {
-      const { dbData } = data;
-      form.setValue("name", dbData?.name || "");
-      form.setValue("email", dbData?.email || "");
-      form.setValue("phone", dbData?.phone || "");
-      form.setValue("address", dbData?.address || "");
-    }
-  }, [data, form]);
 
   const successHandler = useQuerySuccessHandler({
     destinationAfterSuccess: "/proveedores",
@@ -52,7 +47,7 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierId }) => {
       mutate={mutate}
       isPending={isPending}
       formHeader="Editar proveedor"
-      submitButtonLabel="Editar"
+      submitButtonLabel="Actualizar"
     />
   );
 };

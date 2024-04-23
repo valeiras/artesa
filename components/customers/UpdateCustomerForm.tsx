@@ -20,18 +20,13 @@ const UpdateCustomerForm: React.FC<Props> = ({ customerId }) => {
 
   const form = useForm<CustomerFormType>({
     resolver: zodResolver(customerFormSchema),
-    defaultValues: { name: "", email: "", phone: "", address: "" },
+    defaultValues: {
+      name: data?.dbData?.name,
+      email: data?.dbData?.email || "",
+      phone: data?.dbData?.phone || "",
+      address: data?.dbData?.address || "",
+    },
   });
-
-  useEffect(() => {
-    if (data) {
-      const { dbData } = data;
-      form.setValue("name", dbData?.name || "");
-      form.setValue("email", dbData?.email || "");
-      form.setValue("phone", dbData?.phone || "");
-      form.setValue("address", dbData?.address || "");
-    }
-  }, [data, form]);
 
   const successHandler = useQuerySuccessHandler({
     destinationAfterSuccess: "/clientes",
@@ -55,7 +50,7 @@ const UpdateCustomerForm: React.FC<Props> = ({ customerId }) => {
       mutate={mutate}
       isPending={isPending}
       formHeader="Editar cliente"
-      submitButtonLabel="Editar"
+      submitButtonLabel="Actualizar"
     />
   );
 };

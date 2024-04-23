@@ -23,8 +23,7 @@ const esMobileValidator = (str: string) => {
   ]);
 };
 
-const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]);
-export const availableUnits = unitEnum.options;
+export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]);
 export type UnitType = z.infer<typeof unitEnum>;
 
 export const productFormSchema = z.object({

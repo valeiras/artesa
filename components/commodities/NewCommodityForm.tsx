@@ -2,14 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
-import { Form } from "@/components/ui/form";
-import { CustomFormField, CustomFormSelect } from "../FormComponents";
-import { availableUnits, commodityFormSchema, CommodityFormType } from "@/lib/types";
+import { commodityFormSchema, CommodityFormType } from "@/lib/types";
 
 import { useMutation } from "@tanstack/react-query";
 import { createCommodity } from "@/lib/actions/commodityActions";
-import FormButtons from "../FormButtons";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityForm from "./CommodityForm";
 
@@ -32,6 +28,14 @@ const NewCommodityForm: React.FC = () => {
     },
   });
 
-  return <CommodityForm form={form} mutate={mutate} isPending={isPending} formHeader="Nueva materia prima" />;
+  return (
+    <CommodityForm
+      form={form}
+      mutate={mutate}
+      isPending={isPending}
+      formHeader="Nueva materia prima"
+      submitButtonLabel="Crear"
+    />
+  );
 };
 export default NewCommodityForm;

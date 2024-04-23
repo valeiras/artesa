@@ -13,15 +13,6 @@ export function customerColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
       meta: { columnName: "Nombre" },
     },
     {
-      accessorKey: "created_at",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
-      meta: { columnName: "Fecha" },
-      cell: ({ row }) => {
-        const formattedDate = new Date(row.getValue("created_at")).toLocaleDateString();
-        return <>{formattedDate}</>;
-      },
-    },
-    {
       accessorKey: "email",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
       meta: { columnName: "Email" },
@@ -38,6 +29,15 @@ export function customerColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
       header: ({ column }) => <DataTableColumnHeader column={column} title="Dirección" />,
       enableSorting: false,
       meta: { columnName: "Dirección" },
+    },
+    {
+      accessorKey: "created_at",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
+      meta: { columnName: "Fecha" },
+      cell: ({ row }) => {
+        const formattedDate = new Date(row.getValue("created_at")).toLocaleDateString();
+        return <>{formattedDate}</>;
+      },
     },
     {
       id: "actions",

@@ -20,19 +20,11 @@ const UpdateCommodityForm: React.FC<Props> = ({ commodityId }) => {
 
   const form = useForm<CommodityFormType>({
     resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: "", unit: "kg" },
+    defaultValues: { name: data?.dbData?.name, unit: data?.dbData?.unit || undefined },
   });
 
-  useEffect(() => {
-    if (data) {
-      const { dbData } = data;
-      form.setValue("name", dbData?.name || "");
-      form.setValue("unit", dbData?.unit || "kg");
-    }
-  }, [data, form]);
-
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/proveedores",
+    destinationAfterSuccess: "/materias-primas",
     successToastMessage: "Proveedor actualizado con éxito",
     queryKeys: [["commodity", commodityId], ["commodities"], ["stats"], ["charts"]],
   });
@@ -45,6 +37,14 @@ const UpdateCommodityForm: React.FC<Props> = ({ commodityId }) => {
     },
   });
 
-  return <CommodityForm form={form} mutate={mutate} isPending={isPending} formHeader="Editar materia prima" />;
+  return (
+    <CommodityForm
+      form={form}
+      mutate={mutate}
+      isPending={isPending}
+      formHeader="Editar materia prima"
+      submitButtonLabel="Actualizar"
+    />
+  );
 };
 export default UpdateCommodityForm;

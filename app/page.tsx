@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Camera } from "lucide-react";
 import Image from "next/image";
 import logo from "../assets/logo.svg";
 import landingImg from "../assets/main.svg";
@@ -7,11 +6,11 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main>
-      <header className="max-w-6xl mx-auto px-4 sm:px-8 py-6">
-        <Image src={logo} alt="logo" />
+    <main className="flex flex-col min-h-screen items-center">
+      <header className="max-w-6xl w-full px-4 sm:px-8 py-6">
+        <Image src={logo} alt="logo" width={300} />
       </header>
-      <section className="max-w-6xl mx-auto px-4 sm:px-8 h-screen -mt-20 grid lg:grid-cols-[1fr,400px] items-center">
+      <section className="max-w-6xl mx-auto px-4 pt-8 pb-32 sm:px-8 grid lg:grid-cols-[1fr,400px] items-center flex-1">
         <div>
           <h1 className="text-4xl md:text-7xl font-bold">
             Gestión de <span className="text-primary">trazabilidad</span>
