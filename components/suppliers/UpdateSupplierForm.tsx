@@ -6,7 +6,6 @@ import { supplierFormSchema, SupplierFormType } from "@/lib/types";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getSingleSupplier, updateSupplier } from "@/lib/actions/supplierActions";
-import { useEffect } from "react";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import SupplierForm from "./SupplierForm";
 

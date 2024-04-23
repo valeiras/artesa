@@ -7,7 +7,6 @@ import { commodityFormSchema, CommodityFormType } from "@/lib/types";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getSingleCommodity, updateCommodity } from "@/lib/actions/commodityActions";
-import { useEffect } from "react";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityForm from "./CommodityForm";
 

@@ -7,7 +7,6 @@ import { customerFormSchema, CustomerFormType } from "@/lib/types";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getSingleCustomer, updateCustomer } from "@/lib/actions/customerActions";
-import { useEffect } from "react";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CustomerForm from "./CustomerForm";
 
