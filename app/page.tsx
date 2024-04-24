@@ -11,14 +11,14 @@ export default function Home() {
         <Image src={logo} alt="logo" width={300} />
       </header>
       <section className="max-w-6xl mx-auto px-4 pt-8 pb-32 sm:px-8 grid lg:grid-cols-[1fr,400px] items-center flex-1">
-        <div>
+        <div className="flex flex-col gap-6 items-start">
           <h1 className="text-4xl md:text-7xl font-bold">
             Gestión de <span className="text-primary">trazabilidad</span>
           </h1>
-          <p className="leading-loose max-w-md mt-4 text-lg">
+          <p className="leading-loose max-w-md text-lg">
             Gestión simplificada de trazabilidad para pequeños y medianos productores.
           </p>
-          <Button asChild className="mt-4 text-lg">
+          <Button asChild className="text-lg">
             <Link href="/materias-primas">Comenzar</Link>
           </Button>
         </div>

@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
   const linksContainerRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
 
-  const [showLinks, setShowLinks] = useState(true);
+  const [showLinks, setShowLinks] = useState(false);
 
   const linkStyles =
     showLinks && linksRef.current ? { width: `${linksRef.current.getBoundingClientRect().width}px` } : { width: `0px` };
