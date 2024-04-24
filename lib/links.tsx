@@ -35,8 +35,8 @@ const links: NavLink[] = [
     icon: <Handshake strokeWidth={strokeWidth} />,
   },
   {
-    href: "/estadisticas",
-    label: "Estadísticas",
+    href: "/inventario",
+    label: "Inventario",
     icon: <AreaChart strokeWidth={strokeWidth} />,
   },
 ];

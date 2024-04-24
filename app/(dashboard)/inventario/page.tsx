@@ -2,7 +2,7 @@ import React from "react";
 import underConstruction from "@/assets/under_construction.svg";
 import Image from "next/image";
 
-const ProductsPage: React.FC = () => {
+const InventoryPage: React.FC = () => {
   return (
     <div className="flex-flex-col">
       <h2 className="text-4xl font-bold">Estamos trabajando en ello...</h2>
@@ -11,4 +11,4 @@ const ProductsPage: React.FC = () => {
   );
 };
 
-export default ProductsPage;
+export default InventoryPage;
