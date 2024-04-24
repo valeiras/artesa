@@ -56,7 +56,7 @@ const CommodityBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHead
           <CustomFormField name="initialAmount" control={form.control} label="Cantidad" placeholder="0" type="number" />
           <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} cancelButtonHref="/materias-primas" />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} isBatchForm={true} />
       </form>
     </Form>
   );

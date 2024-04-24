@@ -3,16 +3,16 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Check, X, Clock } from "lucide-react";
 import { useDataTableContext } from "./dataTable/dataTableContext";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type Props = {
   isPending: boolean;
   submitButtonLabel: string;
-  cancelButtonHref: string;
+  isBatchForm?: boolean;
 };
-const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel }) => {
+const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, isBatchForm }) => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Data table context if missing");
-  const { setIsDialogOpen } = dataTableContext;
 
   return (
     <div className="flex flex-row gap-x-2 justify-start mt-12">
@@ -29,20 +29,17 @@ const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel }) => {
           </>
         )}
       </Button>
-      {isPending ? (
-        <Button variant="destructive" className="w-32 flex flex-row justify-center gap-x-1 px-2" disabled>
-          <X strokeWidth={1.5} />
-          <span className="text-left">Cargando</span>
-        </Button>
-      ) : (
+      <DialogClose>
         <Button
           variant="destructive"
           className="w-32 flex flex-row justify-center gap-x-1 px-2"
-          onClick={() => setIsDialogOpen(false)}
+          disabled={isPending}
+          type="button"
         >
-          <X strokeWidth={1.5} /> <span className="text-left">Cancelar</span>
+          <X strokeWidth={1.5} />
+          {isPending ? <span className="text-left">Cargando</span> : <span className="text-left">Cancelar</span>}
         </Button>
-      )}
+      </DialogClose>
     </div>
   );
 };
