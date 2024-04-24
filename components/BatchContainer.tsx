@@ -19,12 +19,13 @@ import { PostgrestError } from "@supabase/supabase-js";
 import UpdateCommodityBatchForm from "./commodityBatches/UpdateCommodityBatchForm";
 
 type Props = {
-  itemData: ReadCommodityWithBatchesType | ReadProductWithBatchesType;
+  itemData: ReadCommodityWithBatchesType;
   UpdateBatchForm: typeof UpdateCommodityBatchForm;
+  NewBatchForm: typeof NewCommodityBatchForm;
   mutateBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
 };
 
-const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, mutateBatch, itemData }) => {
+const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, NewBatchForm, mutateBatch, itemData }) => {
   const { batches } = itemData;
   const NewBatchButton = () => {
     return (
@@ -55,7 +56,7 @@ const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, mutateBatch, itemDat
       <div className="-mb-3 -ml-3 z-40">
         <CustomTooltip tooltipContent="Crear nuevo lote">
           <CustomDialog DialogTriggerContent={NewBatchButton()}>
-            <NewCommodityBatchForm commodityData={itemData} />
+            <NewCommodityBatchForm itemData={itemData} />
           </CustomDialog>
         </CustomTooltip>
       </div>

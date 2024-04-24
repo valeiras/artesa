@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { commodityFormSchema, CommodityFormType } from "@/lib/types";
+import { commodityFormSchema, CommodityFormValueType } from "@/lib/types";
 
 import { useMutation } from "@tanstack/react-query";
 import { createCommodity } from "@/lib/actions/commodityActions";
@@ -15,7 +15,7 @@ const NewCommodityForm: React.FC = () => {
   if (dataTableContext === null) throw new Error("Data table context if missing");
   const { setIsDialogOpen } = dataTableContext;
 
-  const form = useForm<CommodityFormType>({
+  const form = useForm<CommodityFormValueType>({
     resolver: zodResolver(commodityFormSchema),
     defaultValues: { name: "", unit: "kg" },
   });
@@ -26,7 +26,7 @@ const NewCommodityForm: React.FC = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: CommodityFormType) => createCommodity(values),
+    mutationFn: (values: CommodityFormValueType) => createCommodity(values),
     onSuccess: (e) => {
       setIsDialogOpen(false);
       successHandler(e);

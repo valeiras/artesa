@@ -5,7 +5,7 @@ import {
   ReadCommodityDBType,
   ReadCommodityBatchDBType,
   UpdateCommodityDBType,
-  CommodityFormType,
+  CommodityFormValueType,
   ReadCommodityWithBatchesType,
 } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
@@ -17,7 +17,7 @@ import {
   deleteRecord,
 } from "../supabaseUtils";
 
-export async function createCommodity(values: CommodityFormType): Promise<{
+export async function createCommodity(values: CommodityFormValueType): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -33,7 +33,7 @@ export async function createCommodity(values: CommodityFormType): Promise<{
 }
 
 export async function updateCommodity(
-  values: CommodityFormType,
+  values: CommodityFormValueType,
   id: number
 ): Promise<{
   dbError: PostgrestError | null;

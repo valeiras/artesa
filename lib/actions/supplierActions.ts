@@ -1,6 +1,6 @@
 "use server";
 
-import { CreateSupplierDBType, ReadSupplierDBType, UpdateSupplierDBType, SupplierFormType } from "../types";
+import { CreateSupplierDBType, ReadSupplierDBType, UpdateSupplierDBType, SupplierFormValueType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
@@ -10,7 +10,7 @@ import {
   deleteRecord,
 } from "../supabaseUtils";
 
-export async function createSupplier(values: SupplierFormType): Promise<{
+export async function createSupplier(values: SupplierFormValueType): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -28,7 +28,7 @@ export async function createSupplier(values: SupplierFormType): Promise<{
 }
 
 export async function updateSupplier(
-  values: SupplierFormType,
+  values: SupplierFormValueType,
   id: number
 ): Promise<{
   dbError: PostgrestError | null;

@@ -1,10 +1,10 @@
 "use server";
 
-import { CreateCommodityBatchDBType, UpdateCommodityBatchDBType, CommodityBatchFormType } from "../types";
+import { CreateCommodityBatchDBType, UpdateCommodityBatchDBType, CommodityBatchFormValueType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { authenticateAndRedirect, connectAndRedirect, deleteRecord } from "../supabaseUtils";
 
-export async function createCommodityBatch(values: CommodityBatchFormType): Promise<{
+export async function createCommodityBatch(values: CommodityBatchFormValueType): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -24,7 +24,7 @@ export async function createCommodityBatch(values: CommodityBatchFormType): Prom
 }
 
 export async function updateCommodityBatch(
-  values: CommodityBatchFormType,
+  values: CommodityBatchFormValueType,
   id: number
 ): Promise<{
   dbError: PostgrestError | null;

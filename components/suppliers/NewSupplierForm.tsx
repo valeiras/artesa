@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { supplierFormSchema, SupplierFormType } from "@/lib/types";
+import { supplierFormSchema, SupplierFormValueType } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { createSupplier } from "@/lib/actions/supplierActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
@@ -14,7 +14,7 @@ const NewSupplierForm: React.FC = () => {
   if (dataTableContext === null) throw new Error("Data table context if missing");
   const { setIsDialogOpen } = dataTableContext;
 
-  const form = useForm<SupplierFormType>({
+  const form = useForm<SupplierFormValueType>({
     resolver: zodResolver(supplierFormSchema),
     defaultValues: { name: "", email: "", phone: "", address: "" },
   });
@@ -25,7 +25,7 @@ const NewSupplierForm: React.FC = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: SupplierFormType) => createSupplier(values),
+    mutationFn: (values: SupplierFormValueType) => createSupplier(values),
     onSuccess: (e) => {
       setIsDialogOpen(false);
       successHandler(e);

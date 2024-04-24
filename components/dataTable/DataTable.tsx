@@ -22,7 +22,7 @@ import { useState } from "react";
 import { DataTablePagination } from "./DataTablePagination";
 import DataTableColumnSelector from "./DataTableColumnSelector";
 import CustomDialog from "../CustomDialog";
-import { DataTableContextProvider, useDataTableContext } from "./dataTableContext";
+import { useDataTableContext } from "./dataTableContext";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];

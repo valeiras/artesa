@@ -1,6 +1,6 @@
 "use server";
 
-import { CreateCustomerDBType, UpdateCustomerDBType, CustomerFormType, ReadCustomerDBType } from "../types";
+import { CreateCustomerDBType, UpdateCustomerDBType, CustomerFormValueType, ReadCustomerDBType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
@@ -10,7 +10,7 @@ import {
   deleteRecord,
 } from "../supabaseUtils";
 
-export async function createCustomer(values: CustomerFormType): Promise<{
+export async function createCustomer(values: CustomerFormValueType): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
@@ -28,7 +28,7 @@ export async function createCustomer(values: CustomerFormType): Promise<{
 }
 
 export async function updateCustomer(
-  values: CustomerFormType,
+  values: CustomerFormValueType,
   id: number
 ): Promise<{
   dbError: PostgrestError | null;

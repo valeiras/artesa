@@ -2,19 +2,19 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { commodityBatchFormSchema, CommodityBatchFormType, ReadCommodityWithBatchesType } from "@/lib/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { commodityBatchFormSchema, CommodityBatchFormValueType, ReadCommodityWithBatchesType } from "@/lib/types";
+import { useMutation } from "@tanstack/react-query";
 import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityBatchForm from "./CommodityBatchForm";
 
-type Props = { commodityData: ReadCommodityWithBatchesType };
-const NewCommodityBatchForm: React.FC<Props> = ({ commodityData }) => {
-  const form = useForm<CommodityBatchFormType>({
+type Props = { itemData: ReadCommodityWithBatchesType };
+const NewCommodityBatchForm: React.FC<Props> = ({ itemData }) => {
+  const form = useForm<CommodityBatchFormValueType>({
     resolver: zodResolver(commodityBatchFormSchema),
     defaultValues: {
-      commodityId: commodityData.id,
-      commodityName: commodityData.name,
+      commodityId: itemData.id,
+      commodityName: itemData.name,
       supplierId: "",
       externalId: "",
       date: new Date(),
@@ -29,7 +29,7 @@ const NewCommodityBatchForm: React.FC<Props> = ({ commodityData }) => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: CommodityBatchFormType) => createCommodityBatch(values),
+    mutationFn: (values: CommodityBatchFormValueType) => createCommodityBatch(values),
     onSuccess: successHandler,
     onError: (error) => {
       console.log(error);
@@ -47,3 +47,5 @@ const NewCommodityBatchForm: React.FC<Props> = ({ commodityData }) => {
   );
 };
 export default NewCommodityBatchForm;
+
+export type NewCommodityBatchFormType = typeof NewCommodityBatchForm;

@@ -1,4 +1,4 @@
-import { CommodityFormValueType } from "@/lib/types";
+import { ProductFormValueType } from "@/lib/types";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 
@@ -10,15 +10,15 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { availableUnits } from "@/lib/units";
 
 type Props = {
-  form: UseFormReturn<CommodityFormValueType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, CommodityFormValueType, unknown>;
+  form: UseFormReturn<ProductFormValueType>;
+  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, ProductFormValueType, unknown>;
   isPending: boolean;
   formHeader: string;
   submitButtonLabel: string;
 };
 
-const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
-  function onSubmit(values: CommodityFormValueType) {
+const ProductForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+  function onSubmit(values: ProductFormValueType) {
     mutate(values);
   }
 
@@ -47,4 +47,4 @@ const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, s
   );
 };
 
-export default CommodityForm;
+export default ProductForm;

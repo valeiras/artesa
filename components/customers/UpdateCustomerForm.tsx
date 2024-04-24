@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { customerFormSchema, CustomerFormType, ReadCustomerDBType } from "@/lib/types";
+import { customerFormSchema, CustomerFormValueType, ReadCustomerDBType } from "@/lib/types";
 
 import { useMutation } from "@tanstack/react-query";
 import { updateCustomer } from "@/lib/actions/customerActions";
@@ -17,7 +17,7 @@ const UpdateCustomerForm: React.FC<Props> = ({ customerData }) => {
   if (dataTableContext === null) throw new Error("Data table context if missing");
   const { setIsDialogOpen } = dataTableContext;
 
-  const form = useForm<CustomerFormType>({
+  const form = useForm<CustomerFormValueType>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
       name: customerData.name,
@@ -33,7 +33,7 @@ const UpdateCustomerForm: React.FC<Props> = ({ customerData }) => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: CustomerFormType) => updateCustomer(values, customerData.id),
+    mutationFn: (values: CustomerFormValueType) => updateCustomer(values, customerData.id),
     onSuccess: (e) => {
       setIsDialogOpen(false);
       successHandler(e);

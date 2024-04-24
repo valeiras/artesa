@@ -1,4 +1,4 @@
-import { CommodityBatchFormValueType } from "@/lib/types";
+import { ProductBatchFormValueType } from "@/lib/types";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
@@ -10,20 +10,20 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { getAllSuppliers } from "@/lib/actions/supplierActions";
 
 type Props = {
-  form: UseFormReturn<CommodityBatchFormValueType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, CommodityBatchFormValueType, unknown>;
+  form: UseFormReturn<ProductBatchFormValueType>;
+  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, ProductBatchFormValueType, unknown>;
   isPending: boolean;
   formHeader: string;
   submitButtonLabel: string;
 };
 
-const CommodityBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+const ProductBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
   const { data: suppliersData } = useQuery({
     queryKey: ["suppliers"],
     queryFn: () => getAllSuppliers(),
   });
 
-  function onSubmit(values: CommodityBatchFormValueType) {
+  function onSubmit(values: ProductBatchFormValueType) {
     mutate(values);
   }
 
@@ -38,7 +38,7 @@ const CommodityBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHead
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
         <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3 items-start mb-8 content-start">
           <CustomFormField
-            name="commodityName"
+            name="productName"
             control={form.control}
             label="Materia prima"
             placeholder="Manzana"
@@ -62,4 +62,4 @@ const CommodityBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHead
   );
 };
 
-export default CommodityBatchForm;
+export default ProductBatchForm;
