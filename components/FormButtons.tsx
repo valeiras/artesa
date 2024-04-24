@@ -2,9 +2,18 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Check, X, Clock } from "lucide-react";
+import { useDataTableContext } from "./dataTable/dataTableContext";
 
-type Props = { isPending: boolean; submitButtonLabel: string; cancelButtonHref: string };
-const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, cancelButtonHref }) => {
+type Props = {
+  isPending: boolean;
+  submitButtonLabel: string;
+  cancelButtonHref: string;
+};
+const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel }) => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Data table context if missing");
+  const { setIsDialogOpen } = dataTableContext;
+
   return (
     <div className="flex flex-row gap-x-2 justify-start mt-12">
       <Button type="submit" className="w-32 flex flex-row justify-center gap-x-1 px-2" disabled={isPending}>
@@ -26,10 +35,12 @@ const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, cancelButt
           <span className="text-left">Cargando</span>
         </Button>
       ) : (
-        <Button variant="destructive" className="w-32 flex flex-row justify-center gap-x-1 px-2" asChild>
-          <Link href={cancelButtonHref}>
-            <X strokeWidth={1.5} /> <span className="text-left">Cancelar</span>
-          </Link>
+        <Button
+          variant="destructive"
+          className="w-32 flex flex-row justify-center gap-x-1 px-2"
+          onClick={() => setIsDialogOpen(false)}
+        >
+          <X strokeWidth={1.5} /> <span className="text-left">Cancelar</span>
         </Button>
       )}
     </div>

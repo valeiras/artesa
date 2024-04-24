@@ -10,22 +10,29 @@ import { createCustomer } from "@/lib/actions/customerActions";
 
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CustomerForm from "./CustomerForm";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const NewCustomerForm: React.FC = () => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Data table context if missing");
+  const { setIsDialogOpen } = dataTableContext;
+
   const form = useForm<CustomerFormType>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: { name: "", email: "", phone: "", address: "" },
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/clientes",
     successToastMessage: "Cliente creado con éxito",
     queryKeys: [["customers"], ["stats"], ["charts"]],
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: (values: CustomerFormType) => createCustomer(values),
-    onSuccess: successHandler,
+    onSuccess: (e) => {
+      setIsDialogOpen(false);
+      successHandler(e);
+    },
     onError: (error) => console.log(error),
   });
 

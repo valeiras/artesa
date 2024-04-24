@@ -8,21 +8,29 @@ import { useMutation } from "@tanstack/react-query";
 import { createCommodity } from "@/lib/actions/commodityActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityForm from "./CommodityForm";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const NewCommodityForm: React.FC = () => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Data table context if missing");
+  const { setIsDialogOpen } = dataTableContext;
+
   const form = useForm<CommodityFormType>({
     resolver: zodResolver(commodityFormSchema),
     defaultValues: { name: "", unit: "kg" },
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/materias-primas",
     successToastMessage: "Materia prima creada con éxito",
     queryKeys: [["commodities"], ["stats"], ["charts"]],
   });
+
   const { mutate, isPending } = useMutation({
     mutationFn: (values: CommodityFormType) => createCommodity(values),
-    onSuccess: successHandler,
+    onSuccess: (e) => {
+      setIsDialogOpen(false);
+      successHandler(e);
+    },
     onError: (error) => {
       console.log(error);
     },

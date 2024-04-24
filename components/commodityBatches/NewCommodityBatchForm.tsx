@@ -2,35 +2,28 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { commodityBatchFormSchema, CommodityBatchFormType } from "@/lib/types";
+import { commodityBatchFormSchema, CommodityBatchFormType, ReadCommodityWithBatchesType } from "@/lib/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityBatchForm from "./CommodityBatchForm";
-import { getSingleCommodity } from "@/lib/actions/commodityActions";
 
-type Props = { commodityId: number };
-const NewCommodityBatchForm: React.FC<Props> = ({ commodityId }) => {
-  const { data: commodityData } = useQuery({
-    queryKey: ["commodity", commodityId],
-    queryFn: () => getSingleCommodity(commodityId),
-  });
-
+type Props = { commodityData: ReadCommodityWithBatchesType };
+const NewCommodityBatchForm: React.FC<Props> = ({ commodityData }) => {
   const form = useForm<CommodityBatchFormType>({
     resolver: zodResolver(commodityBatchFormSchema),
     defaultValues: {
-      commodityId: commodityData?.dbData.id,
-      commodityName: commodityData?.dbData.name,
+      commodityId: commodityData.id,
+      commodityName: commodityData.name,
       supplierId: "",
       externalId: "",
       date: new Date(),
-      initialAmount: undefined,
+      initialAmount: 0,
       comments: "",
     },
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/materias-primas",
     successToastMessage: "Lote creado con éxito",
     queryKeys: [["commodities"], ["stats"], ["charts"]],
   });

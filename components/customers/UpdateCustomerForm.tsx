@@ -9,9 +9,14 @@ import { useMutation } from "@tanstack/react-query";
 import { updateCustomer } from "@/lib/actions/customerActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CustomerForm from "./CustomerForm";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 
 type Props = { customerData: ReadCustomerDBType };
 const UpdateCustomerForm: React.FC<Props> = ({ customerData }) => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Data table context if missing");
+  const { setIsDialogOpen } = dataTableContext;
+
   const form = useForm<CustomerFormType>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
@@ -23,14 +28,16 @@ const UpdateCustomerForm: React.FC<Props> = ({ customerData }) => {
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/clientes",
     successToastMessage: "Cliente actualizado con éxito",
     queryKeys: [["customer", customerData.id], ["customers"], ["stats"], ["charts"]],
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: (values: CustomerFormType) => updateCustomer(values, customerData.id),
-    onSuccess: successHandler,
+    onSuccess: (e) => {
+      setIsDialogOpen(false);
+      successHandler(e);
+    },
     onError: (error) => {
       console.log(error);
     },

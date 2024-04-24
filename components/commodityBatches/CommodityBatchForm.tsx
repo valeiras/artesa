@@ -7,7 +7,6 @@ import { CustomFormDatePicker, CustomFormField, CustomFormSelect } from "../Form
 import FormButtons from "../FormButtons";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
-import { availableUnits } from "@/lib/units";
 import { getAllSuppliers } from "@/lib/actions/supplierActions";
 
 type Props = {

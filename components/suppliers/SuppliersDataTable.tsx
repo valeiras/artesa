@@ -3,11 +3,13 @@
 import { deleteSupplier, getAllSuppliers } from "@/lib/actions/supplierActions";
 import React from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/dataTable/DataTable";
 
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { supplierColumns } from "./supplierColumns";
+import NewSupplierForm from "./NewSupplierForm";
+import { DataTableContextProvider } from "../dataTable/dataTableContext";
 
 const SuppliersDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -46,7 +48,14 @@ const SuppliersDataTable: React.FC = () => {
   }
 
   return (
-    <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" newItemLink="/proveedores/nuevo" />
+    <DataTableContextProvider>
+      <DataTable
+        columns={columns}
+        data={dbData || []}
+        newItemLabel="Nuevo proveedor"
+        NewItemForm={<NewSupplierForm />}
+      />
+    </DataTableContextProvider>
   );
 };
 

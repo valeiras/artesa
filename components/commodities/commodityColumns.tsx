@@ -1,7 +1,7 @@
 import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadCommodityWithBatchesType, UnitType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import RowActions from "../RowActions";
-import { DataTableColumnHeader } from "../DataTableColumnHeader";
+import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
@@ -34,7 +34,7 @@ export function commodityColumns(
       header: ({ column }) => <DataTableColumnHeader column={column} title="Lotes" />,
       enableSorting: false,
       meta: { columnName: "Lotes" },
-      cell: ({ row }) => <BatchesContainer row={row} itemAddress="materias-primas" />,
+      cell: ({ row }) => <BatchesContainer row={row} />,
     },
     {
       accessorKey: "created_at",

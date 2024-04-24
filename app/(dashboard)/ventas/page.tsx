@@ -1,18 +1,12 @@
 import React from "react";
-import Link from "next/link";
-import { CirclePlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import underConstruction from "@/assets/under_construction.svg";
+import Image from "next/image";
 
 const SalesPage: React.FC = () => {
   return (
-    <div>
-      <h2 className="text-4xl font-bold">Proveedores </h2>
-      <div className="flex flex-col my-8">Lista de proveedores</div>
-      <Button asChild variant="default">
-        <Link href="/nuevo-proveedor" className="flex flex-row gap-x-2">
-          <CirclePlus /> <span>Nuevo proveedor</span>
-        </Link>
-      </Button>
+    <div className="flex-flex-col">
+      <h2 className="text-4xl font-bold">Estamos trabajando en ello...</h2>
+      <Image src={underConstruction} alt="Trabajo en curso" className="w-1/2 mt-16" />
     </div>
   );
 };

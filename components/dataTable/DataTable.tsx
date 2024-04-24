@@ -13,15 +13,16 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
-import Link from "next/link";
 import { CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DataTablePagination } from "./DataTablePagination";
 import DataTableColumnSelector from "./DataTableColumnSelector";
+import CustomDialog from "../CustomDialog";
+import { DataTableContextProvider, useDataTableContext } from "./dataTableContext";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -33,17 +34,22 @@ declare module "@tanstack/react-table" {
   }
 }
 
-const pageSize = 10;
-
 function DataTable<TData, TValue>({
   columns,
   data,
   newItemLabel,
-  newItemLink,
-}: DataTableProps<TData, TValue> & { newItemLabel: string; newItemLink: string }) {
+  NewItemForm,
+}: DataTableProps<TData, TValue> & {
+  newItemLabel: string;
+  NewItemForm: React.ReactElement;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Data table context if missing");
+  const { isDialogOpen, setIsDialogOpen } = dataTableContext;
 
   const table = useReactTable({
     data,
@@ -62,9 +68,15 @@ function DataTable<TData, TValue>({
     },
   });
 
-  useEffect(() => {
-    table.setPageSize(pageSize);
-  }, [table]);
+  const NewItemButton = () => {
+    return (
+      <Button variant="default" asChild>
+        <div className="flex flex-row gap-x-2 cursor-pointer">
+          <CirclePlus strokeWidth={1.5} /> <span>{newItemLabel}</span>
+        </div>
+      </Button>
+    );
+  };
 
   return (
     <div>
@@ -116,11 +128,13 @@ function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex flex-row justify-between mt-5">
-        <Button asChild variant="default">
-          <Link href={newItemLink} className="flex flex-row gap-x-2">
-            <CirclePlus strokeWidth={1.5} /> <span>{newItemLabel}</span>
-          </Link>
-        </Button>
+        <CustomDialog
+          DialogTriggerContent={NewItemButton()}
+          isDialogOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+        >
+          {NewItemForm}
+        </CustomDialog>
         <DataTablePagination table={table} />
       </div>
     </div>

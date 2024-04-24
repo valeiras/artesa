@@ -1,13 +1,15 @@
 "use client";
 
 import { deleteCommodity, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/dataTable/DataTable";
 
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { commodityColumns } from "./commodityColumns";
+import NewCommodityForm from "./NewCommodityForm";
+import { DataTableContextProvider } from "../dataTable/dataTableContext";
 
 const CommoditiesDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -46,12 +48,14 @@ const CommoditiesDataTable: React.FC = () => {
   }
 
   return (
-    <DataTable
-      columns={columns}
-      data={dbData || []}
-      newItemLabel="Nueva materia prima"
-      newItemLink="/materias-primas/nueva"
-    />
+    <DataTableContextProvider>
+      <DataTable
+        columns={columns}
+        data={dbData || []}
+        newItemLabel="Nueva materia prima"
+        NewItemForm={<NewCommodityForm />}
+      />
+    </DataTableContextProvider>
   );
 };
 

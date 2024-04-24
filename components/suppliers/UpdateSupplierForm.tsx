@@ -8,9 +8,14 @@ import { useMutation } from "@tanstack/react-query";
 import { updateSupplier } from "@/lib/actions/supplierActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import SupplierForm from "./SupplierForm";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 
 type Props = { supplierData: ReadSupplierDBType };
 const UpdateSupplierForm: React.FC<Props> = ({ supplierData }) => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Data table context if missing");
+  const { setIsDialogOpen } = dataTableContext;
+
   const form = useForm<SupplierFormType>({
     resolver: zodResolver(supplierFormSchema),
     defaultValues: {
@@ -29,7 +34,10 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierData }) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: (values: SupplierFormType) => updateSupplier(values, supplierData.id),
-    onSuccess: successHandler,
+    onSuccess: (e) => {
+      setIsDialogOpen(false);
+      successHandler(e);
+    },
     onError: (error) => console.log(error),
   });
 

@@ -3,16 +3,24 @@ import { Row } from "@tanstack/react-table";
 import React from "react";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import CustomTooltip from "./CustomTooltip";
 import CustomDialog from "./CustomDialog";
 import NewCommodityBatchForm from "./commodityBatches/NewCommodityBatchForm";
 
-type Props = { row: Row<ReadCommodityWithBatchesType | ReadProductWithBatchesType>; itemAddress: string };
-const BatchesContainer: React.FC<Props> = ({ row, itemAddress }) => {
+type Props = { row: Row<ReadCommodityWithBatchesType | ReadProductWithBatchesType> };
+
+const BatchesContainer: React.FC<Props> = ({ row }) => {
   const batches = row.original["batches"];
+  const NewBatchButton = () => {
+    return (
+      <Button className="w-6 h-6 p-0.5 rounded-full" asChild>
+        <Plus strokeWidth={2.5} size={16} />
+      </Button>
+    );
+  };
+
   return (
     <div className="flex flex-row items-end justify-start">
       <ScrollArea className="h-[72px] w-64 rounded-md border">
@@ -27,16 +35,10 @@ const BatchesContainer: React.FC<Props> = ({ row, itemAddress }) => {
               ))}
         </div>
       </ScrollArea>
-      <div className="-mb-3 -ml-3 z-50">
+      <div className="-mb-3 -ml-3 z-40">
         <CustomTooltip tooltipContent="Crear nuevo lote">
-          <CustomDialog
-            dialogTrigger={
-              <Button className="w-6 h-6 p-0.5 rounded-full" asChild>
-                <Plus strokeWidth={2.5} size={16} />
-              </Button>
-            }
-          >
-            <NewCommodityBatchForm commodityId={row.original["id"]} />
+          <CustomDialog DialogTriggerContent={NewBatchButton()}>
+            <NewCommodityBatchForm commodityData={row.original} />
           </CustomDialog>
         </CustomTooltip>
       </div>

@@ -10,8 +10,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+// ! \\ Dialog Trigger wraps the DialogTriggerContent inside a Button => any Button must be used with the asChild property set
 type Props = PropsWithChildren & {
-  dialogTrigger?: React.ReactNode;
+  DialogTriggerContent?: React.ReactNode;
   title?: string;
   description?: string;
   dialogFooter?: React.ReactNode;
@@ -21,7 +22,7 @@ type Props = PropsWithChildren & {
 
 const CustomDialog: React.FC<Props> = ({
   children,
-  dialogTrigger,
+  DialogTriggerContent,
   title,
   description,
   dialogFooter,
@@ -30,7 +31,7 @@ const CustomDialog: React.FC<Props> = ({
 }) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>{dialogTrigger}</DialogTrigger>
+      <DialogTrigger asChild>{DialogTriggerContent}</DialogTrigger>
       <DialogContent className="max-w-full w-4/5 xl:p-16">
         <DialogHeader>
           {title && <DialogTitle>{title}</DialogTitle>}
