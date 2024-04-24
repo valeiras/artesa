@@ -1,4 +1,4 @@
-import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadCommodityWithBatchesType, UnitType } from "@/lib/types";
+import { ReadCommodityWithBatchesType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import RowActions from "../RowActions";
 import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
@@ -6,12 +6,16 @@ import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
 import BatchContainer from "../BatchContainer";
-import { updateCommodity } from "@/lib/actions/commodityActions";
 import UpdateCommodityForm from "./UpdateCommodityForm";
+import UpdateCommodityBatchForm from "../commodityBatches/UpdateCommodityBatchForm";
 
-export function commodityColumns(
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>
-) {
+export function commodityColumns({
+  mutateCommodity,
+  mutateCommodityBatch,
+}: {
+  mutateCommodity: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+  mutateCommodityBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+}) {
   const columns: ColumnDef<ReadCommodityWithBatchesType>[] = [
     {
       accessorKey: "name",
@@ -34,7 +38,13 @@ export function commodityColumns(
       header: ({ column }) => <DataTableColumnHeader column={column} title="Lotes" />,
       enableSorting: false,
       meta: { columnName: "Lotes" },
-      cell: ({ row }) => <BatchContainer row={row} />,
+      cell: ({ row }) => (
+        <BatchContainer
+          itemData={row.original}
+          UpdateBatchForm={UpdateCommodityBatchForm}
+          mutateBatch={mutateCommodityBatch}
+        />
+      ),
     },
     {
       accessorKey: "created_at",
@@ -51,7 +61,7 @@ export function commodityColumns(
         const item = row.original;
         return (
           <RowActions
-            deleteItemMutation={() => mutate(item.id)}
+            deleteItemMutation={() => mutateCommodity(item.id)}
             UpdateItemForm={<UpdateCommodityForm commodityData={item} />}
           />
         );

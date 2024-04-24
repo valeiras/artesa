@@ -16,7 +16,7 @@ const Providers: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-        <Toaster />
+        <Toaster duration={2000} />
         <QueryClientProvider client={queryClient}>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />

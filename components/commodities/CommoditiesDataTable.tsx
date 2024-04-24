@@ -10,24 +10,38 @@ import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { commodityColumns } from "./commodityColumns";
 import NewCommodityForm from "./NewCommodityForm";
 import { DataTableContextProvider } from "../dataTable/dataTableContext";
+import { deleteCommodityBatch } from "@/lib/actions/commodityBatchActions";
 
 const CommoditiesDataTable: React.FC = () => {
   const { toast } = useToast();
 
-  const successHandler = useQuerySuccessHandler({
+  const commoditySuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Materia prima eliminada con éxito",
     queryKeys: [["commodities"], ["stats"], ["charts"]],
   });
 
-  const { mutate } = useMutation({
+  const commodityBatchSuccessHandler = useQuerySuccessHandler({
+    successToastMessage: "Lote eliminado con éxito",
+    queryKeys: [["commodities"], ["stats"], ["charts"]],
+  });
+
+  const { mutate: mutateCommodity } = useMutation({
     mutationFn: (id: number) => deleteCommodity(id),
-    onSuccess: successHandler,
+    onSuccess: commoditySuccessHandler,
     onError: (error) => {
       console.log(error);
     },
   });
 
-  const columns = commodityColumns(mutate);
+  const { mutate: mutateCommodityBatch } = useMutation({
+    mutationFn: (id: number) => deleteCommodityBatch(id),
+    onSuccess: commodityBatchSuccessHandler,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const columns = commodityColumns({ mutateCommodity, mutateCommodityBatch });
 
   const { data, isPending: isDataPending } = useQuery({
     queryKey: ["commodities"],
