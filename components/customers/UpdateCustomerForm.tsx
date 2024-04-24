@@ -3,45 +3,38 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { customerFormSchema, CustomerFormType } from "@/lib/types";
+import { customerFormSchema, CustomerFormType, ReadCustomerDBType } from "@/lib/types";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getSingleCustomer, updateCustomer } from "@/lib/actions/customerActions";
+import { useMutation } from "@tanstack/react-query";
+import { updateCustomer } from "@/lib/actions/customerActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CustomerForm from "./CustomerForm";
 
-type Props = { customerId: number };
-const UpdateCustomerForm: React.FC<Props> = ({ customerId }) => {
-  const { data, isPending: isDataPending } = useQuery({
-    queryKey: ["customer", customerId],
-    queryFn: () => getSingleCustomer(customerId),
-  });
-
+type Props = { customerData: ReadCustomerDBType };
+const UpdateCustomerForm: React.FC<Props> = ({ customerData }) => {
   const form = useForm<CustomerFormType>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
-      name: data?.dbData?.name,
-      email: data?.dbData?.email || "",
-      phone: data?.dbData?.phone || "",
-      address: data?.dbData?.address || "",
+      name: customerData.name,
+      email: customerData.email || "",
+      phone: customerData.phone || "",
+      address: customerData.address || "",
     },
   });
 
   const successHandler = useQuerySuccessHandler({
     destinationAfterSuccess: "/clientes",
     successToastMessage: "Cliente actualizado con éxito",
-    queryKeys: [["customer", customerId], ["customers"], ["stats"], ["charts"]],
+    queryKeys: [["customer", customerData.id], ["customers"], ["stats"], ["charts"]],
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: CustomerFormType) => updateCustomer(values, customerId),
+    mutationFn: (values: CustomerFormType) => updateCustomer(values, customerData.id),
     onSuccess: successHandler,
     onError: (error) => {
       console.log(error);
     },
   });
-
-  if (!isDataPending && !data?.dbData) throw new Error("El id requerido no ha devuelto ningún valor");
 
   return (
     <CustomerForm

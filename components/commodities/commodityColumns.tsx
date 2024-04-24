@@ -1,4 +1,4 @@
-import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadCommodityWithBatches, UnitType } from "@/lib/types";
+import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadCommodityWithBatchesType, UnitType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import RowActions from "../RowActions";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
@@ -6,11 +6,13 @@ import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
 import BatchesContainer from "../BatchesContainer";
+import { updateCommodity } from "@/lib/actions/commodityActions";
+import UpdateCommodityForm from "./UpdateCommodityForm";
 
 export function commodityColumns(
   mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>
 ) {
-  const columns: ColumnDef<ReadCommodityWithBatches>[] = [
+  const columns: ColumnDef<ReadCommodityWithBatchesType>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
@@ -47,7 +49,12 @@ export function commodityColumns(
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <RowActions id={item.id} deleteItemMutation={mutate} itemAddress="materias-primas" />;
+        return (
+          <RowActions
+            deleteItemMutation={() => mutate(item.id)}
+            UpdateItemForm={<UpdateCommodityForm commodityData={item} />}
+          />
+        );
       },
       size: 5,
       minSize: 5,

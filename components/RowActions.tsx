@@ -8,13 +8,30 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
 
 import DeleteAlertDialog from "@/components/DeleteAlertDialog";
+import CustomDialog from "./CustomDialog";
 
-type Props = { id: number; deleteItemMutation: (id: number) => void; itemAddress: string };
-const RowActions: React.FC<Props> = ({ id, deleteItemMutation, itemAddress }) => {
+type Props = { deleteItemMutation: () => void; UpdateItemForm: React.ReactNode };
+const RowActions: React.FC<Props> = ({ deleteItemMutation, UpdateItemForm }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const EditButton = () => {
+    return (
+      <div className="flex flex-row gap-2 items-center cursor-pointer">
+        <Pencil size={16} strokeWidth={1} /> Editar
+      </div>
+    );
+  };
+
+  const RemoveButton = () => {
+    return (
+      <div className="flex flex-row gap-2 items-center cursor-pointer">
+        <Trash2 size={16} strokeWidth={1} /> Eliminar
+      </div>
+    );
+  };
 
   return (
     <>
@@ -26,28 +43,18 @@ const RowActions: React.FC<Props> = ({ id, deleteItemMutation, itemAddress }) =>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>
-            <Link href={`/${itemAddress}/${id}`} className="flex flex-row gap-2 items-center">
-              <Pencil size={16} strokeWidth={1} /> Editar
-            </Link>
+          <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+            <EditButton />
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <div
-              className="flex flex-row gap-2 items-center cursor-pointer"
-              onClick={() => {
-                setIsAlertOpen(true);
-              }}
-            >
-              <Trash2 size={16} strokeWidth={1} /> Eliminar
-            </div>
+          <DropdownMenuItem onClick={() => setIsAlertOpen(true)}>
+            <RemoveButton />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DeleteAlertDialog
-        isAlertOpen={isAlertOpen}
-        setIsAlertOpen={setIsAlertOpen}
-        deleteItem={() => deleteItemMutation(id)}
-      />
+      <CustomDialog isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen}>
+        {UpdateItemForm}
+      </CustomDialog>
+      <DeleteAlertDialog isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} deleteItem={deleteItemMutation} />
     </>
   );
 };

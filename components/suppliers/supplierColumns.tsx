@@ -4,6 +4,7 @@ import RowActions from "../RowActions";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
+import UpdateSupplierForm from "./UpdateSupplierForm";
 
 export function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadSupplierDBType>[] = [
@@ -43,7 +44,12 @@ export function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <RowActions id={item.id} deleteItemMutation={mutate} itemAddress="proveedores" />;
+        return (
+          <RowActions
+            deleteItemMutation={() => mutate(item.id)}
+            UpdateItemForm={<UpdateSupplierForm supplierData={item} />}
+          />
+        );
       },
       size: 5,
       minSize: 5,

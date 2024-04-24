@@ -50,7 +50,7 @@ export type ReadProductBatchDBType = Database["public"]["Tables"]["commodity_bat
 export type CreateProductBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
 export type UpdateProductBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
 
-export type ReadProductWithBatches = ReadProductDBType & { batches?: ReadProductBatchDBType[] };
+export type ReadProductWithBatchesType = ReadProductDBType & { batches?: ReadProductBatchDBType[] };
 
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
@@ -81,7 +81,7 @@ export type ReadCommodityBatchDBType = Database["public"]["Tables"]["commodity_b
 export type CreateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
 export type UpdateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
 
-export type ReadCommodityWithBatches = ReadCommodityDBType & { batches?: ReadCommodityBatchDBType[] };
+export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches?: ReadCommodityBatchDBType[] };
 
 export const supplierFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),

@@ -1,4 +1,4 @@
-import { ReadCommodityWithBatches, ReadProductWithBatches } from "@/lib/types";
+import { ReadCommodityWithBatchesType, ReadProductWithBatchesType } from "@/lib/types";
 import { Row } from "@tanstack/react-table";
 import React from "react";
 import { Button } from "./ui/button";
@@ -10,7 +10,7 @@ import CustomTooltip from "./CustomTooltip";
 import CustomDialog from "./CustomDialog";
 import NewCommodityBatchForm from "./commodityBatches/NewCommodityBatchForm";
 
-type Props = { row: Row<ReadCommodityWithBatches | ReadProductWithBatches>; itemAddress: string };
+type Props = { row: Row<ReadCommodityWithBatchesType | ReadProductWithBatchesType>; itemAddress: string };
 const BatchesContainer: React.FC<Props> = ({ row, itemAddress }) => {
   const batches = row.original["batches"];
   return (

@@ -6,7 +6,7 @@ import {
   ReadCommodityBatchDBType,
   UpdateCommodityDBType,
   CommodityFormType,
-  ReadCommodityWithBatches,
+  ReadCommodityWithBatchesType,
 } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
@@ -55,12 +55,12 @@ export async function getAllCommodities() {
 }
 
 export async function getAllCommoditiesWithBatches(): Promise<{
-  dbData: ReadCommodityWithBatches[];
+  dbData: ReadCommodityWithBatchesType[];
   dbError: PostgrestError;
 }> {
-  let dbData: ReadCommodityWithBatches[], dbError: PostgrestError, dbDataBatches: ReadCommodityBatchDBType[];
+  let dbData: ReadCommodityWithBatchesType[], dbError: PostgrestError, dbDataBatches: ReadCommodityBatchDBType[];
   ({ dbData, dbError } = (await getAllRecords("commodity")) as {
-    dbData: ReadCommodityWithBatches[];
+    dbData: ReadCommodityWithBatchesType[];
     dbError: PostgrestError;
   });
   if (dbError) return { dbData, dbError };

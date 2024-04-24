@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,19 +9,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 type Props = PropsWithChildren & {
-  dialogTrigger: React.ReactNode;
+  dialogTrigger?: React.ReactNode;
   title?: string;
   description?: string;
   dialogFooter?: React.ReactNode;
+  isDialogOpen?: boolean;
+  setIsDialogOpen?: (open: boolean) => void;
 };
 
-const CustomDialog: React.FC<Props> = ({ children, dialogTrigger, title, description, dialogFooter }) => {
+const CustomDialog: React.FC<Props> = ({
+  children,
+  dialogTrigger,
+  title,
+  description,
+  dialogFooter,
+  isDialogOpen,
+  setIsDialogOpen,
+}) => {
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{dialogTrigger}</DialogTrigger>
       <DialogContent className="max-w-full w-4/5 xl:p-16">
         <DialogHeader>

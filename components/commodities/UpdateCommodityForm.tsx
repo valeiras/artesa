@@ -3,33 +3,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { commodityFormSchema, CommodityFormType } from "@/lib/types";
+import { commodityFormSchema, CommodityFormType, ReadCommodityWithBatchesType } from "@/lib/types";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getSingleCommodity, updateCommodity } from "@/lib/actions/commodityActions";
+import { useMutation } from "@tanstack/react-query";
+import { updateCommodity } from "@/lib/actions/commodityActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityForm from "./CommodityForm";
 
-type Props = { commodityId: number };
-const UpdateCommodityForm: React.FC<Props> = ({ commodityId }) => {
-  const { data } = useQuery({
-    queryKey: ["commodity", commodityId],
-    queryFn: () => getSingleCommodity(Number(commodityId)),
-  });
-
+type Props = { commodityData: ReadCommodityWithBatchesType };
+const UpdateCommodityForm: React.FC<Props> = ({ commodityData }) => {
   const form = useForm<CommodityFormType>({
     resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: data?.dbData?.name, unit: data?.dbData?.unit || undefined },
+    defaultValues: { name: commodityData.name, unit: commodityData.unit || undefined },
   });
 
   const successHandler = useQuerySuccessHandler({
     destinationAfterSuccess: "/materias-primas",
     successToastMessage: "Proveedor actualizado con éxito",
-    queryKeys: [["commodity", commodityId], ["commodities"], ["stats"], ["charts"]],
+    queryKeys: [["commodity", commodityData.id], ["commodities"], ["stats"], ["charts"]],
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: CommodityFormType) => updateCommodity(values, commodityId),
+    mutationFn: (values: CommodityFormType) => updateCommodity(values, commodityData.id),
     onSuccess: successHandler,
     onError: (error) => {
       console.log(error);
