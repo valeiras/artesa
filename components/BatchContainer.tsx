@@ -11,7 +11,7 @@ import NewCommodityBatchForm from "./commodityBatches/NewCommodityBatchForm";
 
 type Props = { row: Row<ReadCommodityWithBatchesType | ReadProductWithBatchesType> };
 
-const BatchesContainer: React.FC<Props> = ({ row }) => {
+const BatchContainer: React.FC<Props> = ({ row }) => {
   const batches = row.original["batches"];
   const NewBatchButton = () => {
     return (
@@ -23,7 +23,7 @@ const BatchesContainer: React.FC<Props> = ({ row }) => {
 
   return (
     <div className="flex flex-row items-end justify-start">
-      <ScrollArea className="h-[72px] w-64 rounded-md border">
+      <ScrollArea className="w-48 h-fit rounded-md border" maxHeight="110px">
         <div className="p-2">
           {!batches || batches.length === 0
             ? "No hay lotes disponibles"
@@ -46,4 +46,4 @@ const BatchesContainer: React.FC<Props> = ({ row }) => {
   );
 };
 
-export default BatchesContainer;
+export default BatchContainer;

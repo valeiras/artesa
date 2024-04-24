@@ -2,8 +2,9 @@
 
 Next app designed for product traceability
 
-# Todo:
+# TODO:
 
 - Usar la paginación de las tablas para hacer peticiones más ligeras a la base de datos.
-- Convertir los formularios de creación de nuevos elementos en diálogos
 - Añadir columna "updated_at" y ordenar por más recientemente modificados
+- Crear un RowContext para los diálogos
+- Crear un BatchContext para los lotes

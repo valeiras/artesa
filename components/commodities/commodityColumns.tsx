@@ -5,7 +5,7 @@ import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
-import BatchesContainer from "../BatchesContainer";
+import BatchContainer from "../BatchContainer";
 import { updateCommodity } from "@/lib/actions/commodityActions";
 import UpdateCommodityForm from "./UpdateCommodityForm";
 
@@ -34,7 +34,7 @@ export function commodityColumns(
       header: ({ column }) => <DataTableColumnHeader column={column} title="Lotes" />,
       enableSorting: false,
       meta: { columnName: "Lotes" },
-      cell: ({ row }) => <BatchesContainer row={row} />,
+      cell: ({ row }) => <BatchContainer row={row} />,
     },
     {
       accessorKey: "created_at",
