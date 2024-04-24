@@ -1,49 +1,55 @@
-"use client";
+// "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { useForm } from "react-hook-form";
+// import { commodityBatchFormSchema, CommodityBatchFormType } from "@/lib/types";
+// import { useMutation, useQuery } from "@tanstack/react-query";
+// import { getSingleCommodityWithBatches, updateCommodity } from "@/lib/actions/commodityActions";
+// import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
+// import CommodityForm from "./CommodityBatchForm";
 
-import { commodityFormSchema, CommodityFormType } from "@/lib/types";
+// type Props = { commodityId: number; batchIdx: number };
+// const UpdateCommodityBatchForm: React.FC<Props> = ({ commodityId, batchIdx }) => {
+//   const { data: commodityData } = useQuery({
+//     queryKey: ["commodity", commodityId],
+//     queryFn: () => getSingleCommodityWithBatches(Number(commodityId)),
+//   });
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getSingleCommodity, updateCommodity } from "@/lib/actions/commodityActions";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import CommodityForm from "./CommodityBatchForm";
+//   const form = useForm<CommodityBatchFormType>({
+//     resolver: zodResolver(commodityBatchFormSchema),
+//     defaultValues: {
+//       commodityId: commodityData?.dbData.id,
+//       commodityName: commodityData?.dbData.name,
+//       supplierId: commodityData?.dbData.supplierId,
+//       externalId: "",
+//       date: new Date(),
+//       initialAmount: undefined,
+//       comments: "",
+//     },
+//   });
 
-type Props = { commodityId: number };
-const UpdateCommodityForm: React.FC<Props> = ({ commodityId }) => {
-  const { data } = useQuery({
-    queryKey: ["commodity", commodityId],
-    queryFn: () => getSingleCommodity(Number(commodityId)),
-  });
+//   const successHandler = useQuerySuccessHandler({
+//     destinationAfterSuccess: "/materias-primas",
+//     successToastMessage: "Lote actualizado con éxito",
+//     queryKeys: [["commodity", commodityId], ["commodities"], ["stats"], ["charts"]],
+//   });
 
-  const form = useForm<CommodityFormType>({
-    resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: data?.dbData?.name, unit: data?.dbData?.unit || undefined },
-  });
+//   const { mutate, isPending } = useMutation({
+//     mutationFn: (values: CommodityBacthFormType) => updateCommodityBatch(values, commodityId),
+//     onSuccess: successHandler,
+//     onError: (error) => {
+//       console.log(error);
+//     },
+//   });
 
-  const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/materias-primas",
-    successToastMessage: "Proveedor actualizado con éxito",
-    queryKeys: [["commodity", commodityId], ["commodities"], ["stats"], ["charts"]],
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (values: CommodityFormType) => updateCommodity(values, commodityId),
-    onSuccess: successHandler,
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  return (
-    <CommodityForm
-      form={form}
-      mutate={mutate}
-      isPending={isPending}
-      formHeader="Editar materia prima"
-      submitButtonLabel="Actualizar"
-    />
-  );
-};
-export default UpdateCommodityForm;
+//   return (
+//     <CommodityForm
+//       form={form}
+//       mutate={mutate}
+//       isPending={isPending}
+//       formHeader="Editar materia prima"
+//       submitButtonLabel="Actualizar"
+//     />
+//   );
+// };
+// export default UpdateCommodityBatchForm;

@@ -1,3 +1,2 @@
 Update database types: 
-
-npx supabase gen types typescript --project-id "xtcnmujcubffstsydbey" --schema public > lib/database.types.ts
+npx supabase gen types typescript --project-id "xtcnmujcubffstsydbey" --schema public | Set-Content -Encoding utf8 lib/database.types.ts
