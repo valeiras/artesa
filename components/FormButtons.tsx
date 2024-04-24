@@ -8,9 +8,8 @@ import { DialogClose } from "@radix-ui/react-dialog";
 type Props = {
   isPending: boolean;
   submitButtonLabel: string;
-  isBatchForm?: boolean;
 };
-const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, isBatchForm }) => {
+const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel }) => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Data table context if missing");
 

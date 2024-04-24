@@ -41,7 +41,7 @@ const CommodityForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, s
             placeholder="kg"
           />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} cancelButtonHref="/materias-primas" />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} />
       </form>
     </Form>
   );
