@@ -23,7 +23,6 @@ const UpdateCommodityForm: React.FC<Props> = ({ commodityData }) => {
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/materias-primas",
     successToastMessage: "Proveedor actualizado con éxito",
     queryKeys: [["commodity", commodityData.id], ["commodities"], ["stats"], ["charts"]],
   });

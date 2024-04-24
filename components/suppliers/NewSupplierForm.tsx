@@ -20,7 +20,6 @@ const NewSupplierForm: React.FC = () => {
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/proveedores",
     successToastMessage: "Proveedor creado con éxito",
     queryKeys: [["suppliers"], ["stats"], ["charts"]],
   });

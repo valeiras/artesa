@@ -27,7 +27,6 @@ const UpdateSupplierForm: React.FC<Props> = ({ supplierData }) => {
   });
 
   const successHandler = useQuerySuccessHandler({
-    destinationAfterSuccess: "/proveedores",
     successToastMessage: "Proveedor actualizado con éxito",
     queryKeys: [["supplier", supplierData.id], ["suppliers"], ["stats"], ["charts"]],
   });

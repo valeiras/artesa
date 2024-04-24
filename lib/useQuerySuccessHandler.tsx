@@ -22,10 +22,11 @@ export function useQuerySuccessHandler({
       return;
     }
 
+    queryKeys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
+    if (destinationAfterSuccess) router.push(destinationAfterSuccess);
+
     toast({
       description: <SuccessMessage text={successToastMessage} />,
     });
-    queryKeys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
-    if (destinationAfterSuccess) router.push(destinationAfterSuccess);
   };
 }
