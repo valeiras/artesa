@@ -23,6 +23,7 @@ import { DataTablePagination } from "./DataTablePagination";
 import DataTableColumnSelector from "./DataTableColumnSelector";
 import CustomDialog from "../CustomDialog";
 import { useDataTableContext } from "./dataTableContext";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -41,7 +42,7 @@ function DataTable<TData, TValue>({
   NewItemForm,
 }: DataTableProps<TData, TValue> & {
   newItemLabel: string;
-  NewItemForm: React.ReactElement;
+  NewItemForm: React.ComponentType;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -133,7 +134,7 @@ function DataTable<TData, TValue>({
           isDialogOpen={isDialogOpen}
           setIsDialogOpen={setIsDialogOpen}
         >
-          {NewItemForm}
+          <NewItemForm />
         </CustomDialog>
         <DataTablePagination table={table} />
       </div>

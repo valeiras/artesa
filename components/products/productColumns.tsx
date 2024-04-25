@@ -62,7 +62,7 @@ export function productColumns({
         return (
           <RowActions
             deleteItemMutation={() => mutateProduct(item.id)}
-            UpdateItemForm={<UpdateProductForm productData={item} />}
+            UpdateItemForm={<UpdateProductForm itemData={item} />}
           />
         );
       },

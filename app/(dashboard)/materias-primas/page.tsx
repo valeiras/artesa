@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getAllCommodities, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
+import { getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import CommoditiesDataTable from "@/components/commodities/CommoditiesDataTable";
 

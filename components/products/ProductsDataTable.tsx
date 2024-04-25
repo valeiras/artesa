@@ -63,7 +63,7 @@ const ProductsDataTable: React.FC = () => {
 
   return (
     <DataTableContextProvider>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nueva producto" NewItemForm={<NewProductForm />} />
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nueva producto" NewItemForm={NewProductForm} />
     </DataTableContextProvider>
   );
 };

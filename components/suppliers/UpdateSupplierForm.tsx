@@ -1,53 +1,28 @@
-"use client";
+import { supplierFormSchema, ReadSupplierDBType } from "@/lib/types";
+import UpdateItemForm from "../forms/UpdateItemForm";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { ReadSupplierDBType, supplierFormSchema, SupplierFormValueType } from "@/lib/types";
-
-import { useMutation } from "@tanstack/react-query";
+import React from "react";
 import { updateSupplier } from "@/lib/actions/supplierActions";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import SupplierForm from "./SupplierForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
-type Props = { supplierData: ReadSupplierDBType };
-const UpdateSupplierForm: React.FC<Props> = ({ supplierData }) => {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Data table context if missing");
-  const { setIsDialogOpen } = dataTableContext;
-
-  const form = useForm<SupplierFormValueType>({
-    resolver: zodResolver(supplierFormSchema),
-    defaultValues: {
-      name: supplierData.name,
-      email: supplierData.email || "",
-      phone: supplierData.phone || "",
-      address: supplierData.address || "",
-    },
-  });
-
-  const successHandler = useQuerySuccessHandler({
-    successToastMessage: "Proveedor actualizado con éxito",
-    queryKeys: [["supplier", supplierData.id], ["suppliers"], ["stats"], ["charts"]],
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (values: SupplierFormValueType) => updateSupplier(values, supplierData.id),
-    onSuccess: (e) => {
-      setIsDialogOpen(false);
-      successHandler(e);
-    },
-    onError: (error) => console.log(error),
-  });
-
+const UpdateSupplierForm: React.FC<{ itemData: ReadSupplierDBType }> = ({ itemData }) => {
   return (
-    <SupplierForm
-      form={form}
-      mutate={mutate}
-      isPending={isPending}
+    <UpdateItemForm
+      formSchema={supplierFormSchema}
+      defaultValues={{
+        name: itemData.name,
+        email: itemData.email || "",
+        phone: itemData.phone || "",
+        address: itemData.address || "",
+      }}
+      successToastMessage="Proveedor actualizado con éxito"
+      queryKeys={[["supplier", String(itemData.id)], ["suppliers"], ["stats"], ["charts"]]}
       formHeader="Editar proveedor"
-      submitButtonLabel="Actualizar"
+      updateItemFn={updateSupplier}
+      id={itemData.id}
+      ItemForm={SupplierForm}
     />
   );
 };
+
 export default UpdateSupplierForm;

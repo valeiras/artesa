@@ -1,23 +1,17 @@
-import { ProductFormValueType } from "@/lib/types";
+import { ItemFormType, ProductFormValueType } from "@/lib/types";
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
-
 import { Form } from "@/components/ui/form";
-import { CustomFormField, CustomFormSelect } from "../FormComponents";
-import FormButtons from "../FormButtons";
-import { UseMutateFunction } from "@tanstack/react-query";
-import { PostgrestError } from "@supabase/supabase-js";
+import { CustomFormField, CustomFormSelect } from "../forms/FormComponents";
+import FormButtons from "../forms/FormButtons";
 import { availableUnits } from "@/lib/units";
 
-type Props = {
-  form: UseFormReturn<ProductFormValueType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, ProductFormValueType, unknown>;
-  isPending: boolean;
-  formHeader: string;
-  submitButtonLabel: string;
-};
-
-const ProductForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+const ProductForm: ItemFormType<ProductFormValueType> = ({
+  form,
+  mutate,
+  isPending,
+  formHeader,
+  submitButtonLabel,
+}) => {
   function onSubmit(values: ProductFormValueType) {
     mutate(values);
   }

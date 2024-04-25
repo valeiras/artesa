@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataTableContext } from "./dataTable/dataTableContext";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 import { DefaultValues, FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -12,19 +12,21 @@ function NewItemForm<T extends FieldValues>({
   formSchema,
   defaultValues,
   successToastMessage,
-  mainQueryKey,
-  createItem,
+  queryKeys,
+  formHeader,
+  createItemFn,
   ItemForm,
 }: {
   formSchema: z.ZodType<T>;
   defaultValues: DefaultValues<T>;
   successToastMessage: string;
-  mainQueryKey: string;
-  createItem: (values: T) => Promise<{ dbError: PostgrestError | null }>;
+  queryKeys: string[][];
+  formHeader: string;
+  createItemFn: (values: T) => Promise<{ dbError: PostgrestError | null }>;
   ItemForm: ItemFormType<T>;
 }) {
   const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Data table context if missing");
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { setIsDialogOpen } = dataTableContext;
 
   const form = useForm<T>({
@@ -34,11 +36,11 @@ function NewItemForm<T extends FieldValues>({
 
   const successHandler = useQuerySuccessHandler({
     successToastMessage: successToastMessage,
-    queryKeys: [[mainQueryKey], ["stats"], ["charts"]],
+    queryKeys: queryKeys,
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: T) => createItem(values),
+    mutationFn: (values: T) => createItemFn(values),
     onSuccess: (e) => {
       setIsDialogOpen(false);
       successHandler(e);
@@ -49,14 +51,10 @@ function NewItemForm<T extends FieldValues>({
   });
 
   return (
-    <ItemForm
-      form={form}
-      mutate={mutate}
-      isPending={isPending}
-      formHeader="Nueva materia prima"
-      submitButtonLabel="Crear"
-    />
+    <ItemForm form={form} mutate={mutate} isPending={isPending} formHeader={formHeader} submitButtonLabel="Crear" />
   );
 }
 
 export default NewItemForm;
+
+export type NewItemFormType = typeof NewItemForm;

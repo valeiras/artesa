@@ -47,7 +47,7 @@ export function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
         return (
           <RowActions
             deleteItemMutation={() => mutate(item.id)}
-            UpdateItemForm={<UpdateSupplierForm supplierData={item} />}
+            UpdateItemForm={<UpdateSupplierForm itemData={item} />}
           />
         );
       },

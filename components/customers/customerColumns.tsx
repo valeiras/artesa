@@ -47,7 +47,7 @@ export function customerColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
         return (
           <RowActions
             deleteItemMutation={() => mutate(item.id)}
-            UpdateItemForm={<UpdateCustomerForm customerData={item} />}
+            UpdateItemForm={<UpdateCustomerForm itemData={item} />}
           />
         );
       },

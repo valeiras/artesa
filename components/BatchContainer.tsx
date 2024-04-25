@@ -21,11 +21,10 @@ import UpdateCommodityBatchForm from "./commodityBatches/UpdateCommodityBatchFor
 type Props = {
   itemData: ReadCommodityWithBatchesType;
   UpdateBatchForm: typeof UpdateCommodityBatchForm;
-  NewBatchForm: typeof NewCommodityBatchForm;
   mutateBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
 };
 
-const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, NewBatchForm, mutateBatch, itemData }) => {
+const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, mutateBatch, itemData }) => {
   const { batches } = itemData;
   const NewBatchButton = () => {
     return (

@@ -62,7 +62,7 @@ export function commodityColumns({
         return (
           <RowActions
             deleteItemMutation={() => mutateCommodity(item.id)}
-            UpdateItemForm={<UpdateCommodityForm commodityData={item} />}
+            UpdateItemForm={<UpdateCommodityForm itemData={item} />}
           />
         );
       },

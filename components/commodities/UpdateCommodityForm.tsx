@@ -1,51 +1,23 @@
-"use client";
+import { commodityFormSchema, ReadCommodityDBType } from "@/lib/types";
+import UpdateItemForm from "../forms/UpdateItemForm";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { commodityFormSchema, CommodityFormValueType, ReadCommodityWithBatchesType } from "@/lib/types";
-
-import { useMutation } from "@tanstack/react-query";
+import React from "react";
 import { updateCommodity } from "@/lib/actions/commodityActions";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import CommodityForm from "./CommodityForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
-type Props = { commodityData: ReadCommodityWithBatchesType };
-const UpdateCommodityForm: React.FC<Props> = ({ commodityData }) => {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Data table context if missing");
-  const { setIsDialogOpen } = dataTableContext;
-
-  const form = useForm<CommodityFormValueType>({
-    resolver: zodResolver(commodityFormSchema),
-    defaultValues: { name: commodityData.name, unit: commodityData.unit || undefined },
-  });
-
-  const successHandler = useQuerySuccessHandler({
-    successToastMessage: "Materia prima actualizada con éxito",
-    queryKeys: [["commodity", commodityData.id], ["commodities"], ["stats"], ["charts"]],
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (values: CommodityFormValueType) => updateCommodity(values, commodityData.id),
-    onSuccess: (e) => {
-      setIsDialogOpen(false);
-      successHandler(e);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
+const UpdateCommodityForm: React.FC<{ itemData: ReadCommodityDBType }> = ({ itemData }) => {
   return (
-    <CommodityForm
-      form={form}
-      mutate={mutate}
-      isPending={isPending}
+    <UpdateItemForm
+      formSchema={commodityFormSchema}
+      defaultValues={{ name: itemData.name, unit: itemData.unit || undefined }}
+      successToastMessage="Materia prima actualizada con éxito"
+      queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Editar materia prima"
-      submitButtonLabel="Actualizar"
+      updateItemFn={updateCommodity}
+      id={itemData.id}
+      ItemForm={CommodityForm}
     />
   );
 };
+
 export default UpdateCommodityForm;

@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteCommodity, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
-import React, { useState } from "react";
+import React from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import DataTable from "@/components/dataTable/DataTable";
 
@@ -67,7 +67,7 @@ const CommoditiesDataTable: React.FC = () => {
         columns={columns}
         data={dbData || []}
         newItemLabel="Nueva materia prima"
-        NewItemForm={<NewCommodityForm />}
+        NewItemForm={NewCommodityForm}
       />
     </DataTableContextProvider>
   );

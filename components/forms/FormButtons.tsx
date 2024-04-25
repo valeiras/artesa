@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Check, X, Clock } from "lucide-react";
-import { useDataTableContext } from "./dataTable/dataTableContext";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 type Props = {

@@ -1,46 +1,22 @@
-"use client";
+import { ItemFormType, SupplierFormValueType, supplierFormSchema } from "@/lib/types";
+import NewItemForm from "../forms/NewItemForm";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { supplierFormSchema, SupplierFormValueType } from "@/lib/types";
-import { useMutation } from "@tanstack/react-query";
+import React from "react";
 import { createSupplier } from "@/lib/actions/supplierActions";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import SupplierForm from "./SupplierForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
-const NewSupplierForm: React.FC = () => {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Data table context if missing");
-  const { setIsDialogOpen } = dataTableContext;
-
-  const form = useForm<SupplierFormValueType>({
-    resolver: zodResolver(supplierFormSchema),
-    defaultValues: { name: "", email: "", phone: "", address: "" },
-  });
-
-  const successHandler = useQuerySuccessHandler({
-    successToastMessage: "Proveedor creado con éxito",
-    queryKeys: [["suppliers"], ["stats"], ["charts"]],
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (values: SupplierFormValueType) => createSupplier(values),
-    onSuccess: (e) => {
-      setIsDialogOpen(false);
-      successHandler(e);
-    },
-    onError: (error) => console.log(error),
-  });
-
+const NewSupplierForm: ItemFormType<SupplierFormValueType> = () => {
   return (
-    <SupplierForm
-      form={form}
-      mutate={mutate}
-      isPending={isPending}
+    <NewItemForm
+      formSchema={supplierFormSchema}
+      defaultValues={{ name: "", email: "", phone: "", address: "" }}
+      successToastMessage="Nuevo proveedor creado con éxito"
+      queryKeys={[["suppliers"], ["stats"], ["charts"]]}
       formHeader="Nuevo proveedor"
-      submitButtonLabel="Crear"
+      createItemFn={createSupplier}
+      ItemForm={SupplierForm}
     />
   );
 };
+
 export default NewSupplierForm;
