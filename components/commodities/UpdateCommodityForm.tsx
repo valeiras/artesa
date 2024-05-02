@@ -1,12 +1,11 @@
 "use client";
 
-import { commodityFormSchema, isReadCommodityDBType, ReadCommodityDBType } from "@/lib/types";
-import UpdateItemForm from "../forms/UpdateItemForm";
-
 import React from "react";
+import { commodityFormSchema, isReadCommodityDBType } from "@/lib/types";
+import { UpdateRecordForm } from "@/components/forms/";
 import { updateCommodity } from "@/lib/actions/commodityActions";
+import { useDataTableContext } from "@/components/dataTable";
 import CommodityForm from "./CommodityForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const UpdateCommodityForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -15,13 +14,13 @@ const UpdateCommodityForm: React.FC = () => {
   if (!isReadCommodityDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   return (
-    <UpdateItemForm
+    <UpdateRecordForm
       formSchema={commodityFormSchema}
       defaultValues={{ name: itemData.name, unit: itemData.unit || undefined }}
       successToastMessage="Materia prima actualizada con éxito"
       queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Editar materia prima"
-      updateItemFn={updateCommodity}
+      updateRecordFn={updateCommodity}
       id={itemData.id}
       ItemForm={CommodityForm}
     />

@@ -2,7 +2,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import SuccessMessage from "@/components/SuccesMessage";
+import SuccessMessage from "@/components/SuccessMessage";
 
 export function useQuerySuccessHandler({
   destinationAfterSuccess,

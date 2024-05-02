@@ -1,12 +1,11 @@
 "use client";
 
-import { ReadCommodityDBType, commodityBatchFormSchema, isReadCommodityDBType } from "@/lib/types";
-import NewItemForm from "../forms/NewItemForm";
-
 import React from "react";
+import { commodityBatchFormSchema, isReadCommodityDBType } from "@/lib/types";
+import { NewRecordForm } from "@/components/forms";
 import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
+import { useDataTableContext } from "@/components/dataTable";
 import CommodityBatchForm from "./CommodityBatchForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const NewCommodityBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -15,7 +14,7 @@ const NewCommodityBatchForm: React.FC = () => {
   if (!isReadCommodityDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   return (
-    <NewItemForm
+    <NewRecordForm
       formSchema={commodityBatchFormSchema}
       defaultValues={{
         commodityId: itemData.id,

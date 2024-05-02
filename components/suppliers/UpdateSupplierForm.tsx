@@ -1,12 +1,11 @@
 "use client";
 
-import { supplierFormSchema, isReadSupplierDBType } from "@/lib/types";
-import UpdateItemForm from "../forms/UpdateItemForm";
-
 import React from "react";
+import { supplierFormSchema, isReadSupplierDBType } from "@/lib/types";
+import { UpdateRecordForm } from "@/components/forms";
 import { updateSupplier } from "@/lib/actions/supplierActions";
+import { useDataTableContext } from "@/components/dataTable";
 import SupplierForm from "./SupplierForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const UpdateSupplierForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -15,7 +14,7 @@ const UpdateSupplierForm: React.FC = () => {
   if (!isReadSupplierDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   return (
-    <UpdateItemForm
+    <UpdateRecordForm
       formSchema={supplierFormSchema}
       defaultValues={{
         name: itemData.name,
@@ -26,7 +25,7 @@ const UpdateSupplierForm: React.FC = () => {
       successToastMessage="Proveedor actualizado con éxito"
       queryKeys={[["supplier", String(itemData.id)], ["suppliers"], ["stats"], ["charts"]]}
       formHeader="Editar proveedor"
-      updateItemFn={updateSupplier}
+      updateRecordFn={updateSupplier}
       id={itemData.id}
       ItemForm={SupplierForm}
     />

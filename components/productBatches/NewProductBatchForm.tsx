@@ -1,15 +1,21 @@
 "use client";
 
-import { ReadProductDBType, productBatchFormSchema } from "@/lib/types";
-import NewItemForm from "../forms/NewItemForm";
+import { isReadProductDBType, productBatchFormSchema } from "@/lib/types";
+import { NewRecordForm } from "@/components/forms";
 
 import React from "react";
 import { createProductBatch } from "@/lib/actions/productBatchActions";
+import { useDataTableContext } from "@/components/dataTable/";
 import ProductBatchForm from "./ProductBatchForm";
 
-const NewProductBatchForm: React.FC<{ itemData: ReadProductDBType }> = ({ itemData }) => {
+const NewProductBatchForm: React.FC = () => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+  const { itemData } = dataTableContext;
+  if (!isReadProductDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
+
   return (
-    <NewItemForm
+    <NewRecordForm
       formSchema={productBatchFormSchema}
       defaultValues={{
         productId: String(itemData.id),
@@ -29,54 +35,3 @@ const NewProductBatchForm: React.FC<{ itemData: ReadProductDBType }> = ({ itemDa
 };
 
 export default NewProductBatchForm;
-
-// "use client";
-
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm } from "react-hook-form";
-// import { productBatchFormSchema, ProductBatchFormValueType, ReadProductWithBatchesType } from "@/lib/types";
-// import { useMutation } from "@tanstack/react-query";
-// import { createProductBatch } from "@/lib/actions/productBatchActions";
-// import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-// import ProductBatchForm from "./ProductBatchForm";
-
-// type Props = { itemData: ReadProductWithBatchesType };
-// const NewProductBatchForm: React.FC<Props> = ({ itemData }) => {
-//   const form = useForm<ProductBatchFormValueType>({
-//     resolver: zodResolver(productBatchFormSchema),
-//     defaultValues: {
-//       productId: String(itemData.id),
-//       productName: itemData.name,
-//       externalId: "",
-//       date: new Date(),
-//       initialAmount: 0,
-//       comments: "",
-//     },
-//   });
-
-//   const successHandler = useQuerySuccessHandler({
-//     successToastMessage: "Lote creado con éxito",
-//     queryKeys: [["products"], ["stats"], ["charts"]],
-//   });
-
-//   const { mutate, isPending } = useMutation({
-//     mutationFn: (values: ProductBatchFormValueType) => createProductBatch(values),
-//     onSuccess: successHandler,
-//     onError: (error) => {
-//       console.log(error);
-//     },
-//   });
-
-//   return (
-//     <ProductBatchForm
-//       form={form}
-//       mutate={mutate}
-//       isPending={isPending}
-//       formHeader="Nuevo lote"
-//       submitButtonLabel="Crear"
-//     />
-//   );
-// };
-// export default NewProductBatchForm;
-
-// export type NewProductBatchFormType = typeof NewProductBatchForm;

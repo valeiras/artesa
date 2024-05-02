@@ -16,10 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
-import { DataTablePagination } from "./DataTablePagination";
-import DataTableColumnSelector from "./DataTableColumnSelector";
-import { useDataTableContext } from "./dataTableContext";
-import NewItemButton from "../forms/NewItemButton";
+import { DataTablePagination, DataTableColumnSelector, useDataTableContext } from "@/components/dataTable";
+import { NewItemButton } from "@/components/forms";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

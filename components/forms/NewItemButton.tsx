@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataTableContext } from "../dataTable/dataTableContext";
+import { useDataTableContext } from "@/components/dataTable";
 import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
 

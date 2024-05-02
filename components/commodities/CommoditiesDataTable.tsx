@@ -1,22 +1,18 @@
 "use client";
 
-import { deleteCommodity, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
 import React from "react";
+import { deleteCommodity, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DataTable from "@/components/dataTable/DataTable";
-
-import { useToast } from "../ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import { commodityColumns } from "./commodityColumns";
-import NewCommodityForm from "./NewCommodityForm";
-import { DataTableContextProvider } from "../dataTable/dataTableContext";
+import { DataTableContextProvider, DataTable } from "@/components/dataTable/";
 import { deleteCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { ReadCommodityBatchDBType, ReadCommodityDBType } from "@/lib/types";
+import { NewItemDialog, UpdateItemDialog, NewBatchDialog, UpdateBatchDialog } from "../dialogs/";
+import { NewCommodityBatchForm, UpdateCommodityBatchForm } from "@/components/commodityBatches/";
+import commodityColumns from "./commodityColumns";
+import NewCommodityForm from "./NewCommodityForm";
 import UpdateCommodityForm from "./UpdateCommodityForm";
-import NewRecordDialog from "../forms/NewRecordDialog";
-import UpdateRecordDialog from "../forms/UpdateRecordDialog";
-import NewCommodityBatchForm from "../commodityBatches/NewCommodityBatchForm";
-import UpdateCommodityBatchForm from "../commodityBatches/UpdateCommodityBatchForm";
 
 const CommoditiesDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -83,10 +79,10 @@ const CommoditiesDataTable: React.FC = () => {
   return (
     <DataTableContextProvider defaultItemData={emptyCommodityData} defaultBatchData={emptyCommodityBatchData}>
       <DataTable columns={columns} data={dbData || []} newItemLabel="Nueva materia prima" />
-      <NewRecordDialog RecordForm={NewCommodityForm} />
-      <UpdateRecordDialog RecordForm={UpdateCommodityForm} />
-      <NewRecordDialog RecordForm={NewCommodityBatchForm} isBatch={true} />
-      <UpdateRecordDialog RecordForm={UpdateCommodityBatchForm} isBatch={true} />
+      <NewItemDialog RecordForm={NewCommodityForm} />
+      <UpdateItemDialog RecordForm={UpdateCommodityForm} />
+      <NewBatchDialog RecordForm={NewCommodityBatchForm} isBatch={true} />
+      <UpdateBatchDialog RecordForm={UpdateCommodityBatchForm} isBatch={true} />
     </DataTableContextProvider>
   );
 };

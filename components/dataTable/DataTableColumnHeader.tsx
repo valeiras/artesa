@@ -16,11 +16,7 @@ interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes
   title: string;
 }
 
-export function DataTableColumnHeader<TData, TValue>({
-  column,
-  title,
-  className,
-}: DataTableColumnHeaderProps<TData, TValue>) {
+function DataTableColumnHeader<TData, TValue>({ column, title, className }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort() && !column.getCanHide()) {
     return <div className={cn("font-bold", className)}>{title}</div>;
   }
@@ -63,3 +59,5 @@ export function DataTableColumnHeader<TData, TValue>({
     </div>
   );
 }
+
+export default DataTableColumnHeader;

@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataTableContext } from "../dataTable/dataTableContext";
+import { useDataTableContext } from "@/components/dataTable";
 import { ReadItemDBType } from "@/lib/types";
 import RowActions from "./RowActions";
 

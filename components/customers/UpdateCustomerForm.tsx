@@ -1,12 +1,11 @@
 "use client";
 
-import { customerFormSchema, isReadCustomerDBType } from "@/lib/types";
-import UpdateItemForm from "../forms/UpdateItemForm";
-
 import React from "react";
+import { customerFormSchema, isReadCustomerDBType } from "@/lib/types";
+import { UpdateRecordForm } from "@/components/forms";
 import { updateCustomer } from "@/lib/actions/customerActions";
+import { useDataTableContext } from "@/components/dataTable";
 import CustomerForm from "./CustomerForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const UpdateCustomerForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -15,7 +14,7 @@ const UpdateCustomerForm: React.FC = () => {
   if (!isReadCustomerDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   return (
-    <UpdateItemForm
+    <UpdateRecordForm
       formSchema={customerFormSchema}
       defaultValues={{
         name: itemData.name,
@@ -26,7 +25,7 @@ const UpdateCustomerForm: React.FC = () => {
       successToastMessage="Cliente actualizado con éxito"
       queryKeys={[["customer", String(itemData.id)], ["customers"], ["stats"], ["charts"]]}
       formHeader="Editar cliente"
-      updateItemFn={updateCustomer}
+      updateRecordFn={updateCustomer}
       id={itemData.id}
       ItemForm={CustomerForm}
     />

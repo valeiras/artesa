@@ -1,15 +1,14 @@
 "use client";
 
-import { customerFormSchema } from "@/lib/types";
-import NewItemForm from "../forms/NewItemForm";
-
 import React from "react";
+import { customerFormSchema } from "@/lib/types";
+import { NewRecordForm } from "@/components/forms";
 import { createCustomer } from "@/lib/actions/customerActions";
 import CustomerForm from "./CustomerForm";
 
 const NewCustomerForm: React.FC = () => {
   return (
-    <NewItemForm
+    <NewRecordForm
       formSchema={customerFormSchema}
       defaultValues={{ name: "", email: "", phone: "", address: "" }}
       successToastMessage="Nuevo cliente creado con éxito"

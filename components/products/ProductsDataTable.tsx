@@ -1,16 +1,14 @@
 "use client";
 
-import { deleteProduct, getAllProductsWithBatches } from "@/lib/actions/productActions";
 import React from "react";
+import { deleteProduct, getAllProductsWithBatches } from "@/lib/actions/productActions";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DataTable from "@/components/dataTable/DataTable";
-
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import { productColumns } from "./productColumns";
-import NewProductForm from "./NewProductForm";
-import { DataTableContextProvider } from "../dataTable/dataTableContext";
+import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { deleteProductBatch } from "@/lib/actions/productBatchActions";
+import { ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
+import productColumns from "./productColumns";
 
 const ProductsDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -61,9 +59,21 @@ const ProductsDataTable: React.FC = () => {
     return null;
   }
 
+  const emptyProductData: ReadProductDBType = { name: "", created_at: "", id: 0, unit: null, user_id: "" };
+  const emptyProductBatchData: ReadProductBatchDBType = {
+    comments: "",
+    product_id: 0,
+    created_at: "",
+    date: "",
+    external_id: "",
+    id: 0,
+    initial_amount: 0,
+    user_id: "",
+  };
+
   return (
-    <DataTableContextProvider>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nueva producto" NewItemForm={NewProductForm} />
+    <DataTableContextProvider defaultItemData={emptyProductData} defaultBatchData={emptyProductBatchData}>
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo producto" />
     </DataTableContextProvider>
   );
 };

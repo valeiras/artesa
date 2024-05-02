@@ -1,14 +1,14 @@
 import React from "react";
-import { useDataTableContext } from "../dataTable/dataTableContext";
+import * as z from "zod";
+import { useDataTableContext } from "@/components/dataTable";
 import { DefaultValues, FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { useMutation } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { ItemFormType } from "@/lib/types";
 
-function NewItemForm<T extends FieldValues>({
+function NewRecordForm<T extends FieldValues>({
   formSchema,
   defaultValues,
   successToastMessage,
@@ -55,6 +55,6 @@ function NewItemForm<T extends FieldValues>({
   );
 }
 
-export default NewItemForm;
+export default NewRecordForm;
 
-export type NewItemFormType = typeof NewItemForm;
+export type NewRecordFormType = typeof NewRecordForm;

@@ -1,12 +1,11 @@
 import { ReadSupplierDBType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import RowActions from "../rowActions/RowActions";
-import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
+import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
-import UpdateSupplierForm from "./UpdateSupplierForm";
+import { ItemRowActions } from "@/components/rowActions";
 
-export function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
+function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadSupplierDBType>[] = [
     {
       accessorKey: "name",
@@ -44,7 +43,7 @@ export function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <RowActions deleteItemMutation={() => mutate(item.id)} itemData={item} />;
+        return <ItemRowActions deleteItemMutation={() => mutate(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,
@@ -55,3 +54,5 @@ export function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
   ];
   return columns;
 }
+
+export default supplierColumns;

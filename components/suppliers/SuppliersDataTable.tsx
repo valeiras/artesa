@@ -3,13 +3,14 @@
 import { deleteSupplier, getAllSuppliers } from "@/lib/actions/supplierActions";
 import React from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DataTable from "@/components/dataTable/DataTable";
-
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import { supplierColumns } from "./supplierColumns";
+import { DataTableContextProvider, DataTable } from "@/components/dataTable";
+import { ReadSupplierDBType } from "@/lib/types";
+import { UpdateItemDialog, NewItemDialog } from "@/components/dialogs/";
+import UpdateSupplierForm from "./UpdateSupplierForm";
 import NewSupplierForm from "./NewSupplierForm";
-import { DataTableContextProvider } from "../dataTable/dataTableContext";
+import supplierColumns from "./supplierColumns";
 
 const SuppliersDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -47,9 +48,21 @@ const SuppliersDataTable: React.FC = () => {
     return null;
   }
 
+  const emptySupplierData: ReadSupplierDBType = {
+    address: "",
+    created_at: "",
+    email: "",
+    id: 0,
+    name: "",
+    phone: "",
+    user_id: "",
+  };
+
   return (
-    <DataTableContextProvider>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" NewItemForm={NewSupplierForm} />
+    <DataTableContextProvider defaultItemData={emptySupplierData}>
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" />
+      <NewItemDialog RecordForm={NewSupplierForm} />
+      <UpdateItemDialog RecordForm={UpdateSupplierForm} />
     </DataTableContextProvider>
   );
 };

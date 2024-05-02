@@ -1,16 +1,13 @@
 import { ReadProductWithBatchesType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import RowActions from "../rowActions/RowActions";
-import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
+import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
-import BatchContainer from "../BatchContainer";
-import UpdateProductForm from "./UpdateProductForm";
-import UpdateProductBatchForm from "../productBatches/UpdateProductBatchForm";
-import NewProductBatchForm from "../productBatches/NewProductBatchForm";
+import { BatchContainer } from "@/components";
+import { ItemRowActions } from "@/components/rowActions";
 
-export function productColumns({
+function productColumns({
   mutateProduct,
   mutateProductBatch,
 }: {
@@ -40,12 +37,7 @@ export function productColumns({
       enableSorting: false,
       meta: { columnName: "Lotes" },
       cell: ({ row }) => (
-        <BatchContainer
-          itemData={row.original}
-          UpdateBatchForm={UpdateProductBatchForm}
-          NewBatchForm={NewProductBatchForm}
-          mutateBatch={mutateProductBatch}
-        />
+        <BatchContainer itemData={row.original} batches={row.original.batches || []} mutateBatch={mutateProductBatch} />
       ),
     },
     {
@@ -61,7 +53,7 @@ export function productColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <RowActions deleteItemMutation={() => mutateProduct(item.id)} itemData={item} />;
+        return <ItemRowActions deleteItemMutation={() => mutateProduct(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,
@@ -72,3 +64,5 @@ export function productColumns({
   ];
   return columns;
 }
+
+export default productColumns;

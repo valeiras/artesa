@@ -171,7 +171,8 @@ export function isReadSupplierDBType(record: ReadRecordDBType): record is ReadSu
   return "customer_id" in record && "product_batch_id" in record && "sold_amount" in record;
 }
 
-export function isReadCommodityBatchDBType(record: ReadRecordDBType): record is ReadCommodityBatchDBType {
+export function isReadCommodityBatchDBType(record: ReadRecordDBType | undefined): record is ReadCommodityBatchDBType {
+  if (!record) return false;
   return (
     "comments" in record &&
     "commodity_id" in record &&
@@ -182,7 +183,8 @@ export function isReadCommodityBatchDBType(record: ReadRecordDBType): record is 
   );
 }
 
-export function isReadProductBatchDBType(record: ReadRecordDBType): record is ReadProductBatchDBType {
+export function isReadProductBatchDBType(record: ReadRecordDBType | undefined): record is ReadProductBatchDBType {
+  if (!record) return false;
   return (
     "comments" in record &&
     "product_id" in record &&

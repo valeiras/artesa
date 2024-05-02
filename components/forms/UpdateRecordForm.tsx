@@ -4,15 +4,15 @@ import { DefaultValues, FieldValues, useForm } from "react-hook-form";
 import { ItemFormType } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import { useDataTableContext } from "../dataTable/dataTableContext";
+import { useDataTableContext } from "@/components/dataTable";
 import { PostgrestError } from "@supabase/supabase-js";
 
-function UpdateItemForm<T extends FieldValues>({
+function UpdateRecordForm<T extends FieldValues>({
   formSchema,
   defaultValues,
   successToastMessage,
   queryKeys,
-  updateItemFn,
+  updateRecordFn,
   formHeader,
   id,
   ItemForm,
@@ -21,7 +21,7 @@ function UpdateItemForm<T extends FieldValues>({
   defaultValues: DefaultValues<T>;
   successToastMessage: string;
   queryKeys: string[][];
-  updateItemFn: (values: T, id: number) => Promise<{ dbError: PostgrestError | null }>;
+  updateRecordFn: (values: T, id: number) => Promise<{ dbError: PostgrestError | null }>;
   formHeader: string;
   id: number;
   ItemForm: ItemFormType<T>;
@@ -41,7 +41,7 @@ function UpdateItemForm<T extends FieldValues>({
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: T) => updateItemFn(values, id),
+    mutationFn: (values: T) => updateRecordFn(values, id),
     onSuccess: (e) => {
       setIsUpdateItemDialogOpen(false);
       successHandler(e);
@@ -62,6 +62,6 @@ function UpdateItemForm<T extends FieldValues>({
   );
 }
 
-export default UpdateItemForm;
+export default UpdateRecordForm;
 
-export type UpdateItemFormType = typeof UpdateItemForm;
+export type UpdateRecordFormType = typeof UpdateRecordForm;

@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  commodityBatchFormSchema,
-  isReadCommodityBatchDBType,
-  isReadCommodityDBType,
-  ReadCommodityBatchDBType,
-  ReadCommodityDBType,
-} from "@/lib/types";
-import UpdateItemForm from "../forms/UpdateItemForm";
-
 import React from "react";
+import { commodityBatchFormSchema, isReadCommodityBatchDBType, isReadCommodityDBType } from "@/lib/types";
+import { UpdateRecordForm } from "@/components/forms";
 import { updateCommodityBatch } from "@/lib/actions/commodityBatchActions";
+import { useDataTableContext } from "@/components/dataTable";
 import CommodityBatchForm from "./CommodityBatchForm";
-import { useDataTableContext } from "../dataTable/dataTableContext";
 
 const UpdateCommodityBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -20,10 +13,10 @@ const UpdateCommodityBatchForm: React.FC = () => {
   const { itemData, batchData } = dataTableContext;
 
   if (!isReadCommodityDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
-  if (!isReadCommodityBatchDBType(batchData)) throw new Error("El tipo de artículo no coincide con el esperado");
+  if (!isReadCommodityBatchDBType(batchData)) throw new Error("El tipo de lote no coincide con el esperado");
 
   return (
-    <UpdateItemForm
+    <UpdateRecordForm
       formSchema={commodityBatchFormSchema}
       defaultValues={{
         commodityId: itemData.id,
@@ -37,7 +30,7 @@ const UpdateCommodityBatchForm: React.FC = () => {
       successToastMessage="Lote actualizado con éxito"
       queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Editar lote"
-      updateItemFn={updateCommodityBatch}
+      updateRecordFn={updateCommodityBatch}
       id={itemData.id}
       ItemForm={CommodityBatchForm}
     />

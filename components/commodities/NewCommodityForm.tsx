@@ -1,15 +1,14 @@
 "use client";
 
-import { commodityFormSchema } from "@/lib/types";
-import NewItemForm from "../forms/NewItemForm";
-
 import React from "react";
+import { commodityFormSchema } from "@/lib/types";
+import { NewRecordForm } from "@/components/forms";
 import { createCommodity } from "@/lib/actions/commodityActions";
 import CommodityForm from "./CommodityForm";
 
 const NewCommodityForm: React.FC = () => {
   return (
-    <NewItemForm
+    <NewRecordForm
       formSchema={commodityFormSchema}
       defaultValues={{ name: "", unit: "kg" }}
       successToastMessage="Nueva materia prima creada con éxito"

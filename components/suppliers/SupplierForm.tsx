@@ -1,10 +1,8 @@
-import { SupplierFormValueType } from "@/lib/types";
 import React from "react";
+import { SupplierFormValueType } from "@/lib/types";
 import { UseFormReturn } from "react-hook-form";
-
 import { Form } from "@/components/ui/form";
-import { CustomFormField } from "../forms/FormComponents";
-import FormButtons from "../forms/FormButtons";
+import { CustomFormField, FormButtons } from "@/components/forms";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 

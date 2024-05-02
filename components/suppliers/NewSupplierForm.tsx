@@ -1,15 +1,14 @@
 "use client";
 
-import { supplierFormSchema } from "@/lib/types";
-import NewItemForm from "../forms/NewItemForm";
-
 import React from "react";
+import { supplierFormSchema } from "@/lib/types";
+import { NewRecordForm } from "@/components/forms";
 import { createSupplier } from "@/lib/actions/supplierActions";
 import SupplierForm from "./SupplierForm";
 
 const NewSupplierForm: React.FC = () => {
   return (
-    <NewItemForm
+    <NewRecordForm
       formSchema={supplierFormSchema}
       defaultValues={{ name: "", email: "", phone: "", address: "" }}
       successToastMessage="Nuevo proveedor creado con éxito"

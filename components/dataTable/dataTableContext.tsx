@@ -12,8 +12,8 @@ type DataTableContext = {
   setIsNewBatchDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isUpdateBatchDialogOpen: boolean;
   setIsUpdateBatchDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  batchData: ReadBatchDBType;
-  setBatchData: React.Dispatch<React.SetStateAction<ReadBatchDBType>>;
+  batchData?: ReadBatchDBType;
+  setBatchData: React.Dispatch<React.SetStateAction<ReadBatchDBType | undefined>>;
 } | null;
 
 const DataTableContext = createContext<DataTableContext>(null);
@@ -25,7 +25,7 @@ export const useDataTableContext = () => {
 export const DataTableContextProvider: React.FC<{
   children: React.ReactNode;
   defaultItemData: ReadItemDBType;
-  defaultBatchData: ReadBatchDBType;
+  defaultBatchData?: ReadBatchDBType;
 }> = ({ children, defaultItemData, defaultBatchData }) => {
   const [isNewItemDialogOpen, setIsNewItemDialogOpen] = useState(false);
   const [isUpdateItemDialogOpen, setIsUpdateItemDialogOpen] = useState(false);

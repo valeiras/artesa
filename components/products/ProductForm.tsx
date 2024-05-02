@@ -1,8 +1,7 @@
-import { ItemFormType, ProductFormValueType } from "@/lib/types";
 import React from "react";
+import { ItemFormType, ProductFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
-import { CustomFormField, CustomFormSelect } from "../forms/FormComponents";
-import FormButtons from "../forms/FormButtons";
+import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import { availableUnits } from "@/lib/units";
 
 const ProductForm: ItemFormType<ProductFormValueType> = ({

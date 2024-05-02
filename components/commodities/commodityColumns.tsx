@@ -1,17 +1,13 @@
 import { ReadCommodityWithBatchesType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import RowActions from "../rowActions/RowActions";
-import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
+import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
-import BatchContainer from "../BatchContainer";
-import UpdateCommodityForm from "./UpdateCommodityForm";
-import UpdateCommodityBatchForm from "../commodityBatches/UpdateCommodityBatchForm";
-import NewCommodityBatchForm from "../commodityBatches/NewCommodityBatchForm";
-import ItemRowActions from "../rowActions/ItemRowActions";
+import { ItemRowActions } from "@/components/rowActions";
+import BatchContainer from "@/components/BatchContainer";
 
-export function commodityColumns({
+function commodityColumns({
   mutateCommodity,
   mutateCommodityBatch,
 }: {
@@ -72,3 +68,5 @@ export function commodityColumns({
   ];
   return columns;
 }
+
+export default commodityColumns;

@@ -3,12 +3,14 @@
 import { deleteCustomer, getAllCustomers } from "@/lib/actions/customerActions";
 import React from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DataTable from "@/components/dataTable/DataTable";
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { customerColumns } from "./customerColumns";
+import { DataTable, DataTableContextProvider } from "@/components/dataTable";
+import { NewItemDialog, UpdateItemDialog } from "@/components/dialogs/";
+import { ReadCustomerDBType } from "@/lib/types";
 import NewCustomerForm from "./NewCustomerForm";
-import { DataTableContextProvider } from "../dataTable/dataTableContext";
+import UpdateCustomerForm from "./UpdateCustomerForm";
 
 const CustomersDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -46,9 +48,21 @@ const CustomersDataTable: React.FC = () => {
     return null;
   }
 
+  const emptyCustomerData: ReadCustomerDBType = {
+    address: "",
+    created_at: "",
+    email: "",
+    id: 0,
+    name: "",
+    phone: "",
+    user_id: "",
+  };
+
   return (
-    <DataTableContextProvider>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo cliente" NewItemForm={NewCustomerForm} />
+    <DataTableContextProvider defaultItemData={emptyCustomerData}>
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo cliente" />
+      <NewItemDialog RecordForm={NewCustomerForm} />
+      <UpdateItemDialog RecordForm={UpdateCustomerForm} />
     </DataTableContextProvider>
   );
 };
