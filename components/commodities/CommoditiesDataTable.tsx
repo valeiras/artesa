@@ -8,7 +8,7 @@ import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable/";
 import { deleteCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { ReadCommodityBatchDBType, ReadCommodityDBType } from "@/lib/types";
-import { NewItemDialog, UpdateItemDialog, NewBatchDialog, UpdateBatchDialog } from "../dialogs/";
+import { NewItemDialog, UpdateItemDialog, NewBatchDialog, UpdateBatchDialog, DeleteAlertDialog } from "../dialogs/";
 import { NewCommodityBatchForm, UpdateCommodityBatchForm } from "@/components/commodityBatches/";
 import commodityColumns from "./commodityColumns";
 import NewCommodityForm from "./NewCommodityForm";
@@ -83,6 +83,7 @@ const CommoditiesDataTable: React.FC = () => {
       <UpdateItemDialog RecordForm={UpdateCommodityForm} />
       <NewBatchDialog RecordForm={NewCommodityBatchForm} isBatch={true} />
       <UpdateBatchDialog RecordForm={UpdateCommodityBatchForm} isBatch={true} />
+      <DeleteAlertDialog />
     </DataTableContextProvider>
   );
 };

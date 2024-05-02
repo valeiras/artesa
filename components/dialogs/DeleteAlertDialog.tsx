@@ -7,17 +7,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useDataTableContext } from "../dataTable";
 
-type Props = {
-  isAlertOpen: boolean;
-  setIsAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  deleteItem: () => void;
-};
-const DeleteAlertDialog: React.FC<Props> = ({ isAlertOpen, setIsAlertOpen, deleteItem }) => {
+const DeleteAlertDialog: React.FC = () => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+  const { isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen, deleteRecordFn } = dataTableContext;
+
   return (
-    <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+    <AlertDialog open={isDeleteAlertDialogOpen} onOpenChange={setIsDeleteAlertDialogOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>¿Realmente deseas eliminar este elemento?</AlertDialogTitle>
@@ -25,7 +24,7 @@ const DeleteAlertDialog: React.FC<Props> = ({ isAlertOpen, setIsAlertOpen, delet
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={deleteItem}>Continuar</AlertDialogAction>
+          <AlertDialogAction onClick={deleteRecordFn}>Continuar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

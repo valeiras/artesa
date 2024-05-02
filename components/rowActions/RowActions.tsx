@@ -8,8 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import DeleteAlertDialog from "@/components/DeleteAlertDialog";
+import { useDataTableContext } from "../dataTable";
 
 const RowActions = ({
   handleClick,
@@ -18,7 +17,9 @@ const RowActions = ({
   handleClick: () => void;
   deleteRecordMutation: () => void;
 }) => {
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+  const { setIsDeleteAlertDialogOpen, setDeleteRecordFn } = dataTableContext;
 
   const EditButton = () => {
     return (
@@ -49,13 +50,16 @@ const RowActions = ({
           <DropdownMenuItem onClick={handleClick}>
             <EditButton />
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsAlertOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => {
+              setIsDeleteAlertDialogOpen(true);
+              setDeleteRecordFn(() => deleteRecordMutation);
+            }}
+          >
             <RemoveButton />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <DeleteAlertDialog isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} deleteItem={deleteRecordMutation} />
     </>
   );
 };

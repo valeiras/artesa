@@ -9,6 +9,7 @@ import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { deleteProductBatch } from "@/lib/actions/productBatchActions";
 import { ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
 import productColumns from "./productColumns";
+import { DeleteAlertDialog } from "../dialogs";
 
 const ProductsDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -74,6 +75,7 @@ const ProductsDataTable: React.FC = () => {
   return (
     <DataTableContextProvider defaultItemData={emptyProductData} defaultBatchData={emptyProductBatchData}>
       <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo producto" />
+      <DeleteAlertDialog />
     </DataTableContextProvider>
   );
 };

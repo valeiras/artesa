@@ -14,6 +14,10 @@ type DataTableContext = {
   setIsUpdateBatchDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   batchData?: ReadBatchDBType;
   setBatchData: React.Dispatch<React.SetStateAction<ReadBatchDBType | undefined>>;
+  isDeleteAlertDialogOpen: boolean;
+  setIsDeleteAlertDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteRecordFn: () => void;
+  setDeleteRecordFn: React.Dispatch<React.SetStateAction<() => void>>;
 } | null;
 
 const DataTableContext = createContext<DataTableContext>(null);
@@ -33,6 +37,8 @@ export const DataTableContextProvider: React.FC<{
   const [isNewBatchDialogOpen, setIsNewBatchDialogOpen] = useState(false);
   const [isUpdateBatchDialogOpen, setIsUpdateBatchDialogOpen] = useState(false);
   const [batchData, setBatchData] = useState(defaultBatchData);
+  const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] = useState(false);
+  const [deleteRecordFn, setDeleteRecordFn] = useState(() => () => {});
 
   return (
     <DataTableContext.Provider
@@ -49,6 +55,10 @@ export const DataTableContextProvider: React.FC<{
         setIsUpdateBatchDialogOpen,
         batchData,
         setBatchData,
+        isDeleteAlertDialogOpen,
+        setIsDeleteAlertDialogOpen,
+        deleteRecordFn,
+        setDeleteRecordFn,
       }}
     >
       {children}

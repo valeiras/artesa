@@ -7,7 +7,7 @@ import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { customerColumns } from "./customerColumns";
 import { DataTable, DataTableContextProvider } from "@/components/dataTable";
-import { NewItemDialog, UpdateItemDialog } from "@/components/dialogs/";
+import { DeleteAlertDialog, NewItemDialog, UpdateItemDialog } from "@/components/dialogs/";
 import { ReadCustomerDBType } from "@/lib/types";
 import NewCustomerForm from "./NewCustomerForm";
 import UpdateCustomerForm from "./UpdateCustomerForm";
@@ -63,6 +63,7 @@ const CustomersDataTable: React.FC = () => {
       <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo cliente" />
       <NewItemDialog RecordForm={NewCustomerForm} />
       <UpdateItemDialog RecordForm={UpdateCustomerForm} />
+      <DeleteAlertDialog />
     </DataTableContextProvider>
   );
 };
