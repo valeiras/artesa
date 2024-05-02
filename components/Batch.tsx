@@ -3,12 +3,11 @@ import { ReadCommodityBatchDBType, ReadProductBatchDBType } from "@/lib/types";
 import RowActions from "./RowActions";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 
-type Props = {
+const Batch: React.FC<{
   batchData: ReadCommodityBatchDBType | ReadProductBatchDBType;
-  UpdateBatchForm: React.ReactNode;
+  UpdateBatchForm: React.ReactElement;
   deleteBatchMutation: () => void;
-};
-const Batch: React.FC<Props> = ({ batchData, UpdateBatchForm, deleteBatchMutation }) => {
+}> = ({ batchData, UpdateBatchForm, deleteBatchMutation }) => {
   const successHandler = useQuerySuccessHandler({
     successToastMessage: "Lote actualizado con éxito",
     queryKeys: [["commodyBatch", batchData.id], ["commodities"]],

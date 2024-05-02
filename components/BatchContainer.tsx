@@ -1,10 +1,4 @@
-import {
-  ReadCommodityBatchDBType,
-  ReadCommodityWithBatchesType,
-  ReadProductBatchDBType,
-  ReadProductWithBatchesType,
-} from "@/lib/types";
-import { Row } from "@tanstack/react-table";
+import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
 import React from "react";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
@@ -12,19 +6,24 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import CustomTooltip from "./CustomTooltip";
 import CustomDialog from "./CustomDialog";
-import NewCommodityBatchForm from "./commodityBatches/NewCommodityBatchForm";
 import Batch from "./Batch";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
-import UpdateCommodityBatchForm from "./commodityBatches/UpdateCommodityBatchForm";
 
-type Props = {
-  itemData: ReadCommodityWithBatchesType;
-  UpdateBatchForm: typeof UpdateCommodityBatchForm;
+function BatchContainer<
+  TItem extends ReadCommodityDBType | ReadProductDBType,
+  TBatch extends ReadCommodityBatchDBType | ReadProductBatchDBType
+>({
+  UpdateBatchForm,
+  NewBatchForm,
+  itemData,
+  mutateBatch,
+}: {
+  UpdateBatchForm: React.FC<{ batchData: TBatch; itemData: TItem }>;
+  NewBatchForm: React.FC<{ itemData: TItem & { batches?: TBatch[] } }>;
+  itemData: TItem & { batches?: TBatch[] };
   mutateBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
-};
-
-const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, mutateBatch, itemData }) => {
+}) {
   const { batches } = itemData;
   const NewBatchButton = () => {
     return (
@@ -55,12 +54,12 @@ const BatchContainer: React.FC<Props> = ({ UpdateBatchForm, mutateBatch, itemDat
       <div className="-mb-3 -ml-3 z-40">
         <CustomTooltip tooltipContent="Crear nuevo lote">
           <CustomDialog DialogTriggerContent={NewBatchButton()}>
-            <NewCommodityBatchForm itemData={itemData} />
+            <NewBatchForm itemData={itemData} />
           </CustomDialog>
         </CustomTooltip>
       </div>
     </div>
   );
-};
+}
 
 export default BatchContainer;

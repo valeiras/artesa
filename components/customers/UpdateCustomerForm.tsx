@@ -1,3 +1,5 @@
+"use client";
+
 import { customerFormSchema, ReadCustomerDBType } from "@/lib/types";
 import UpdateItemForm from "../forms/UpdateItemForm";
 

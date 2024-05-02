@@ -49,12 +49,7 @@ const SuppliersDataTable: React.FC = () => {
 
   return (
     <DataTableContextProvider>
-      <DataTable
-        columns={columns}
-        data={dbData || []}
-        newItemLabel="Nuevo proveedor"
-        NewItemForm={<NewSupplierForm />}
-      />
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" NewItemForm={NewSupplierForm} />
     </DataTableContextProvider>
   );
 };

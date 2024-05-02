@@ -1,11 +1,13 @@
-import { ItemFormType, SupplierFormValueType, supplierFormSchema } from "@/lib/types";
+"use client";
+
+import { supplierFormSchema } from "@/lib/types";
 import NewItemForm from "../forms/NewItemForm";
 
 import React from "react";
 import { createSupplier } from "@/lib/actions/supplierActions";
 import SupplierForm from "./SupplierForm";
 
-const NewSupplierForm: ItemFormType<SupplierFormValueType> = () => {
+const NewSupplierForm: React.FC = () => {
   return (
     <NewItemForm
       formSchema={supplierFormSchema}

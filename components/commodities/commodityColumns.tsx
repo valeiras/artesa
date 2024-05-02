@@ -8,6 +8,7 @@ import { valueToLabel } from "@/lib/units";
 import BatchContainer from "../BatchContainer";
 import UpdateCommodityForm from "./UpdateCommodityForm";
 import UpdateCommodityBatchForm from "../commodityBatches/UpdateCommodityBatchForm";
+import NewCommodityBatchForm from "../commodityBatches/NewCommodityBatchForm";
 
 export function commodityColumns({
   mutateCommodity,
@@ -42,6 +43,7 @@ export function commodityColumns({
         <BatchContainer
           itemData={row.original}
           UpdateBatchForm={UpdateCommodityBatchForm}
+          NewBatchForm={NewCommodityBatchForm}
           mutateBatch={mutateCommodityBatch}
         />
       ),

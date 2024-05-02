@@ -1,3 +1,5 @@
+"use client";
+
 import { supplierFormSchema, ReadSupplierDBType } from "@/lib/types";
 import UpdateItemForm from "../forms/UpdateItemForm";
 

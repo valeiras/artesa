@@ -1,3 +1,5 @@
+"use client";
+
 import { customerFormSchema } from "@/lib/types";
 import NewItemForm from "../forms/NewItemForm";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { commodityFormSchema, ReadCommodityDBType } from "@/lib/types";
 import UpdateItemForm from "../forms/UpdateItemForm";
 

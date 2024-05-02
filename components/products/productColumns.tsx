@@ -8,6 +8,7 @@ import { valueToLabel } from "@/lib/units";
 import BatchContainer from "../BatchContainer";
 import UpdateProductForm from "./UpdateProductForm";
 import UpdateProductBatchForm from "../productBatches/UpdateProductBatchForm";
+import NewProductBatchForm from "../productBatches/NewProductBatchForm";
 
 export function productColumns({
   mutateProduct,
@@ -42,6 +43,7 @@ export function productColumns({
         <BatchContainer
           itemData={row.original}
           UpdateBatchForm={UpdateProductBatchForm}
+          NewBatchForm={NewProductBatchForm}
           mutateBatch={mutateProductBatch}
         />
       ),

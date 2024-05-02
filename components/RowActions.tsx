@@ -12,7 +12,7 @@ import {
 import DeleteAlertDialog from "@/components/DeleteAlertDialog";
 import CustomDialog from "./CustomDialog";
 
-type Props = { deleteItemMutation: () => void; UpdateItemForm: React.ReactNode };
+type Props = { deleteItemMutation: () => void; UpdateItemForm: React.ReactElement };
 const RowActions: React.FC<Props> = ({ deleteItemMutation, UpdateItemForm }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
