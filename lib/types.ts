@@ -132,7 +132,7 @@ export type ReadSaleDBType = Database["public"]["Tables"]["sale"]["Row"];
 export type CreateSaleDBType = Database["public"]["Tables"]["sale"]["Insert"];
 export type UpdateSaleDBType = Database["public"]["Tables"]["sale"]["Update"];
 
-export type ItemFormType<T extends FieldValues> = React.FC<{
+export type RecordFormType<T extends FieldValues> = React.FC<{
   form: UseFormReturn<T>;
   mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, T, unknown>;
   isPending: boolean;

@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { commodityBatchFormSchema, isReadCommodityDBType } from "@/lib/types";
-import { NewRecordForm } from "@/components/forms";
+import { CommodityBatchFormValueType, commodityBatchFormSchema, isReadCommodityDBType } from "@/lib/types";
+import { NewBatchForm } from "@/components/forms";
 import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useDataTableContext } from "@/components/dataTable";
 import CommodityBatchForm from "./CommodityBatchForm";
@@ -13,23 +13,25 @@ const NewCommodityBatchForm: React.FC = () => {
   const { itemData } = dataTableContext;
   if (!isReadCommodityDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
+  const defaultValues: CommodityBatchFormValueType = {
+    commodityId: itemData.id,
+    commodityName: itemData.name,
+    supplierId: "",
+    externalId: "",
+    date: new Date(),
+    initialAmount: 0,
+    comments: "",
+  };
+
   return (
-    <NewRecordForm
+    <NewBatchForm<CommodityBatchFormValueType>
       formSchema={commodityBatchFormSchema}
-      defaultValues={{
-        commodityId: itemData.id,
-        commodityName: itemData.name,
-        supplierId: "",
-        externalId: "",
-        date: new Date(),
-        initialAmount: 0,
-        comments: "",
-      }}
+      defaultValues={defaultValues}
       successToastMessage="Nuevo lote creado con éxito"
       queryKeys={[["commodities"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
-      createItemFn={createCommodityBatch}
-      ItemForm={CommodityBatchForm}
+      createBatchFn={createCommodityBatch}
+      BatchForm={CommodityBatchForm}
     />
   );
 };

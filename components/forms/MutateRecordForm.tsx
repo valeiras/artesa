@@ -1,34 +1,31 @@
 import React from "react";
 import * as z from "zod";
-import { useDataTableContext } from "@/components/dataTable";
 import { DefaultValues, FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, MutationFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
-import { ItemFormType } from "@/lib/types";
+import { RecordFormType } from "@/lib/types";
 
-function NewRecordForm<T extends FieldValues>({
+function MutateRecordForm<T extends FieldValues>({
   formSchema,
   defaultValues,
   successToastMessage,
   queryKeys,
+  mutationFn,
   formHeader,
-  createItemFn,
-  ItemForm,
+  RecordForm,
+  setIsDialogOpen,
 }: {
   formSchema: z.ZodType<T>;
   defaultValues: DefaultValues<T>;
   successToastMessage: string;
   queryKeys: string[][];
   formHeader: string;
-  createItemFn: (values: T) => Promise<{ dbError: PostgrestError | null }>;
-  ItemForm: ItemFormType<T>;
+  mutationFn: MutationFunction<{ dbError: PostgrestError | null }, T>;
+  RecordForm: RecordFormType<T>;
+  setIsDialogOpen: (isOpen: boolean) => void;
 }) {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
-  const { setIsNewItemDialogOpen } = dataTableContext;
-
   const form = useForm<T>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
@@ -40,9 +37,9 @@ function NewRecordForm<T extends FieldValues>({
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (values: T) => createItemFn(values),
+    mutationFn: mutationFn,
     onSuccess: (e) => {
-      setIsNewItemDialogOpen(false);
+      setIsDialogOpen(false);
       successHandler(e);
     },
     onError: (error) => {
@@ -51,10 +48,8 @@ function NewRecordForm<T extends FieldValues>({
   });
 
   return (
-    <ItemForm form={form} mutate={mutate} isPending={isPending} formHeader={formHeader} submitButtonLabel="Crear" />
+    <RecordForm form={form} mutate={mutate} isPending={isPending} formHeader={formHeader} submitButtonLabel="Crear" />
   );
 }
 
-export default NewRecordForm;
-
-export type NewRecordFormType = typeof NewRecordForm;
+export default MutateRecordForm;

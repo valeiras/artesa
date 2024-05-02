@@ -1,10 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { DefaultValues, FieldValues, useForm } from "react-hook-form";
-import { ItemFormType } from "@/lib/types";
+import { RecordFormType } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
-import { useDataTableContext } from "@/components/dataTable";
 import { PostgrestError } from "@supabase/supabase-js";
 
 function UpdateRecordForm<T extends FieldValues>({
@@ -16,6 +15,7 @@ function UpdateRecordForm<T extends FieldValues>({
   formHeader,
   id,
   ItemForm,
+  setIsDialogOpen,
 }: {
   formSchema: z.ZodType<T>;
   defaultValues: DefaultValues<T>;
@@ -24,12 +24,9 @@ function UpdateRecordForm<T extends FieldValues>({
   updateRecordFn: (values: T, id: number) => Promise<{ dbError: PostgrestError | null }>;
   formHeader: string;
   id: number;
-  ItemForm: ItemFormType<T>;
+  ItemForm: RecordFormType<T>;
+  setIsDialogOpen: (isOpen: boolean) => void;
 }) {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
-  const { setIsUpdateItemDialogOpen } = dataTableContext;
-
   const form = useForm<T>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
@@ -43,7 +40,7 @@ function UpdateRecordForm<T extends FieldValues>({
   const { mutate, isPending } = useMutation({
     mutationFn: (values: T) => updateRecordFn(values, id),
     onSuccess: (e) => {
-      setIsUpdateItemDialogOpen(false);
+      setIsDialogOpen(false);
       successHandler(e);
     },
     onError: (error) => {
