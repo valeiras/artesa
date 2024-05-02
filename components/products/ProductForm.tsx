@@ -1,10 +1,10 @@
 import React from "react";
-import { ItemFormType, ProductFormValueType } from "@/lib/types";
+import { RecordFormType, ProductFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import { availableUnits } from "@/lib/units";
 
-const ProductForm: ItemFormType<ProductFormValueType> = ({
+const ProductForm: RecordFormType<ProductFormValueType> = ({
   form,
   mutate,
   isPending,

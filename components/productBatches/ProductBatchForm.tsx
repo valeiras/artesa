@@ -1,22 +1,17 @@
-import { ProductBatchFormValueType } from "@/lib/types";
+import { ProductBatchFormValueType, RecordFormType } from "@/lib/types";
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
-import { UseMutateFunction } from "@tanstack/react-query";
-import { PostgrestError } from "@supabase/supabase-js";
 import { getAllSuppliers } from "@/lib/actions/supplierActions";
 
-type Props = {
-  form: UseFormReturn<ProductBatchFormValueType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, ProductBatchFormValueType, unknown>;
-  isPending: boolean;
-  formHeader: string;
-  submitButtonLabel: string;
-};
-
-const ProductBatchForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+const ProductBatchForm: RecordFormType<ProductBatchFormValueType> = ({
+  form,
+  mutate,
+  isPending,
+  formHeader,
+  submitButtonLabel,
+}) => {
   const { data: suppliersData } = useQuery({
     queryKey: ["suppliers"],
     queryFn: () => getAllSuppliers(),

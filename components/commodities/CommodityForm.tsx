@@ -1,10 +1,10 @@
-import { CommodityFormValueType, ItemFormType } from "@/lib/types";
+import { CommodityFormValueType, RecordFormType } from "@/lib/types";
 import React from "react";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import { availableUnits } from "@/lib/units";
 
-const CommodityForm: ItemFormType<CommodityFormValueType> = ({
+const CommodityForm: RecordFormType<CommodityFormValueType> = ({
   form,
   mutate,
   isPending,

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { isReadProductDBType, productFormSchema } from "@/lib/types";
-import { UpdateRecordForm } from "@/components/forms";
+import { ProductFormValueType, isReadProductDBType, productFormSchema } from "@/lib/types";
+import { UpdateItemForm } from "@/components/forms";
 import { updateProduct } from "@/lib/actions/productActions";
 import { useDataTableContext } from "@/components/dataTable";
 import ProductForm from "./ProductForm";
@@ -13,14 +13,13 @@ const UpdateProductForm: React.FC = () => {
   if (!isReadProductDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   return (
-    <UpdateRecordForm
+    <UpdateItemForm<ProductFormValueType>
       formSchema={productFormSchema}
       defaultValues={{ name: itemData.name, unit: itemData.unit || undefined }}
       successToastMessage="Producto actualizado con éxito"
       queryKeys={[["product", String(itemData.id)], ["products"], ["stats"], ["charts"]]}
       formHeader="Editar producto"
-      updateRecordFn={updateProduct}
-      id={itemData.id}
+      updateItemFn={updateProduct}
       ItemForm={ProductForm}
     />
   );

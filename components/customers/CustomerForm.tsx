@@ -1,21 +1,15 @@
-import { CustomerFormValueType } from "@/lib/types";
+import { CustomerFormValueType, RecordFormType } from "@/lib/types";
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
-
 import { Form } from "@/components/ui/form";
 import { CustomFormField, FormButtons } from "@/components/forms";
-import { UseMutateFunction } from "@tanstack/react-query";
-import { PostgrestError } from "@supabase/supabase-js";
 
-type Props = {
-  form: UseFormReturn<CustomerFormValueType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, CustomerFormValueType, unknown>;
-  isPending: boolean;
-  formHeader: string;
-  submitButtonLabel: string;
-};
-
-const CustomerForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+const CustomerForm: RecordFormType<CustomerFormValueType> = ({
+  form,
+  mutate,
+  isPending,
+  formHeader,
+  submitButtonLabel,
+}) => {
   function onSubmit(values: CustomerFormValueType) {
     mutate(values);
   }

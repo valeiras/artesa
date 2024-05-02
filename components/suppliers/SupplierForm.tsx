@@ -1,20 +1,15 @@
 import React from "react";
-import { SupplierFormValueType } from "@/lib/types";
-import { UseFormReturn } from "react-hook-form";
+import { RecordFormType, SupplierFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, FormButtons } from "@/components/forms";
-import { UseMutateFunction } from "@tanstack/react-query";
-import { PostgrestError } from "@supabase/supabase-js";
 
-type Props = {
-  form: UseFormReturn<SupplierFormValueType>;
-  mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, SupplierFormValueType, unknown>;
-  isPending: boolean;
-  formHeader: string;
-  submitButtonLabel: string;
-};
-
-const SupplierForm: React.FC<Props> = ({ form, mutate, isPending, formHeader, submitButtonLabel }) => {
+const SupplierForm: RecordFormType<SupplierFormValueType> = ({
+  form,
+  mutate,
+  isPending,
+  formHeader,
+  submitButtonLabel,
+}) => {
   function onSubmit(values: SupplierFormValueType) {
     mutate(values);
   }

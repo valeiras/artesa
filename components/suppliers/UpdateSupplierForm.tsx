@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { supplierFormSchema, isReadSupplierDBType } from "@/lib/types";
-import { UpdateRecordForm } from "@/components/forms";
+import { supplierFormSchema, isReadSupplierDBType, SupplierFormValueType } from "@/lib/types";
+import { UpdateItemForm } from "@/components/forms";
 import { updateSupplier } from "@/lib/actions/supplierActions";
 import { useDataTableContext } from "@/components/dataTable";
 import SupplierForm from "./SupplierForm";
@@ -11,22 +11,23 @@ const UpdateSupplierForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { itemData } = dataTableContext;
+  console.log(itemData);
   if (!isReadSupplierDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
+  const defaultValues: SupplierFormValueType = {
+    name: itemData.name,
+    email: itemData.email || "",
+    phone: itemData.phone || "",
+    address: itemData.address || "",
+  };
   return (
-    <UpdateRecordForm
+    <UpdateItemForm<SupplierFormValueType>
       formSchema={supplierFormSchema}
-      defaultValues={{
-        name: itemData.name,
-        email: itemData.email || "",
-        phone: itemData.phone || "",
-        address: itemData.address || "",
-      }}
+      defaultValues={defaultValues}
       successToastMessage="Proveedor actualizado con éxito"
       queryKeys={[["supplier", String(itemData.id)], ["suppliers"], ["stats"], ["charts"]]}
       formHeader="Editar proveedor"
-      updateRecordFn={updateSupplier}
-      id={itemData.id}
+      updateItemFn={updateSupplier}
       ItemForm={SupplierForm}
     />
   );

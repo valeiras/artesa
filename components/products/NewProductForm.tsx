@@ -1,12 +1,12 @@
 import React from "react";
-import { productFormSchema } from "@/lib/types";
-import { NewRecordForm } from "@/components/forms";
+import { ProductFormValueType, productFormSchema } from "@/lib/types";
+import { NewItemForm } from "@/components/forms";
 import { createProduct } from "@/lib/actions/productActions";
 import ProductForm from "./ProductForm";
 
 const NewProductForm: React.FC = () => {
   return (
-    <NewRecordForm
+    <NewItemForm<ProductFormValueType>
       formSchema={productFormSchema}
       defaultValues={{ name: "", unit: "kg" }}
       successToastMessage="Nuevo producto creado con éxito"

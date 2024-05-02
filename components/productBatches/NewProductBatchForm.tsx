@@ -1,7 +1,7 @@
 "use client";
 
-import { isReadProductDBType, productBatchFormSchema } from "@/lib/types";
-import { NewRecordForm } from "@/components/forms";
+import { ProductBatchFormValueType, isReadProductDBType, productBatchFormSchema } from "@/lib/types";
+import { NewBatchForm } from "@/components/forms";
 
 import React from "react";
 import { createProductBatch } from "@/lib/actions/productBatchActions";
@@ -14,22 +14,24 @@ const NewProductBatchForm: React.FC = () => {
   const { itemData } = dataTableContext;
   if (!isReadProductDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
+  const defaultValues: ProductBatchFormValueType = {
+    productId: String(itemData.id),
+    productName: itemData.name,
+    externalId: "",
+    date: new Date(),
+    initialAmount: 0,
+    comments: "",
+  };
+
   return (
-    <NewRecordForm
+    <NewBatchForm<ProductBatchFormValueType>
       formSchema={productBatchFormSchema}
-      defaultValues={{
-        productId: String(itemData.id),
-        productName: itemData.name,
-        externalId: "",
-        date: new Date(),
-        initialAmount: 0,
-        comments: "",
-      }}
+      defaultValues={defaultValues}
       successToastMessage="Nuevo lote creado con éxito"
       queryKeys={[["products"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
-      createItemFn={createProductBatch}
-      ItemForm={ProductBatchForm}
+      createBatchFn={createProductBatch}
+      BatchForm={ProductBatchForm}
     />
   );
 };

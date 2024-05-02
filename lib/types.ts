@@ -168,7 +168,7 @@ export function isReadSaleDBType(record: ReadRecordDBType): record is ReadSaleDB
 }
 
 export function isReadSupplierDBType(record: ReadRecordDBType): record is ReadSupplierDBType {
-  return "customer_id" in record && "product_batch_id" in record && "sold_amount" in record;
+  return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 
 export function isReadCommodityBatchDBType(record: ReadRecordDBType | undefined): record is ReadCommodityBatchDBType {
