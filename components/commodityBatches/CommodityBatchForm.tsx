@@ -11,6 +11,7 @@ const CommodityBatchForm: RecordFormType<CommodityBatchFormValueType> = ({
   isPending,
   formHeader,
   submitButtonLabel,
+  setIsFormOpen,
 }) => {
   const { data: suppliersData } = useQuery({
     queryKey: ["suppliers"],
@@ -50,7 +51,7 @@ const CommodityBatchForm: RecordFormType<CommodityBatchFormValueType> = ({
           <CustomFormField name="initialAmount" control={form.control} label="Cantidad" placeholder="0" type="number" />
           <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>
     </Form>
   );

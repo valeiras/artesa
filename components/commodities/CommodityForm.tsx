@@ -10,6 +10,7 @@ const CommodityForm: RecordFormType<CommodityFormValueType> = ({
   isPending,
   formHeader,
   submitButtonLabel,
+  setIsFormOpen,
 }) => {
   function onSubmit(values: CommodityFormValueType) {
     mutate(values);
@@ -34,7 +35,7 @@ const CommodityForm: RecordFormType<CommodityFormValueType> = ({
             placeholder="kg"
           />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>
     </Form>
   );

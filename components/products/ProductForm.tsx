@@ -10,6 +10,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
   isPending,
   formHeader,
   submitButtonLabel,
+  setIsFormOpen,
 }) => {
   function onSubmit(values: ProductFormValueType) {
     mutate(values);
@@ -34,7 +35,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             placeholder="kg"
           />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>
     </Form>
   );

@@ -1,17 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Check, X, Clock } from "lucide-react";
-import { useDataTableContext } from "@/components/dataTable";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 type Props = {
   isPending: boolean;
   submitButtonLabel: string;
+  setIsFormOpen: (isOpen: boolean) => void;
 };
-const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel }) => {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Data table context if missing");
-
+const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, setIsFormOpen }) => {
   return (
     <div className="flex flex-row gap-x-2 justify-start mt-12">
       <Button type="submit" className="w-32 flex flex-row justify-center gap-x-1 px-2" disabled={isPending}>
@@ -27,17 +23,15 @@ const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel }) => {
           </>
         )}
       </Button>
-      <DialogClose>
-        <Button
-          variant="destructive"
-          className="w-32 flex flex-row justify-center gap-x-1 px-2"
-          disabled={isPending}
-          type="button"
-        >
-          <X strokeWidth={1.5} />
-          {isPending ? <span className="text-left">Cargando</span> : <span className="text-left">Cancelar</span>}
-        </Button>
-      </DialogClose>
+      <Button
+        variant="destructive"
+        className="w-32 flex flex-row justify-center gap-x-1 px-2"
+        type="button"
+        onClick={() => setIsFormOpen(false)}
+      >
+        <X strokeWidth={1.5} />
+        {isPending ? <span className="text-left">Cargando</span> : <span className="text-left">Cancelar</span>}
+      </Button>
     </div>
   );
 };

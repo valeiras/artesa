@@ -41,8 +41,8 @@ const SuppliersDataTable: React.FC = () => {
     toast({ title: "Ha habido un error", variant: "destructive" });
     return null;
   }
-  let { dbData, dbError } = data;
 
+  let { dbData, dbError } = data;
   if (dbError) {
     toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
     return null;

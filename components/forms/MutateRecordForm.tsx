@@ -48,7 +48,14 @@ function MutateRecordForm<T extends FieldValues>({
   });
 
   return (
-    <RecordForm form={form} mutate={mutate} isPending={isPending} formHeader={formHeader} submitButtonLabel="Crear" />
+    <RecordForm
+      form={form}
+      mutate={mutate}
+      isPending={isPending}
+      formHeader={formHeader}
+      submitButtonLabel="Crear"
+      setIsFormOpen={setIsDialogOpen}
+    />
   );
 }
 

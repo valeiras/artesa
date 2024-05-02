@@ -138,6 +138,7 @@ export type RecordFormType<T extends FieldValues> = React.FC<{
   isPending: boolean;
   formHeader: string;
   submitButtonLabel: string;
+  setIsFormOpen: (isOpen: boolean) => void;
 }>;
 
 export type ReadItemDBType =

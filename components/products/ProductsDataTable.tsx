@@ -8,14 +8,18 @@ import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { deleteProductBatch } from "@/lib/actions/productBatchActions";
 import { ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
+import { DeleteAlertDialog, NewBatchDialog, NewItemDialog, UpdateBatchDialog, UpdateItemDialog } from "../dialogs";
 import productColumns from "./productColumns";
-import { DeleteAlertDialog } from "../dialogs";
+import NewProductForm from "./NewProductForm";
+import UpdateProductForm from "./UpdateProductForm";
+import NewProductBatchForm from "../productBatches/NewProductBatchForm";
+import UpdateProductBatchForm from "../productBatches/UpdateProductBatchForm";
 
 const ProductsDataTable: React.FC = () => {
   const { toast } = useToast();
 
   const productSuccessHandler = useQuerySuccessHandler({
-    successToastMessage: "Productos eliminada con éxito",
+    successToastMessage: "Producto eliminado con éxito",
     queryKeys: [["products"], ["stats"], ["charts"]],
   });
 
@@ -75,6 +79,10 @@ const ProductsDataTable: React.FC = () => {
   return (
     <DataTableContextProvider defaultItemData={emptyProductData} defaultBatchData={emptyProductBatchData}>
       <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo producto" />
+      <NewItemDialog RecordForm={NewProductForm} />
+      <UpdateItemDialog RecordForm={UpdateProductForm} />
+      <NewBatchDialog RecordForm={NewProductBatchForm} isBatch={true} />
+      <UpdateBatchDialog RecordForm={UpdateProductBatchForm} isBatch={true} />
       <DeleteAlertDialog />
     </DataTableContextProvider>
   );

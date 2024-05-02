@@ -9,6 +9,7 @@ const SupplierForm: RecordFormType<SupplierFormValueType> = ({
   isPending,
   formHeader,
   submitButtonLabel,
+  setIsFormOpen,
 }) => {
   function onSubmit(values: SupplierFormValueType) {
     mutate(values);
@@ -24,7 +25,7 @@ const SupplierForm: RecordFormType<SupplierFormValueType> = ({
           <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />
           <CustomFormField name="address" control={form.control} label="Dirección" placeholder="C/" />
         </div>
-        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} />
+        <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>
     </Form>
   );
