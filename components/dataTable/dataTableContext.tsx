@@ -1,8 +1,8 @@
 import { createContext, useState, useContext } from "react";
 
 type DataTableContext = {
-  isDialogOpen: boolean;
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isItemDialogOpen: boolean;
+  setIsItemDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 } | null;
 
 const DataTableContext = createContext<DataTableContext>(null);
@@ -12,13 +12,13 @@ export const useDataTableContext = () => {
 };
 
 export const DataTableContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isItemDialogOpen, setIsItemDialogOpen] = useState(false);
 
   return (
     <DataTableContext.Provider
       value={{
-        isDialogOpen,
-        setIsDialogOpen,
+        isItemDialogOpen,
+        setIsItemDialogOpen,
       }}
     >
       {children}

@@ -23,6 +23,8 @@ import { DataTablePagination } from "./DataTablePagination";
 import DataTableColumnSelector from "./DataTableColumnSelector";
 import CustomDialog from "../CustomDialog";
 import { useDataTableContext } from "./dataTableContext";
+import NewItemButton from "../forms/NewItemButton";
+import ItemDialog from "../forms/ItemDialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,7 +44,7 @@ function DataTable<TData, TValue>({
   NewItemForm,
 }: DataTableProps<TData, TValue> & {
   newItemLabel: string;
-  NewItemForm: React.ComponentType;
+  NewItemForm: React.FC;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -50,7 +52,6 @@ function DataTable<TData, TValue>({
 
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Data table context if missing");
-  const { isDialogOpen, setIsDialogOpen } = dataTableContext;
 
   const table = useReactTable({
     data,
@@ -68,16 +69,6 @@ function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
-
-  const NewItemButton = () => {
-    return (
-      <Button variant="default" asChild>
-        <div className="flex flex-row gap-x-2 cursor-pointer">
-          <CirclePlus strokeWidth={1.5} /> <span>{newItemLabel}</span>
-        </div>
-      </Button>
-    );
-  };
 
   return (
     <div>
@@ -129,15 +120,10 @@ function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex flex-row justify-between mt-5">
-        <CustomDialog
-          DialogTriggerContent={NewItemButton()}
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
-        >
-          <NewItemForm />
-        </CustomDialog>
+        <NewItemButton newItemLabel={newItemLabel} />
         <DataTablePagination table={table} />
       </div>
+      <ItemDialog ItemForm={NewItemForm} />
     </div>
   );
 }
