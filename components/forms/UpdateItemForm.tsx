@@ -28,7 +28,7 @@ function UpdateItemForm<T extends FieldValues>({
 }) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
-  const { setIsItemDialogOpen } = dataTableContext;
+  const { setIsUpdateItemDialogOpen } = dataTableContext;
 
   const form = useForm<T>({
     resolver: zodResolver(formSchema),
@@ -43,7 +43,7 @@ function UpdateItemForm<T extends FieldValues>({
   const { mutate, isPending } = useMutation({
     mutationFn: (values: T) => updateItemFn(values, id),
     onSuccess: (e) => {
-      setIsItemDialogOpen(false);
+      setIsUpdateItemDialogOpen(false);
       successHandler(e);
     },
     onError: (error) => {

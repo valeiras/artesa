@@ -44,12 +44,7 @@ export function customerColumns(mutate: UseMutateFunction<{ dbError: PostgrestEr
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return (
-          <RowActions
-            deleteItemMutation={() => mutate(item.id)}
-            UpdateItemForm={<UpdateCustomerForm itemData={item} />}
-          />
-        );
+        return <RowActions deleteItemMutation={() => mutate(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,

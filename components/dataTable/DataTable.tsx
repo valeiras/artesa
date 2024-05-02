@@ -13,18 +13,15 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
-import { CirclePlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
 import { DataTablePagination } from "./DataTablePagination";
 import DataTableColumnSelector from "./DataTableColumnSelector";
-import CustomDialog from "../CustomDialog";
 import { useDataTableContext } from "./dataTableContext";
 import NewItemButton from "../forms/NewItemButton";
-import ItemDialog from "../forms/ItemDialog";
+import NewItemDialog from "../forms/NewItemDialog";
+import UpdateItemDialog from "../forms/UpdateItemDialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,9 +39,11 @@ function DataTable<TData, TValue>({
   data,
   newItemLabel,
   NewItemForm,
+  UpdateItemForm,
 }: DataTableProps<TData, TValue> & {
   newItemLabel: string;
   NewItemForm: React.FC;
+  UpdateItemForm: React.FC;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -123,7 +122,8 @@ function DataTable<TData, TValue>({
         <NewItemButton newItemLabel={newItemLabel} />
         <DataTablePagination table={table} />
       </div>
-      <ItemDialog ItemForm={NewItemForm} />
+      <NewItemDialog ItemForm={NewItemForm} />
+      <UpdateItemDialog ItemForm={UpdateItemForm} />
     </div>
   );
 }

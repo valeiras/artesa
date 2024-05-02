@@ -61,12 +61,7 @@ export function commodityColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return (
-          <RowActions
-            deleteItemMutation={() => mutateCommodity(item.id)}
-            UpdateItemForm={<UpdateCommodityForm itemData={item} />}
-          />
-        );
+        return <RowActions deleteItemMutation={() => mutateCommodity(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,

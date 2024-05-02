@@ -1,8 +1,13 @@
 import { createContext, useState, useContext } from "react";
+import { ReadItemDBType } from "@/lib/types";
 
 type DataTableContext = {
-  isItemDialogOpen: boolean;
-  setIsItemDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isNewItemDialogOpen: boolean;
+  setIsNewItemDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isUpdateItemDialogOpen: boolean;
+  setIsUpdateItemDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  itemData: ReadItemDBType;
+  setItemData: React.Dispatch<React.SetStateAction<ReadItemDBType>>;
 } | null;
 
 const DataTableContext = createContext<DataTableContext>(null);
@@ -11,14 +16,23 @@ export const useDataTableContext = () => {
   return useContext(DataTableContext);
 };
 
-export const DataTableContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isItemDialogOpen, setIsItemDialogOpen] = useState(false);
+export const DataTableContextProvider: React.FC<{ children: React.ReactNode; defaultItemData: ReadItemDBType }> = ({
+  children,
+  defaultItemData,
+}) => {
+  const [isNewItemDialogOpen, setIsNewItemDialogOpen] = useState(false);
+  const [isUpdateItemDialogOpen, setIsUpdateItemDialogOpen] = useState(false);
+  const [itemData, setItemData] = useState(defaultItemData);
 
   return (
     <DataTableContext.Provider
       value={{
-        isItemDialogOpen,
-        setIsItemDialogOpen,
+        isNewItemDialogOpen,
+        setIsNewItemDialogOpen,
+        isUpdateItemDialogOpen,
+        setIsUpdateItemDialogOpen,
+        itemData,
+        setItemData,
       }}
     >
       {children}

@@ -1,13 +1,19 @@
 "use client";
 
-import { customerFormSchema, ReadCustomerDBType } from "@/lib/types";
+import { customerFormSchema, isReadCustomerDBType } from "@/lib/types";
 import UpdateItemForm from "../forms/UpdateItemForm";
 
 import React from "react";
 import { updateCustomer } from "@/lib/actions/customerActions";
 import CustomerForm from "./CustomerForm";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 
-const UpdateCustomerForm: React.FC<{ itemData: ReadCustomerDBType }> = ({ itemData }) => {
+const UpdateCustomerForm: React.FC = () => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+  const { itemData } = dataTableContext;
+  if (!isReadCustomerDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
+
   return (
     <UpdateItemForm
       formSchema={customerFormSchema}

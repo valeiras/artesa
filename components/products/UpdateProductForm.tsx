@@ -1,11 +1,17 @@
-import { productFormSchema, ReadProductDBType } from "@/lib/types";
+import { isReadProductDBType, productFormSchema } from "@/lib/types";
 import UpdateItemForm from "../forms/UpdateItemForm";
 
 import React from "react";
 import { updateProduct } from "@/lib/actions/productActions";
 import ProductForm from "./ProductForm";
+import { useDataTableContext } from "../dataTable/dataTableContext";
 
-const UpdateProductForm: React.FC<{ itemData: ReadProductDBType }> = ({ itemData }) => {
+const UpdateProductForm: React.FC = () => {
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+  const { itemData } = dataTableContext;
+  if (!isReadProductDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
+
   return (
     <UpdateItemForm
       formSchema={productFormSchema}

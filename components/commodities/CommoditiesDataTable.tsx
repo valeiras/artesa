@@ -11,6 +11,8 @@ import { commodityColumns } from "./commodityColumns";
 import NewCommodityForm from "./NewCommodityForm";
 import { DataTableContextProvider } from "../dataTable/dataTableContext";
 import { deleteCommodityBatch } from "@/lib/actions/commodityBatchActions";
+import { ReadCommodityDBType } from "@/lib/types";
+import UpdateCommodityForm from "./UpdateCommodityForm";
 
 const CommoditiesDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -61,13 +63,16 @@ const CommoditiesDataTable: React.FC = () => {
     return null;
   }
 
+  const emptyCommodityData: ReadCommodityDBType = { name: "", created_at: "", id: 0, unit: null, user_id: "" };
+
   return (
-    <DataTableContextProvider>
+    <DataTableContextProvider defaultItemData={emptyCommodityData}>
       <DataTable
         columns={columns}
         data={dbData || []}
         newItemLabel="Nueva materia prima"
         NewItemForm={NewCommodityForm}
+        UpdateItemForm={UpdateCommodityForm}
       />
     </DataTableContextProvider>
   );

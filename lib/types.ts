@@ -139,3 +139,30 @@ export type ItemFormType<T extends FieldValues> = React.FC<{
   formHeader: string;
   submitButtonLabel: string;
 }>;
+
+export type ReadItemDBType =
+  | ReadCommodityDBType
+  | ReadCustomerDBType
+  | ReadProductDBType
+  | ReadSaleDBType
+  | ReadSupplierDBType;
+
+export function isReadCommodityDBType(item: ReadItemDBType): item is ReadCommodityDBType {
+  return "name" in item && "unit" in item;
+}
+
+export function isReadCustomerDBType(item: ReadItemDBType): item is ReadCustomerDBType {
+  return "address" in item && "email" in item && "name" in item && "phone" in item;
+}
+
+export function isReadProductDBType(item: ReadItemDBType): item is ReadProductDBType {
+  return "name" in item && "unit" in item;
+}
+
+export function isReadSaleDBType(item: ReadItemDBType): item is ReadSaleDBType {
+  return "name" in item && "unit" in item;
+}
+
+export function isReadSupplierDBType(item: ReadItemDBType): item is ReadSupplierDBType {
+  return "customer_id" in item && "product_batch_id" in item && "sold_amount" in item;
+}

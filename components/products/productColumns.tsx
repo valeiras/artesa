@@ -61,12 +61,7 @@ export function productColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return (
-          <RowActions
-            deleteItemMutation={() => mutateProduct(item.id)}
-            UpdateItemForm={<UpdateProductForm itemData={item} />}
-          />
-        );
+        return <RowActions deleteItemMutation={() => mutateProduct(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,
