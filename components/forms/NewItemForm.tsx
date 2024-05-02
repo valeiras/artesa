@@ -27,7 +27,7 @@ function NewItemForm<T extends FieldValues>({
 }) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
-  const { setIsItemDialogOpen } = dataTableContext;
+  const { setIsNewItemDialogOpen } = dataTableContext;
 
   const form = useForm<T>({
     resolver: zodResolver(formSchema),
@@ -42,7 +42,7 @@ function NewItemForm<T extends FieldValues>({
   const { mutate, isPending } = useMutation({
     mutationFn: (values: T) => createItemFn(values),
     onSuccess: (e) => {
-      setIsItemDialogOpen(false);
+      setIsNewItemDialogOpen(false);
       successHandler(e);
     },
     onError: (error) => {

@@ -10,15 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import DeleteAlertDialog from "@/components/DeleteAlertDialog";
-import { ReadItemDBType } from "@/lib/types";
-import { useDataTableContext } from "./dataTable/dataTableContext";
 
-type Props = { deleteItemMutation: () => void; itemData: ReadItemDBType };
-const RowActions: React.FC<Props> = ({ deleteItemMutation, itemData }) => {
-  const dataTableContext = useDataTableContext();
-  if (dataTableContext === null) throw new Error("Las acciones de fila no pueden acceder al contexto de la tabla");
-  const { setIsUpdateItemDialogOpen, setItemData } = dataTableContext;
-
+const RowActions = ({
+  handleClick,
+  deleteRecordMutation,
+}: {
+  handleClick: () => void;
+  deleteRecordMutation: () => void;
+}) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const EditButton = () => {
@@ -47,12 +46,7 @@ const RowActions: React.FC<Props> = ({ deleteItemMutation, itemData }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => {
-              setIsUpdateItemDialogOpen(true);
-              setItemData(itemData);
-            }}
-          >
+          <DropdownMenuItem onClick={handleClick}>
             <EditButton />
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setIsAlertOpen(true)}>
@@ -61,7 +55,7 @@ const RowActions: React.FC<Props> = ({ deleteItemMutation, itemData }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DeleteAlertDialog isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} deleteItem={deleteItemMutation} />
+      <DeleteAlertDialog isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} deleteItem={deleteRecordMutation} />
     </>
   );
 };

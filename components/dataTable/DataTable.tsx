@@ -20,8 +20,6 @@ import { DataTablePagination } from "./DataTablePagination";
 import DataTableColumnSelector from "./DataTableColumnSelector";
 import { useDataTableContext } from "./dataTableContext";
 import NewItemButton from "../forms/NewItemButton";
-import NewItemDialog from "../forms/NewItemDialog";
-import UpdateItemDialog from "../forms/UpdateItemDialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,12 +36,8 @@ function DataTable<TData, TValue>({
   columns,
   data,
   newItemLabel,
-  NewItemForm,
-  UpdateItemForm,
 }: DataTableProps<TData, TValue> & {
   newItemLabel: string;
-  NewItemForm: React.FC;
-  UpdateItemForm: React.FC;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -122,8 +116,6 @@ function DataTable<TData, TValue>({
         <NewItemButton newItemLabel={newItemLabel} />
         <DataTablePagination table={table} />
       </div>
-      <NewItemDialog ItemForm={NewItemForm} />
-      <UpdateItemDialog ItemForm={UpdateItemForm} />
     </div>
   );
 }

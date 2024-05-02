@@ -11,8 +11,12 @@ import { commodityColumns } from "./commodityColumns";
 import NewCommodityForm from "./NewCommodityForm";
 import { DataTableContextProvider } from "../dataTable/dataTableContext";
 import { deleteCommodityBatch } from "@/lib/actions/commodityBatchActions";
-import { ReadCommodityDBType } from "@/lib/types";
+import { ReadCommodityBatchDBType, ReadCommodityDBType } from "@/lib/types";
 import UpdateCommodityForm from "./UpdateCommodityForm";
+import NewRecordDialog from "../forms/NewRecordDialog";
+import UpdateRecordDialog from "../forms/UpdateRecordDialog";
+import NewCommodityBatchForm from "../commodityBatches/NewCommodityBatchForm";
+import UpdateCommodityBatchForm from "../commodityBatches/UpdateCommodityBatchForm";
 
 const CommoditiesDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -64,16 +68,25 @@ const CommoditiesDataTable: React.FC = () => {
   }
 
   const emptyCommodityData: ReadCommodityDBType = { name: "", created_at: "", id: 0, unit: null, user_id: "" };
+  const emptyCommodityBatchData: ReadCommodityBatchDBType = {
+    comments: "",
+    commodity_id: 0,
+    created_at: "",
+    date: "",
+    external_id: "",
+    id: 0,
+    initial_amount: 0,
+    supplier_id: 0,
+    user_id: "",
+  };
 
   return (
-    <DataTableContextProvider defaultItemData={emptyCommodityData}>
-      <DataTable
-        columns={columns}
-        data={dbData || []}
-        newItemLabel="Nueva materia prima"
-        NewItemForm={NewCommodityForm}
-        UpdateItemForm={UpdateCommodityForm}
-      />
+    <DataTableContextProvider defaultItemData={emptyCommodityData} defaultBatchData={emptyCommodityBatchData}>
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nueva materia prima" />
+      <NewRecordDialog RecordForm={NewCommodityForm} />
+      <UpdateRecordDialog RecordForm={UpdateCommodityForm} />
+      <NewRecordDialog RecordForm={NewCommodityBatchForm} isBatch={true} />
+      <UpdateRecordDialog RecordForm={UpdateCommodityBatchForm} isBatch={true} />
     </DataTableContextProvider>
   );
 };

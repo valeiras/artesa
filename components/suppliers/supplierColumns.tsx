@@ -1,6 +1,6 @@
 import { ReadSupplierDBType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import RowActions from "../RowActions";
+import RowActions from "../rowActions/RowActions";
 import { DataTableColumnHeader } from "../dataTable/DataTableColumnHeader";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";

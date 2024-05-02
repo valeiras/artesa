@@ -147,22 +147,47 @@ export type ReadItemDBType =
   | ReadSaleDBType
   | ReadSupplierDBType;
 
-export function isReadCommodityDBType(item: ReadItemDBType): item is ReadCommodityDBType {
-  return "name" in item && "unit" in item;
+export type ReadBatchDBType = ReadCommodityBatchDBType | ReadProductBatchDBType;
+
+export type ReadRecordDBType = ReadItemDBType | ReadBatchDBType;
+
+export function isReadCommodityDBType(record: ReadRecordDBType): record is ReadCommodityDBType {
+  return "name" in record && "unit" in record;
 }
 
-export function isReadCustomerDBType(item: ReadItemDBType): item is ReadCustomerDBType {
-  return "address" in item && "email" in item && "name" in item && "phone" in item;
+export function isReadCustomerDBType(record: ReadRecordDBType): record is ReadCustomerDBType {
+  return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 
-export function isReadProductDBType(item: ReadItemDBType): item is ReadProductDBType {
-  return "name" in item && "unit" in item;
+export function isReadProductDBType(record: ReadRecordDBType): record is ReadProductDBType {
+  return "name" in record && "unit" in record;
 }
 
-export function isReadSaleDBType(item: ReadItemDBType): item is ReadSaleDBType {
-  return "name" in item && "unit" in item;
+export function isReadSaleDBType(record: ReadRecordDBType): record is ReadSaleDBType {
+  return "name" in record && "unit" in record;
 }
 
-export function isReadSupplierDBType(item: ReadItemDBType): item is ReadSupplierDBType {
-  return "customer_id" in item && "product_batch_id" in item && "sold_amount" in item;
+export function isReadSupplierDBType(record: ReadRecordDBType): record is ReadSupplierDBType {
+  return "customer_id" in record && "product_batch_id" in record && "sold_amount" in record;
+}
+
+export function isReadCommodityBatchDBType(record: ReadRecordDBType): record is ReadCommodityBatchDBType {
+  return (
+    "comments" in record &&
+    "commodity_id" in record &&
+    "external_id" in record &&
+    "initial_amount" in record &&
+    "supplier_id" in record &&
+    "user_id" in record
+  );
+}
+
+export function isReadProductBatchDBType(record: ReadRecordDBType): record is ReadProductBatchDBType {
+  return (
+    "comments" in record &&
+    "product_id" in record &&
+    "external_id" in record &&
+    "initial_amount" in record &&
+    "user_id" in record
+  );
 }
