@@ -33,7 +33,8 @@ export type UnitType = z.infer<typeof unitEnum>;
 export const productFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
   unit: unitEnum,
-  ingredientIds: z.string().array(),
+  commodityIngredientIds: z.object({ id: z.string() }).array(),
+  productIngredientIds: z.object({ id: z.string() }).array(),
 });
 
 export type ProductFormValueType = z.infer<typeof productFormSchema>;

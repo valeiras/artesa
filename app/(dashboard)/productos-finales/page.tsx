@@ -1,16 +1,15 @@
 import React from "react";
 
-import { getAllProducts } from "@/lib/actions/productActions";
+import { getAllProductsWithBatches } from "@/lib/actions/productActions";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import ProductsDataTable from "@/components/products/ProductsDataTable";
+import { getAllCommodities } from "@/lib/actions/commodityActions";
 
 const ProductsPage: React.FC = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ["products"],
-    queryFn: () => getAllProducts(),
-  });
+  await queryClient.prefetchQuery({ queryKey: ["products"], queryFn: () => getAllProductsWithBatches() });
+  await queryClient.prefetchQuery({ queryKey: ["commodities"], queryFn: () => getAllCommodities() });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

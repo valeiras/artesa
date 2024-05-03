@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import { nanoid } from "nanoid";
 import { RecordFormType, ProductFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
-import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
+import { CustomFormField, CustomFormSelect, CustomFormSelectFieldArray, FormButtons } from "@/components/forms";
 import { availableUnits } from "@/lib/units";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCommodities } from "@/lib/actions/commodityActions";
+import { getAllProducts } from "@/lib/actions/productActions";
+import { getAvailableArray } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 const ProductForm: RecordFormType<ProductFormValueType> = ({
   form,
@@ -16,6 +22,19 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
     mutate(values);
   }
 
+  const { data: commoditiesData } = useQuery({
+    queryKey: ["commodities"],
+    queryFn: () => getAllCommodities(),
+  });
+
+  const { data: productsData } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => getAllProducts(),
+  });
+
+  const availableCommodities = getAvailableArray(commoditiesData);
+  const availableProducts = getAvailableArray(productsData);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="bg-muted p-8 rounded">
@@ -24,8 +43,9 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
           <CustomFormField
             name="name"
             control={form.control}
-            label="Nombre de la materia prima"
+            label="Nombre del producto"
             placeholder="Manzana"
+            className="justify-start"
           />
           <CustomFormSelect
             name="unit"
@@ -33,7 +53,18 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             control={form.control}
             label="Unidad de medida"
             placeholder="kg"
+            className="justify-start"
           />
+          <div>
+            <CustomFormSelectFieldArray
+              name="commodityIngredientIds"
+              control={form.control}
+              register={form.register}
+              items={availableCommodities}
+              label="Materias primas"
+              placeholder="Selecciona una materia prima"
+            />
+          </div>
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>

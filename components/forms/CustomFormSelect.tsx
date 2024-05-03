@@ -1,6 +1,8 @@
-import { Control } from "react-hook-form";
+import { Control, RefCallBack } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 type CustomFormSelectProps = {
   name: string;
@@ -8,16 +10,21 @@ type CustomFormSelectProps = {
   items: { value: string; label?: string }[];
   label?: string;
   placeholder?: string;
+  className?: string;
+  hasLabel?: boolean;
 };
 
-function CustomFormSelect({ name, control, items, label, placeholder }: CustomFormSelectProps) {
+const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>(function CustomFormSelect(
+  { name, control, items, label, placeholder, className, hasLabel = true },
+  ref
+) {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex flex-col h-full justify-between pt-1 relative">
-          <FormLabel>{label || name}</FormLabel>
+        <FormItem className={cn("flex flex-col h-full justify-between pt-1 relative", className)}>
+          {hasLabel && <FormLabel>{label || name}</FormLabel>}
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger>
@@ -27,7 +34,7 @@ function CustomFormSelect({ name, control, items, label, placeholder }: CustomFo
             <SelectContent>
               {items.map(({ value, label }) => {
                 return (
-                  <SelectItem key={value} value={value}>
+                  <SelectItem key={value} value={value} ref={ref}>
                     {label || value}
                   </SelectItem>
                 );
@@ -39,6 +46,6 @@ function CustomFormSelect({ name, control, items, label, placeholder }: CustomFo
       )}
     />
   );
-}
+});
 
 export default CustomFormSelect;

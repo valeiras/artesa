@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import { getAllSuppliers } from "@/lib/actions/supplierActions";
+import { getAvailableArray } from "@/lib/utils";
 
 const CommodityBatchForm: RecordFormType<CommodityBatchFormValueType> = ({
   form,
@@ -22,10 +23,7 @@ const CommodityBatchForm: RecordFormType<CommodityBatchFormValueType> = ({
     mutate(values);
   }
 
-  const availableSuppliers =
-    suppliersData?.dbData.map(({ name, id }) => {
-      return { value: id.toString(), label: name };
-    }) || [];
+  const availableSuppliers = getAvailableArray(suppliersData);
 
   return (
     <Form {...form}>

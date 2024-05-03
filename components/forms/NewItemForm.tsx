@@ -1,8 +1,7 @@
 import React from "react";
 import * as z from "zod";
-import { DefaultValues, FieldValues, useForm } from "react-hook-form";
-import { PostgrestError } from "@supabase/supabase-js";
-import { NewRecordFormProps, RecordFormType } from "@/lib/types";
+import { FieldValues } from "react-hook-form";
+import { NewRecordFormProps } from "@/lib/types";
 import { useDataTableContext } from "../dataTable";
 import MutateRecordForm from "./MutateRecordForm";
 

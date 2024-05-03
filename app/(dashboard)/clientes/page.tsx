@@ -7,10 +7,7 @@ import ClientsDataTable from "@/components/clients/ClientsDataTable";
 const ClientsPage: React.FC = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ["clients"],
-    queryFn: () => getAllClients(),
-  });
+  await queryClient.prefetchQuery({ queryKey: ["clients"], queryFn: () => getAllClients() });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

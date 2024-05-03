@@ -11,7 +11,6 @@ const UpdateSupplierForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { itemData } = dataTableContext;
-  console.log(itemData);
   if (!isReadSupplierDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   const defaultValues: SupplierFormValueType = {

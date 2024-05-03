@@ -7,10 +7,7 @@ import SuppliersDataTable from "@/components/suppliers/SuppliersDataTable";
 const SuppliersPage: React.FC = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ["suppliers"],
-    queryFn: () => getAllSuppliers(),
-  });
+  await queryClient.prefetchQuery({ queryKey: ["suppliers"], queryFn: () => getAllSuppliers() });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
