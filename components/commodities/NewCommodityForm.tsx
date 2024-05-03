@@ -14,8 +14,8 @@ const NewCommodityForm: React.FC = () => {
       successToastMessage="Nueva materia prima creada con éxito"
       queryKeys={[["commodities"], ["stats"], ["charts"]]}
       formHeader="Nueva materia prima"
-      createItemFn={createCommodity}
-      ItemForm={CommodityForm}
+      createRecordFn={createCommodity}
+      RecordForm={CommodityForm}
     />
   );
 };

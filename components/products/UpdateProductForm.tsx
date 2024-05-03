@@ -19,8 +19,8 @@ const UpdateProductForm: React.FC = () => {
       successToastMessage="Producto actualizado con éxito"
       queryKeys={[["product", String(itemData.id)], ["products"], ["stats"], ["charts"]]}
       formHeader="Editar producto"
-      updateItemFn={updateProduct}
-      ItemForm={ProductForm}
+      updateRecordFn={updateProduct}
+      RecordForm={ProductForm}
     />
   );
 };

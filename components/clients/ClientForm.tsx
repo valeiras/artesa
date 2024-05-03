@@ -1,9 +1,9 @@
-import { CustomerFormValueType, RecordFormType } from "@/lib/types";
+import { ClientFormValueType, RecordFormType } from "@/lib/types";
 import React from "react";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, FormButtons } from "@/components/forms";
 
-const CustomerForm: RecordFormType<CustomerFormValueType> = ({
+const ClientForm: RecordFormType<ClientFormValueType> = ({
   form,
   mutate,
   isPending,
@@ -11,7 +11,7 @@ const CustomerForm: RecordFormType<CustomerFormValueType> = ({
   submitButtonLabel,
   setIsFormOpen,
 }) => {
-  function onSubmit(values: CustomerFormValueType) {
+  function onSubmit(values: ClientFormValueType) {
     mutate(values);
   }
 
@@ -31,4 +31,4 @@ const CustomerForm: RecordFormType<CustomerFormValueType> = ({
   );
 };
 
-export default CustomerForm;
+export default ClientForm;

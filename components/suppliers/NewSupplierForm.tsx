@@ -14,8 +14,8 @@ const NewSupplierForm: React.FC = () => {
       successToastMessage="Nuevo proveedor creado con éxito"
       queryKeys={[["suppliers"], ["stats"], ["charts"]]}
       formHeader="Nuevo proveedor"
-      createItemFn={createSupplier}
-      ItemForm={SupplierForm}
+      createRecordFn={createSupplier}
+      RecordForm={SupplierForm}
     />
   );
 };

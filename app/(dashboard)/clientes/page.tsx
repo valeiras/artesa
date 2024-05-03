@@ -1,15 +1,15 @@
 import React from "react";
 
-import { getAllCustomers } from "@/lib/actions/customerActions";
+import { getAllClients } from "@/lib/actions/clientActions";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import CustomersDataTable from "@/components/customers/CustomersDataTable";
+import ClientsDataTable from "@/components/clients/ClientsDataTable";
 
-const CustomersPage: React.FC = async () => {
+const ClientsPage: React.FC = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["customers"],
-    queryFn: () => getAllCustomers(),
+    queryKey: ["clients"],
+    queryFn: () => getAllClients(),
   });
 
   return (
@@ -17,9 +17,9 @@ const CustomersPage: React.FC = async () => {
       <div className="flex flex-row justify-between items-center mb-8">
         <h2 className="item-list-header">Clientes:</h2>
       </div>
-      <CustomersDataTable />
+      <ClientsDataTable />
     </HydrationBoundary>
   );
 };
 
-export default CustomersPage;
+export default ClientsPage;

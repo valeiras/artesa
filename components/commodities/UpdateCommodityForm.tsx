@@ -20,8 +20,8 @@ const UpdateCommodityForm: React.FC = () => {
       successToastMessage="Materia prima actualizada con éxito"
       queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Editar materia prima"
-      updateItemFn={updateCommodity}
-      ItemForm={CommodityForm}
+      updateRecordFn={updateCommodity}
+      RecordForm={CommodityForm}
     />
   );
 };

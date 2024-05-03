@@ -6,7 +6,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 
 type TableDB =
   | "supplier"
-  | "customer"
+  | "client"
   | "commodity"
   | "commodity_batch"
   | "product"

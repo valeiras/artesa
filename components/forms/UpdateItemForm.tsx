@@ -1,8 +1,6 @@
 import React from "react";
-import * as z from "zod";
-import { DefaultValues, FieldValues, useForm } from "react-hook-form";
-import { PostgrestError } from "@supabase/supabase-js";
-import { RecordFormType } from "@/lib/types";
+import { FieldValues } from "react-hook-form";
+import { UpdateRecordFormProps } from "@/lib/types";
 import { useDataTableContext } from "../dataTable";
 import MutateRecordForm from "./MutateRecordForm";
 
@@ -11,18 +9,10 @@ function UpdateItemForm<T extends FieldValues>({
   defaultValues,
   successToastMessage,
   queryKeys,
-  updateItemFn,
+  updateRecordFn,
   formHeader,
-  ItemForm,
-}: {
-  formSchema: z.ZodType<T>;
-  defaultValues: DefaultValues<T>;
-  successToastMessage: string;
-  queryKeys: string[][];
-  formHeader: string;
-  updateItemFn: (values: T, id: number) => Promise<{ dbError: PostgrestError | null }>;
-  ItemForm: RecordFormType<T>;
-}) {
+  RecordForm,
+}: UpdateRecordFormProps<T>) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { setIsUpdateItemDialogOpen, itemData } = dataTableContext;
@@ -33,9 +23,9 @@ function UpdateItemForm<T extends FieldValues>({
       defaultValues={defaultValues}
       successToastMessage={successToastMessage}
       queryKeys={queryKeys}
-      mutationFn={(values: T) => updateItemFn(values, itemData.id)}
+      mutationFn={(values: T) => updateRecordFn(values, itemData.id)}
       formHeader={formHeader}
-      RecordForm={ItemForm}
+      RecordForm={RecordForm}
       setIsDialogOpen={setIsUpdateItemDialogOpen}
     />
   );

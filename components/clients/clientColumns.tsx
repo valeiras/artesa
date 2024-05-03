@@ -1,12 +1,12 @@
-import { ReadCustomerDBType } from "@/lib/types";
+import { ReadClientDBType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { ItemRowActions } from "@/components/rowActions";
 
-export function customerColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
-  const columns: ColumnDef<ReadCustomerDBType>[] = [
+export function clientColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
+  const columns: ColumnDef<ReadClientDBType>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,

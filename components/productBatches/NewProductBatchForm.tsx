@@ -30,8 +30,8 @@ const NewProductBatchForm: React.FC = () => {
       successToastMessage="Nuevo lote creado con éxito"
       queryKeys={[["products"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
-      createBatchFn={createProductBatch}
-      BatchForm={ProductBatchForm}
+      createRecordFn={createProductBatch}
+      RecordForm={ProductBatchForm}
     />
   );
 };

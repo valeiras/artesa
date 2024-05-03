@@ -12,8 +12,8 @@ const NewProductForm: React.FC = () => {
       successToastMessage="Nuevo producto creado con éxito"
       queryKeys={[["products"], ["stats"], ["charts"]]}
       formHeader="Nuevo producto"
-      createItemFn={createProduct}
-      ItemForm={ProductForm}
+      createRecordFn={createProduct}
+      RecordForm={ProductForm}
     />
   );
 };

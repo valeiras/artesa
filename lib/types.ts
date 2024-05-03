@@ -2,8 +2,8 @@ import * as z from "zod";
 import validator from "validator";
 import { Database } from "./database.types";
 import React from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
-import { UseMutateFunction } from "@tanstack/react-query";
+import { DefaultValues, FieldValues, UseFormReturn } from "react-hook-form";
+import { UseMutateFunction, MutationFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 
 const esMobileValidator = (str: string) => {
@@ -104,7 +104,7 @@ export type ReadSupplierDBType = Database["public"]["Tables"]["supplier"]["Row"]
 export type CreateSupplierDBType = Database["public"]["Tables"]["supplier"]["Insert"];
 export type UpdateSupplierDBType = Database["public"]["Tables"]["supplier"]["Update"];
 
-export const customerFormSchema = z.object({
+export const clientFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
   address: z.string().optional(),
   phone: z
@@ -115,10 +115,10 @@ export const customerFormSchema = z.object({
   email: z.string().email({ message: "Introduce un email válido" }).optional().or(z.literal("")),
 });
 
-export type CustomerFormValueType = z.infer<typeof customerFormSchema>;
-export type ReadCustomerDBType = Database["public"]["Tables"]["customer"]["Row"];
-export type CreateCustomerDBType = Database["public"]["Tables"]["customer"]["Insert"];
-export type UpdateCustomerDBType = Database["public"]["Tables"]["customer"]["Update"];
+export type ClientFormValueType = z.infer<typeof clientFormSchema>;
+export type ReadClientDBType = Database["public"]["Tables"]["client"]["Row"];
+export type CreateClientDBType = Database["public"]["Tables"]["client"]["Insert"];
+export type UpdateClientDBType = Database["public"]["Tables"]["client"]["Update"];
 
 export const saleFormSchema = z.object({
   productId: z.string({ required_error: "Especifica un producto" }),
@@ -141,9 +141,31 @@ export type RecordFormType<T extends FieldValues> = React.FC<{
   setIsFormOpen: (isOpen: boolean) => void;
 }>;
 
+type BaseRecordFormProps<T extends FieldValues> = {
+  formSchema: z.ZodType<T>;
+  defaultValues: DefaultValues<T>;
+  successToastMessage: string;
+  queryKeys: string[][];
+  formHeader: string;
+  RecordForm: RecordFormType<T>;
+};
+
+export type NewRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
+  createRecordFn: (values: T) => Promise<{ dbError: PostgrestError | null }>;
+};
+
+export type UpdateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
+  updateRecordFn: (values: T, id: number) => Promise<{ dbError: PostgrestError | null }>;
+};
+
+export type MutateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
+  mutationFn: MutationFunction<{ dbError: PostgrestError | null }, T>;
+  setIsDialogOpen: (isOpen: boolean) => void;
+};
+
 export type ReadItemDBType =
   | ReadCommodityDBType
-  | ReadCustomerDBType
+  | ReadClientDBType
   | ReadProductDBType
   | ReadSaleDBType
   | ReadSupplierDBType;
@@ -156,7 +178,7 @@ export function isReadCommodityDBType(record: ReadRecordDBType): record is ReadC
   return "name" in record && "unit" in record;
 }
 
-export function isReadCustomerDBType(record: ReadRecordDBType): record is ReadCustomerDBType {
+export function isReadClientDBType(record: ReadRecordDBType): record is ReadClientDBType {
   return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 

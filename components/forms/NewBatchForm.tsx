@@ -1,8 +1,6 @@
 import React from "react";
-import * as z from "zod";
-import { DefaultValues, FieldValues, useForm } from "react-hook-form";
-import { PostgrestError } from "@supabase/supabase-js";
-import { RecordFormType } from "@/lib/types";
+import { FieldValues } from "react-hook-form";
+import { NewRecordFormProps } from "@/lib/types";
 import { useDataTableContext } from "../dataTable";
 import MutateRecordForm from "./MutateRecordForm";
 
@@ -11,18 +9,10 @@ function NewBatchForm<T extends FieldValues>({
   defaultValues,
   successToastMessage,
   queryKeys,
-  createBatchFn,
+  createRecordFn,
   formHeader,
-  BatchForm,
-}: {
-  formSchema: z.ZodType<T>;
-  defaultValues: DefaultValues<T>;
-  successToastMessage: string;
-  queryKeys: string[][];
-  formHeader: string;
-  createBatchFn: (values: T) => Promise<{ dbError: PostgrestError | null }>;
-  BatchForm: RecordFormType<T>;
-}) {
+  RecordForm,
+}: NewRecordFormProps<T>) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { setIsNewBatchDialogOpen } = dataTableContext;
@@ -33,9 +23,9 @@ function NewBatchForm<T extends FieldValues>({
       defaultValues={defaultValues}
       successToastMessage={successToastMessage}
       queryKeys={queryKeys}
-      mutationFn={(values: T) => createBatchFn(values)}
+      mutationFn={(values: T) => createRecordFn(values)}
       formHeader={formHeader}
-      RecordForm={BatchForm}
+      RecordForm={RecordForm}
       setIsDialogOpen={setIsNewBatchDialogOpen}
     />
   );

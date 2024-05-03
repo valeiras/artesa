@@ -27,8 +27,8 @@ const UpdateSupplierForm: React.FC = () => {
       successToastMessage="Proveedor actualizado con éxito"
       queryKeys={[["supplier", String(itemData.id)], ["suppliers"], ["stats"], ["charts"]]}
       formHeader="Editar proveedor"
-      updateItemFn={updateSupplier}
-      ItemForm={SupplierForm}
+      updateRecordFn={updateSupplier}
+      RecordForm={SupplierForm}
     />
   );
 };
