@@ -20,7 +20,7 @@ function CustomFormField({ name, control, label, placeholder, disabled, type, cl
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn("flex flex-col h-full justify-between pt-1 relative", className)}>
+        <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           <FormLabel>{label || name}</FormLabel>
           <FormControl>
             <Input placeholder={placeholder} {...field} disabled={disabled} type={type} />

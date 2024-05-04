@@ -23,7 +23,7 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn("flex flex-col h-full justify-between pt-1 relative", className)}>
+        <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           {hasLabel && <FormLabel>{label || name}</FormLabel>}
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>

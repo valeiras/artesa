@@ -39,7 +39,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="bg-muted p-8 rounded">
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
-        <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3 items-start mb-8 content-start">
+        <div className="form-content">
           <CustomFormField
             name="name"
             control={form.control}
@@ -55,16 +55,15 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             placeholder="kg"
             className="justify-start"
           />
-          <div>
-            <CustomFormSelectFieldArray
-              name="commodityIngredientIds"
-              control={form.control}
-              register={form.register}
-              items={availableCommodities}
-              label="Materias primas"
-              placeholder="Selecciona una materia prima"
-            />
-          </div>
+
+          <CustomFormSelectFieldArray
+            name="ingredientIds"
+            control={form.control}
+            register={form.register}
+            errors={form.formState.errors}
+            items={[...availableCommodities, ...availableProducts]}
+            placeholder="Selecciona un ingrediente"
+          />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>

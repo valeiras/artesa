@@ -31,7 +31,7 @@ const ProductBatchForm: RecordFormType<ProductBatchFormValueType> = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="bg-muted p-8 rounded">
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
-        <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3 items-start mb-8 content-start">
+        <div className="form-content">
           <CustomFormField
             name="productName"
             control={form.control}

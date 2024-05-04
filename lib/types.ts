@@ -31,10 +31,9 @@ export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", 
 export type UnitType = z.infer<typeof unitEnum>;
 
 export const productFormSchema = z.object({
-  name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
+  name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
   unit: unitEnum,
-  commodityIngredientIds: z.object({ id: z.string() }).array(),
-  productIngredientIds: z.object({ id: z.string() }).array(),
+  ingredientIds: z.object({ id: z.string() }).array().nonempty({ message: "Selecciona al menos un ingrediente" }),
 });
 
 export type ProductFormValueType = z.infer<typeof productFormSchema>;
@@ -59,7 +58,7 @@ export type UpdateProductBatchDBType = Database["public"]["Tables"]["product_bat
 export type ReadProductWithBatchesType = ReadProductDBType & { batches?: ReadProductBatchDBType[] };
 
 export const commodityFormSchema = z.object({
-  name: z.string().min(2, { message: "El nombre del artículo debe tener al menos 2 caracteres" }),
+  name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
   unit: unitEnum,
 });
 
