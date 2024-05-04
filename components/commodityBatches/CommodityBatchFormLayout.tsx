@@ -1,11 +1,12 @@
-import { ProductBatchFormValueType, RecordFormType } from "@/lib/types";
 import React from "react";
+import { CommodityBatchFormValueType, RecordFormType } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import { getAllSuppliers } from "@/lib/actions/supplierActions";
+import { getAvailableArray } from "@/lib/utils";
 
-const ProductBatchForm: RecordFormType<ProductBatchFormValueType> = ({
+const CommodityBatchFormLayout: RecordFormType<CommodityBatchFormValueType> = ({
   form,
   mutate,
   isPending,
@@ -18,14 +19,11 @@ const ProductBatchForm: RecordFormType<ProductBatchFormValueType> = ({
     queryFn: () => getAllSuppliers(),
   });
 
-  function onSubmit(values: ProductBatchFormValueType) {
+  function onSubmit(values: CommodityBatchFormValueType) {
     mutate(values);
   }
 
-  const availableSuppliers =
-    suppliersData?.dbData.map(({ name, id }) => {
-      return { value: id.toString(), label: name };
-    }) || [];
+  const availableSuppliers = getAvailableArray(suppliersData);
 
   return (
     <Form {...form}>
@@ -33,7 +31,7 @@ const ProductBatchForm: RecordFormType<ProductBatchFormValueType> = ({
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
         <div className="form-content">
           <CustomFormField
-            name="productName"
+            name="commodityName"
             control={form.control}
             label="Materia prima"
             placeholder="Manzana"
@@ -57,4 +55,4 @@ const ProductBatchForm: RecordFormType<ProductBatchFormValueType> = ({
   );
 };
 
-export default ProductBatchForm;
+export default CommodityBatchFormLayout;

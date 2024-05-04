@@ -12,7 +12,7 @@ function NewItemForm<T extends FieldValues>({
   queryKeys,
   createRecordFn,
   formHeader,
-  RecordForm,
+  FormLayout,
 }: NewRecordFormProps<T>) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
@@ -26,8 +26,9 @@ function NewItemForm<T extends FieldValues>({
       queryKeys={queryKeys}
       mutationFn={(values: T) => createRecordFn(values)}
       formHeader={formHeader}
-      RecordForm={RecordForm}
+      FormLayout={FormLayout}
       setIsDialogOpen={setIsNewItemDialogOpen}
+      submitButtonLabel="Crear"
     />
   );
 }

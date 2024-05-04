@@ -4,7 +4,7 @@ import React from "react";
 import { CommodityFormValueType, commodityFormSchema } from "@/lib/types";
 import { NewItemForm } from "@/components/forms";
 import { createCommodity } from "@/lib/actions/commodityActions";
-import CommodityForm from "./CommodityForm";
+import CommodityFormLayout from "./CommodityFormLayout";
 
 const NewCommodityForm: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const NewCommodityForm: React.FC = () => {
       queryKeys={[["commodities"], ["stats"], ["charts"]]}
       formHeader="Nueva materia prima"
       createRecordFn={createCommodity}
-      RecordForm={CommodityForm}
+      FormLayout={CommodityFormLayout}
     />
   );
 };

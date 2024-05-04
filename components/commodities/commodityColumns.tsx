@@ -8,11 +8,11 @@ import { ItemRowActions } from "@/components/rowActions";
 import BatchContainer from "@/components/BatchContainer";
 
 function commodityColumns({
-  mutateCommodity,
-  mutateCommodityBatch,
+  deleteCommodityMutation,
+  deleteCommodityBatchMutation,
 }: {
-  mutateCommodity: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
-  mutateCommodityBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+  deleteCommodityMutation: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+  deleteCommodityBatchMutation: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
 }) {
   const columns: ColumnDef<ReadCommodityWithBatchesType>[] = [
     {
@@ -40,7 +40,7 @@ function commodityColumns({
         <BatchContainer
           itemData={row.original}
           batches={row.original.batches || []}
-          mutateBatch={mutateCommodityBatch}
+          mutateBatch={deleteCommodityBatchMutation}
         />
       ),
     },
@@ -57,7 +57,7 @@ function commodityColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <ItemRowActions deleteItemMutation={() => mutateCommodity(item.id)} itemData={item} />;
+        return <ItemRowActions deleteItemMutation={() => deleteCommodityMutation(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,

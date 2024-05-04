@@ -25,7 +25,7 @@ function CustomFormField({ name, control, label, placeholder, disabled, type, cl
           <FormControl>
             <Input placeholder={placeholder} {...field} disabled={disabled} type={type} />
           </FormControl>
-          <FormMessage className="absolute -bottom-6" />
+          <FormMessage className="absolute top-[60px]" />
         </FormItem>
       )}
     />

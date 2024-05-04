@@ -11,7 +11,7 @@ function UpdateBatchForm<T extends FieldValues>({
   queryKeys,
   updateRecordFn,
   formHeader,
-  RecordForm,
+  FormLayout,
 }: UpdateRecordFormProps<T>) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
@@ -26,8 +26,9 @@ function UpdateBatchForm<T extends FieldValues>({
       queryKeys={queryKeys}
       mutationFn={(values: T) => updateRecordFn(values, batchData.id)}
       formHeader={formHeader}
-      RecordForm={RecordForm}
+      FormLayout={FormLayout}
       setIsDialogOpen={setIsUpdateBatchDialogOpen}
+      submitButtonLabel="Editar"
     />
   );
 }

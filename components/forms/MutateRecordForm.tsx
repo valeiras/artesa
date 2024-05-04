@@ -12,8 +12,9 @@ function MutateRecordForm<T extends FieldValues>({
   queryKeys,
   mutationFn,
   formHeader,
-  RecordForm,
+  FormLayout,
   setIsDialogOpen,
+  submitButtonLabel = "Crear",
 }: MutateRecordFormProps<T>) {
   const form = useForm<T>({
     resolver: zodResolver(formSchema),
@@ -37,12 +38,12 @@ function MutateRecordForm<T extends FieldValues>({
   });
 
   return (
-    <RecordForm
+    <FormLayout
       form={form}
       mutate={mutate}
       isPending={isPending}
       formHeader={formHeader}
-      submitButtonLabel="Crear"
+      submitButtonLabel={submitButtonLabel}
       setIsFormOpen={setIsDialogOpen}
     />
   );

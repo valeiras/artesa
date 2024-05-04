@@ -33,7 +33,7 @@ export type UnitType = z.infer<typeof unitEnum>;
 export const productFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
   unit: unitEnum,
-  ingredientIds: z.object({ id: z.string() }).array().nonempty({ message: "Selecciona al menos un ingrediente" }),
+  ingredientIds: z.object({ id: z.string() }).array(),
 });
 
 export type ProductFormValueType = z.infer<typeof productFormSchema>;
@@ -147,7 +147,7 @@ type BaseRecordFormProps<T extends FieldValues> = {
   successToastMessage: string;
   queryKeys: string[][];
   formHeader: string;
-  RecordForm: RecordFormType<T>;
+  FormLayout: RecordFormType<T>;
 };
 
 export type NewRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
@@ -161,6 +161,7 @@ export type UpdateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T
 export type MutateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
   mutationFn: MutationFunction<{ dbError: PostgrestError | null }, T>;
   setIsDialogOpen: (isOpen: boolean) => void;
+  submitButtonLabel?: string;
 };
 
 export type ReadItemDBType =

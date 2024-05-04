@@ -1,9 +1,9 @@
-import { ClientFormValueType, RecordFormType } from "@/lib/types";
 import React from "react";
+import { RecordFormType, SupplierFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, FormButtons } from "@/components/forms";
 
-const ClientForm: RecordFormType<ClientFormValueType> = ({
+const SupplierFormLayout: RecordFormType<SupplierFormValueType> = ({
   form,
   mutate,
   isPending,
@@ -11,7 +11,7 @@ const ClientForm: RecordFormType<ClientFormValueType> = ({
   submitButtonLabel,
   setIsFormOpen,
 }) => {
-  function onSubmit(values: ClientFormValueType) {
+  function onSubmit(values: SupplierFormValueType) {
     mutate(values);
   }
 
@@ -19,9 +19,9 @@ const ClientForm: RecordFormType<ClientFormValueType> = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="bg-muted p-8 rounded">
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
-        <div className="from-content">
-          <CustomFormField name="name" control={form.control} label="Nombre del cliente" placeholder="Cliente" />
-          <CustomFormField name="email" control={form.control} label="Email" placeholder="cliente@mail.es" />
+        <div className="form-content">
+          <CustomFormField name="name" control={form.control} label="Nombre del proveedor" placeholder="Proveedor" />
+          <CustomFormField name="email" control={form.control} label="Email" placeholder="proveedor@mail.es" />
           <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />
           <CustomFormField name="address" control={form.control} label="Dirección" placeholder="C/" />
         </div>
@@ -31,4 +31,4 @@ const ClientForm: RecordFormType<ClientFormValueType> = ({
   );
 };
 
-export default ClientForm;
+export default SupplierFormLayout;

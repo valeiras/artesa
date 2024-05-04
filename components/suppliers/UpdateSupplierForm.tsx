@@ -5,7 +5,7 @@ import { supplierFormSchema, isReadSupplierDBType, SupplierFormValueType } from 
 import { UpdateItemForm } from "@/components/forms";
 import { updateSupplier } from "@/lib/actions/supplierActions";
 import { useDataTableContext } from "@/components/dataTable";
-import SupplierForm from "./SupplierForm";
+import SupplierFormLayout from "./SupplierFormLayout";
 
 const UpdateSupplierForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -27,7 +27,7 @@ const UpdateSupplierForm: React.FC = () => {
       queryKeys={[["supplier", String(itemData.id)], ["suppliers"], ["stats"], ["charts"]]}
       formHeader="Editar proveedor"
       updateRecordFn={updateSupplier}
-      RecordForm={SupplierForm}
+      FormLayout={SupplierFormLayout}
     />
   );
 };

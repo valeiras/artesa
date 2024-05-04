@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { nanoid } from "nanoid";
+import React from "react";
 import { RecordFormType, ProductFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, CustomFormSelectFieldArray, FormButtons } from "@/components/forms";
@@ -8,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllCommodities } from "@/lib/actions/commodityActions";
 import { getAllProducts } from "@/lib/actions/productActions";
 import { getAvailableArray } from "@/lib/utils";
-import { Button } from "../ui/button";
 
 const ProductForm: RecordFormType<ProductFormValueType> = ({
   form,
@@ -19,7 +17,8 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
   setIsFormOpen,
 }) => {
   function onSubmit(values: ProductFormValueType) {
-    mutate(values);
+    console.log(values);
+    // mutate(values);
   }
 
   const { data: commoditiesData } = useQuery({
@@ -60,7 +59,6 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             name="ingredientIds"
             control={form.control}
             register={form.register}
-            errors={form.formState.errors}
             items={[...availableCommodities, ...availableProducts]}
             placeholder="Selecciona un ingrediente"
           />

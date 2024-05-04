@@ -41,7 +41,7 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
               })}
             </SelectContent>
           </Select>
-          <FormMessage className="absolute -bottom-6" />
+          <FormMessage className="absolute top-[60px]" />
         </FormItem>
       )}
     />

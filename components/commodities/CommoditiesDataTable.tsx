@@ -27,7 +27,7 @@ const CommoditiesDataTable: React.FC = () => {
     queryKeys: [["commodities"], ["stats"], ["charts"]],
   });
 
-  const { mutate: mutateCommodity } = useMutation({
+  const { mutate: deleteCommodityMutation } = useMutation({
     mutationFn: (id: number) => deleteCommodity(id),
     onSuccess: commoditySuccessHandler,
     onError: (error) => {
@@ -35,7 +35,7 @@ const CommoditiesDataTable: React.FC = () => {
     },
   });
 
-  const { mutate: mutateCommodityBatch } = useMutation({
+  const { mutate: deleteCommodityBatchMutation } = useMutation({
     mutationFn: (id: number) => deleteCommodityBatch(id),
     onSuccess: commodityBatchSuccessHandler,
     onError: (error) => {
@@ -43,7 +43,7 @@ const CommoditiesDataTable: React.FC = () => {
     },
   });
 
-  const columns = commodityColumns({ mutateCommodity, mutateCommodityBatch });
+  const columns = commodityColumns({ deleteCommodityMutation, deleteCommodityBatchMutation });
 
   const { data, isPending: isDataPending } = useQuery({
     queryKey: ["commodities"],

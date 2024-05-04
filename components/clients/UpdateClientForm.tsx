@@ -5,7 +5,7 @@ import { ClientFormValueType, clientFormSchema, isReadClientDBType } from "@/lib
 import { UpdateItemForm } from "@/components/forms";
 import { updateClient } from "@/lib/actions/clientActions";
 import { useDataTableContext } from "@/components/dataTable";
-import ClientForm from "./ClientForm";
+import ClientFormLayout from "./ClientFormLayout";
 
 const UpdateClientForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -28,7 +28,7 @@ const UpdateClientForm: React.FC = () => {
       queryKeys={[["client", String(itemData.id)], ["clients"], ["stats"], ["charts"]]}
       formHeader="Editar cliente"
       updateRecordFn={updateClient}
-      RecordForm={ClientForm}
+      FormLayout={ClientFormLayout}
     />
   );
 };

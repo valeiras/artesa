@@ -4,7 +4,7 @@ import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import { availableUnits } from "@/lib/units";
 
-const CommodityForm: RecordFormType<CommodityFormValueType> = ({
+const CommodityFormLayout: RecordFormType<CommodityFormValueType> = ({
   form,
   mutate,
   isPending,
@@ -41,4 +41,4 @@ const CommodityForm: RecordFormType<CommodityFormValueType> = ({
   );
 };
 
-export default CommodityForm;
+export default CommodityFormLayout;

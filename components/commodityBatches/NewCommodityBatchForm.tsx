@@ -5,7 +5,7 @@ import { CommodityBatchFormValueType, commodityBatchFormSchema, isReadCommodityD
 import { NewBatchForm } from "@/components/forms";
 import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useDataTableContext } from "@/components/dataTable";
-import CommodityBatchForm from "./CommodityBatchForm";
+import CommodityBatchFormLayout from "./CommodityBatchFormLayout";
 
 const NewCommodityBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -31,7 +31,7 @@ const NewCommodityBatchForm: React.FC = () => {
       queryKeys={[["commodities"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
       createRecordFn={createCommodityBatch}
-      RecordForm={CommodityBatchForm}
+      FormLayout={CommodityBatchFormLayout}
     />
   );
 };

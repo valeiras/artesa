@@ -28,7 +28,7 @@ const ProductsDataTable: React.FC = () => {
     queryKeys: [["products"], ["stats"], ["charts"]],
   });
 
-  const { mutate: mutateProduct } = useMutation({
+  const { mutate: deleteProductMutation } = useMutation({
     mutationFn: (id: number) => deleteProduct(id),
     onSuccess: productSuccessHandler,
     onError: (error) => {
@@ -36,7 +36,7 @@ const ProductsDataTable: React.FC = () => {
     },
   });
 
-  const { mutate: mutateProductBatch } = useMutation({
+  const { mutate: deleteProductBatchMutation } = useMutation({
     mutationFn: (id: number) => deleteProductBatch(id),
     onSuccess: productBatchSuccessHandler,
     onError: (error) => {
@@ -44,7 +44,7 @@ const ProductsDataTable: React.FC = () => {
     },
   });
 
-  const columns = productColumns({ mutateProduct, mutateProductBatch });
+  const columns = productColumns({ deleteProductMutation, deleteProductBatchMutation });
 
   const { data, isPending: isDataPending } = useQuery({
     queryKey: ["products"],

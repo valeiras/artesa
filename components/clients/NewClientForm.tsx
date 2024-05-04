@@ -4,7 +4,7 @@ import React from "react";
 import { ClientFormValueType, clientFormSchema } from "@/lib/types";
 import { NewItemForm } from "@/components/forms";
 import { createClient } from "@/lib/actions/clientActions";
-import ClientForm from "./ClientForm";
+import ClientFormLayout from "./ClientFormLayout";
 
 const NewClientForm: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const NewClientForm: React.FC = () => {
       queryKeys={[["clients"], ["stats"], ["charts"]]}
       formHeader="Nuevo cliente"
       createRecordFn={createClient}
-      RecordForm={ClientForm}
+      FormLayout={ClientFormLayout}
     />
   );
 };

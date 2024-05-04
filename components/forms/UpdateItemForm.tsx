@@ -11,7 +11,7 @@ function UpdateItemForm<T extends FieldValues>({
   queryKeys,
   updateRecordFn,
   formHeader,
-  RecordForm,
+  FormLayout,
 }: UpdateRecordFormProps<T>) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
@@ -25,8 +25,9 @@ function UpdateItemForm<T extends FieldValues>({
       queryKeys={queryKeys}
       mutationFn={(values: T) => updateRecordFn(values, itemData.id)}
       formHeader={formHeader}
-      RecordForm={RecordForm}
+      FormLayout={FormLayout}
       setIsDialogOpen={setIsUpdateItemDialogOpen}
+      submitButtonLabel="Editar"
     />
   );
 }

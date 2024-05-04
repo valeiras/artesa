@@ -8,11 +8,11 @@ import BatchContainer from "@/components/BatchContainer";
 import { ItemRowActions } from "@/components/rowActions";
 
 function productColumns({
-  mutateProduct,
-  mutateProductBatch,
+  deleteProductMutation,
+  deleteProductBatchMutation,
 }: {
-  mutateProduct: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
-  mutateProductBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+  deleteProductMutation: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+  deleteProductBatchMutation: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
 }) {
   const columns: ColumnDef<ReadProductWithBatchesType>[] = [
     {
@@ -37,7 +37,7 @@ function productColumns({
       enableSorting: false,
       meta: { columnName: "Lotes" },
       cell: ({ row }) => (
-        <BatchContainer itemData={row.original} batches={row.original.batches || []} mutateBatch={mutateProductBatch} />
+        <BatchContainer itemData={row.original} batches={row.original.batches || []} mutateBatch={deleteProductBatchMutation} />
       ),
     },
     {
@@ -53,7 +53,7 @@ function productColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <ItemRowActions deleteItemMutation={() => mutateProduct(item.id)} itemData={item} />;
+        return <ItemRowActions deleteItemMutation={() => deleteProductMutation(item.id)} itemData={item} />;
       },
       size: 5,
       minSize: 5,

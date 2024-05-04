@@ -6,7 +6,7 @@ import { NewBatchForm } from "@/components/forms";
 import React from "react";
 import { createProductBatch } from "@/lib/actions/productBatchActions";
 import { useDataTableContext } from "@/components/dataTable/";
-import ProductBatchForm from "./ProductBatchForm";
+import ProductBatchFormLayout from "./ProductBatchFormLayout";
 
 const NewProductBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -31,7 +31,7 @@ const NewProductBatchForm: React.FC = () => {
       queryKeys={[["products"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
       createRecordFn={createProductBatch}
-      RecordForm={ProductBatchForm}
+      FormLayout={ProductBatchFormLayout}
     />
   );
 };

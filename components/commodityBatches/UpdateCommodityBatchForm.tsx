@@ -10,7 +10,7 @@ import {
 import { UpdateBatchForm } from "@/components/forms";
 import { updateCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useDataTableContext } from "@/components/dataTable";
-import CommodityBatchForm from "./CommodityBatchForm";
+import CommodityBatchFormLayout from "./CommodityBatchFormLayout";
 
 const UpdateCommodityBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -38,7 +38,7 @@ const UpdateCommodityBatchForm: React.FC = () => {
       queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Editar lote"
       updateRecordFn={updateCommodityBatch}
-      RecordForm={CommodityBatchForm}
+      FormLayout={CommodityBatchFormLayout}
     />
   );
 };

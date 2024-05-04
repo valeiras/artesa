@@ -4,7 +4,7 @@ import React from "react";
 import { SupplierFormValueType, supplierFormSchema } from "@/lib/types";
 import { NewItemForm } from "@/components/forms";
 import { createSupplier } from "@/lib/actions/supplierActions";
-import SupplierForm from "./SupplierForm";
+import SupplierFormLayout from "./SupplierFormLayout";
 
 const NewSupplierForm: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const NewSupplierForm: React.FC = () => {
       queryKeys={[["suppliers"], ["stats"], ["charts"]]}
       formHeader="Nuevo proveedor"
       createRecordFn={createSupplier}
-      RecordForm={SupplierForm}
+      FormLayout={SupplierFormLayout}
     />
   );
 };

@@ -4,7 +4,7 @@ import { ProductFormValueType, isReadProductDBType, productFormSchema } from "@/
 import { UpdateItemForm } from "@/components/forms";
 import { updateProduct } from "@/lib/actions/productActions";
 import { useDataTableContext } from "@/components/dataTable";
-import ProductForm from "./ProductForm";
+import ProductForm from "./ProductFormLayout";
 
 const UpdateProductForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -20,7 +20,7 @@ const UpdateProductForm: React.FC = () => {
       queryKeys={[["product", String(itemData.id)], ["products"], ["stats"], ["charts"]]}
       formHeader="Editar producto"
       updateRecordFn={updateProduct}
-      RecordForm={ProductForm}
+      FormLayout={ProductForm}
     />
   );
 };

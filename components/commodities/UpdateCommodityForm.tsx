@@ -5,7 +5,7 @@ import { CommodityFormValueType, commodityFormSchema, isReadCommodityDBType } fr
 import { UpdateItemForm } from "@/components/forms/";
 import { updateCommodity } from "@/lib/actions/commodityActions";
 import { useDataTableContext } from "@/components/dataTable";
-import CommodityForm from "./CommodityForm";
+import CommodityFormLayout from "./CommodityFormLayout";
 
 const UpdateCommodityForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -21,7 +21,7 @@ const UpdateCommodityForm: React.FC = () => {
       queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Editar materia prima"
       updateRecordFn={updateCommodity}
-      RecordForm={CommodityForm}
+      FormLayout={CommodityFormLayout}
     />
   );
 };
