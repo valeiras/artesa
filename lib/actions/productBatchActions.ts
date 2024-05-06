@@ -1,8 +1,13 @@
 "use server";
 
-import { CreateProductBatchDBType, UpdateProductBatchDBType, ProductBatchFormValueType } from "../types";
+import {
+  CreateProductBatchDBType,
+  UpdateProductBatchDBType,
+  ProductBatchFormValueType,
+  ReadProductBatchDBType,
+} from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecord } from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, deleteRecordById, getAllRecords } from "../supabaseUtils";
 
 export async function createProductBatch(values: ProductBatchFormValueType): Promise<{
   dbError: PostgrestError | null;
@@ -44,5 +49,9 @@ export async function updateProductBatch(
 }
 
 export async function deleteProductBatch(id: number) {
-  return deleteRecord("product_batch", id);
+  return deleteRecordById("product_batch", id);
+}
+
+export async function getAllProductBatches() {
+  return getAllRecords("product_batch") as Promise<{ dbData: ReadProductBatchDBType[]; dbError: PostgrestError }>;
 }

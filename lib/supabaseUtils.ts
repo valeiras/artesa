@@ -44,14 +44,14 @@ export async function getAllRecords(tableName: TableDB) {
   return { dbData, dbError };
 }
 
-export async function getsingleRecord(tableName: TableDB, id: number) {
+export async function getSingleRecordById(tableName: TableDB, id: number) {
   const supabase = await connectAndRedirect();
 
   const { data: dbData, error: dbError } = await supabase.from(tableName).select().eq("id", id).maybeSingle();
   return { dbData, dbError };
 }
 
-export async function deleteRecord(tableName: TableDB, id: number) {
+export async function deleteRecordById(tableName: TableDB, id: number) {
   const supabase = await connectAndRedirect();
 
   const { error: dbError } = await supabase.from(tableName).delete().eq("id", id);

@@ -6,19 +6,24 @@ import {
   ReadProductBatchDBType,
   UpdateProductDBType,
   ProductFormValueType,
+  ReadProductWithBatchesAndIngredientsType,
   ReadProductWithBatchesType,
+  ReadProductRecipeDBType,
 } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
-  getsingleRecord,
-  deleteRecord,
+  getSingleRecordById,
+  deleteRecordById,
 } from "../supabaseUtils";
+import { getAllProductRecipes } from "./productRecipeActions";
+import { getAllProductBatches } from "./productBatchActions";
 
 export async function createProduct(values: ProductFormValueType): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadProductDBType | null;
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
@@ -28,8 +33,8 @@ export async function createProduct(values: ProductFormValueType): Promise<{
     user_id: userId,
   };
 
-  const { error: dbError } = await supabase.from("product").insert(newProduct);
-  return { dbError };
+  const { error: dbError, data: dbData } = await supabase.from("product").insert(newProduct).select();
+  return { dbError, dbData: dbData?.[0] || null };
 }
 
 export async function updateProduct(
@@ -59,28 +64,53 @@ export async function getAllProductsWithBatches(): Promise<{
   dbError: PostgrestError;
 }> {
   let dbData: ReadProductWithBatchesType[], dbError: PostgrestError, dbDataBatches: ReadProductBatchDBType[];
-  ({ dbData, dbError } = (await getAllRecords("product")) as {
-    dbData: ReadProductWithBatchesType[];
-    dbError: PostgrestError;
-  });
+  ({ dbData, dbError } = await getAllProducts());
   if (dbError) return { dbData, dbError };
 
-  ({ dbData: dbDataBatches, dbError } = (await getAllRecords("product_batch")) as {
-    dbData: ReadProductBatchDBType[];
-    dbError: PostgrestError;
-  });
+  ({ dbData: dbDataBatches, dbError } = await getAllProductBatches());
+  if (dbError) return { dbData, dbError };
 
   dbData = dbData.map((item) => {
-    const productBatches = dbDataBatches.filter(({ product_id }) => item.id === product_id);
-    return { ...item, batches: productBatches };
+    const batches = dbDataBatches.filter(({ product_id }) => item.id === product_id);
+    return { ...item, batches };
   });
   return { dbData, dbError };
 }
 
+export async function getAllProductsWithBatchesAndIngredients(): Promise<{
+  dbData: ReadProductWithBatchesAndIngredientsType[];
+  dbError: PostgrestError;
+}> {
+  let { dbData, dbError } = await getAllProductsWithBatches();
+  if (dbError) return { dbData, dbError };
+
+  const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
+    await getAllProductRecipes();
+  if (productIngredientsError) return { dbData: dbData, dbError: productIngredientsError };
+  if (commodityIngredientsError) return { dbData: dbData, dbError: commodityIngredientsError };
+
+  dbData = dbData.map((item) => {
+    const currProductIngredients = productIngredients
+      ?.filter(({ product_id }) => product_id === item.id)
+      .map(({ product_ingredient_id, ingredient_name }) => {
+        return { ingredient_id: product_ingredient_id, ingredient_name };
+      });
+    const currCommodityIngredients = commodityIngredients
+      ?.filter(({ product_id }) => product_id === item.id)
+      .map(({ commodity_ingredient_id, ingredient_name }) => {
+        return { ingredient_id: commodity_ingredient_id, ingredient_name };
+      });
+
+    return { ...item, productIngredients: currProductIngredients, commodityIngredients: currCommodityIngredients };
+  });
+
+  return { dbData, dbError };
+}
+
 export async function getSingleProduct(id: number) {
-  return getsingleRecord("product", id) as Promise<{ dbData: ReadProductDBType; dbError: PostgrestError }>;
+  return getSingleRecordById("product", id) as Promise<{ dbData: ReadProductDBType; dbError: PostgrestError }>;
 }
 
 export async function deleteProduct(id: number) {
-  return deleteRecord("product", id);
+  return deleteRecordById("product", id);
 }

@@ -6,8 +6,8 @@ import {
   authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
-  getsingleRecord,
-  deleteRecord,
+  getSingleRecordById,
+  deleteRecordById,
 } from "../supabaseUtils";
 
 export async function createSupplier(values: SupplierFormValueType): Promise<{
@@ -52,9 +52,9 @@ export async function getAllSuppliers() {
 }
 
 export async function getSingleSupplier(id: number) {
-  return getsingleRecord("supplier", id) as Promise<{ dbData: ReadSupplierDBType; dbError: PostgrestError }>;
+  return getSingleRecordById("supplier", id) as Promise<{ dbData: ReadSupplierDBType; dbError: PostgrestError }>;
 }
 
 export async function deleteSupplier(id: number) {
-  return deleteRecord("supplier", id);
+  return deleteRecordById("supplier", id);
 }

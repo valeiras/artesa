@@ -55,7 +55,14 @@ export type ReadProductBatchDBType = Database["public"]["Tables"]["product_batch
 export type CreateProductBatchDBType = Database["public"]["Tables"]["product_batch"]["Insert"];
 export type UpdateProductBatchDBType = Database["public"]["Tables"]["product_batch"]["Update"];
 
-export type ReadProductWithBatchesType = ReadProductDBType & { batches?: ReadProductBatchDBType[] };
+export type ReadProductWithBatchesType = ReadProductDBType & {
+  batches?: ReadProductBatchDBType[];
+};
+
+export type ReadProductWithBatchesAndIngredientsType = ReadProductWithBatchesType & {
+  productIngredients?: { ingredient_id: string; ingredient_name: string }[];
+  commodityIngredients?: { ingredient_id: string; ingredient_name: string }[];
+};
 
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
@@ -131,6 +138,14 @@ export type SaleFormValueType = z.infer<typeof saleFormSchema>;
 export type ReadSaleDBType = Database["public"]["Tables"]["sale"]["Row"];
 export type CreateSaleDBType = Database["public"]["Tables"]["sale"]["Insert"];
 export type UpdateSaleDBType = Database["public"]["Tables"]["sale"]["Update"];
+
+export type ReadProductRecipeDBType = Database["public"]["Tables"]["product_recipe"]["Row"];
+export type CreateProductRecipeDBType = Database["public"]["Tables"]["product_recipe"]["Insert"];
+export type UpdateProductRecipeDBType = Database["public"]["Tables"]["product_recipe"]["Update"];
+
+export type ReadProductBatchRecipeDBType = Database["public"]["Tables"]["product_batch_recipe"]["Row"];
+export type CreateProductBatchRecipeDBType = Database["public"]["Tables"]["product_batch_recipe"]["Insert"];
+export type UpdateProductBatchRecipeDBType = Database["public"]["Tables"]["product_batch_recipe"]["Update"];
 
 export type RecordFormType<T extends FieldValues> = React.FC<{
   form: UseFormReturn<T>;

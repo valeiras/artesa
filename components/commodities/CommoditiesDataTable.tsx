@@ -63,7 +63,7 @@ const CommoditiesDataTable: React.FC = () => {
     return null;
   }
 
-  const emptyCommodityData: ReadCommodityDBType = { name: "", created_at: "", id: 0, unit: null, user_id: "" };
+  const emptyCommodityData: ReadCommodityDBType = { name: "", created_at: "", id: 0, unit: "kg", user_id: "" };
   const emptyCommodityBatchData: ReadCommodityBatchDBType = {
     comments: "",
     commodity_id: 0,

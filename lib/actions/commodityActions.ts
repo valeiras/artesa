@@ -13,9 +13,10 @@ import {
   authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
-  getsingleRecord,
-  deleteRecord,
+  getSingleRecordById,
+  deleteRecordById,
 } from "../supabaseUtils";
+import { getAllCommodityBatches } from "./commodityBatchActions";
 
 export async function createCommodity(values: CommodityFormValueType): Promise<{
   dbError: PostgrestError | null;
@@ -59,16 +60,10 @@ export async function getAllCommoditiesWithBatches(): Promise<{
   dbError: PostgrestError;
 }> {
   let dbData: ReadCommodityWithBatchesType[], dbError: PostgrestError, dbDataBatches: ReadCommodityBatchDBType[];
-  ({ dbData, dbError } = (await getAllRecords("commodity")) as {
-    dbData: ReadCommodityWithBatchesType[];
-    dbError: PostgrestError;
-  });
+  ({ dbData, dbError } = await getAllCommodities());
   if (dbError) return { dbData, dbError };
 
-  ({ dbData: dbDataBatches, dbError } = (await getAllRecords("commodity_batch")) as {
-    dbData: ReadCommodityBatchDBType[];
-    dbError: PostgrestError;
-  });
+  ({ dbData: dbDataBatches, dbError } = await getAllCommodityBatches());
 
   dbData = dbData.map((item) => {
     const commodityBatches = dbDataBatches.filter(({ commodity_id }) => item.id === commodity_id);
@@ -78,9 +73,9 @@ export async function getAllCommoditiesWithBatches(): Promise<{
 }
 
 export async function getSingleCommodity(id: number) {
-  return getsingleRecord("commodity", id) as Promise<{ dbData: ReadCommodityDBType; dbError: PostgrestError }>;
+  return getSingleRecordById("commodity", id) as Promise<{ dbData: ReadCommodityDBType; dbError: PostgrestError }>;
 }
 
 export async function deleteCommodity(id: number) {
-  return deleteRecord("commodity", id);
+  return deleteRecordById("commodity", id);
 }

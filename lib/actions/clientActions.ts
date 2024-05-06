@@ -6,8 +6,8 @@ import {
   authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
-  getsingleRecord,
-  deleteRecord,
+  getSingleRecordById,
+  deleteRecordById,
 } from "../supabaseUtils";
 
 export async function createClient(values: ClientFormValueType): Promise<{
@@ -52,9 +52,9 @@ export async function getAllClients() {
 }
 
 export async function getSingleClient(id: number) {
-  return getsingleRecord("client", id) as Promise<{ dbData: ReadClientDBType; dbError: PostgrestError }>;
+  return getSingleRecordById("client", id) as Promise<{ dbData: ReadClientDBType; dbError: PostgrestError }>;
 }
 
 export async function deleteClient(id: number) {
-  return deleteRecord("client", id);
+  return deleteRecordById("client", id);
 }

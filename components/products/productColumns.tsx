@@ -37,7 +37,24 @@ function productColumns({
       enableSorting: false,
       meta: { columnName: "Lotes" },
       cell: ({ row }) => (
-        <BatchContainer itemData={row.original} batches={row.original.batches || []} mutateBatch={deleteProductBatchMutation} />
+        <BatchContainer
+          itemData={row.original}
+          batches={row.original.batches || []}
+          mutateBatch={deleteProductBatchMutation}
+        />
+      ),
+    },
+    {
+      accessorKey: "ingredients",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Ingredientes" />,
+      enableSorting: false,
+      meta: { columnName: "Lotes" },
+      cell: ({ row }) => (
+        <BatchContainer
+          itemData={row.original}
+          batches={row.original.batches || []}
+          mutateBatch={deleteProductBatchMutation}
+        />
       ),
     },
     {

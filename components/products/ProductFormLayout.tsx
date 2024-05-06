@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllCommodities } from "@/lib/actions/commodityActions";
 import { getAllProducts } from "@/lib/actions/productActions";
 import { getAvailableArray } from "@/lib/utils";
+import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
 
 const ProductForm: RecordFormType<ProductFormValueType> = ({
   form,
@@ -17,8 +18,8 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
   setIsFormOpen,
 }) => {
   function onSubmit(values: ProductFormValueType) {
-    console.log(values);
-    // mutate(values);
+    // console.log(values);
+    mutate(values);
   }
 
   const { data: commoditiesData } = useQuery({
@@ -31,8 +32,8 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
     queryFn: () => getAllProducts(),
   });
 
-  const availableCommodities = getAvailableArray(commoditiesData);
-  const availableProducts = getAvailableArray(productsData);
+  const availableCommodities = getAvailableArray(commoditiesData, COMMODITY_PREFIX);
+  const availableProducts = getAvailableArray(productsData, PRODUCT_PREFIX);
 
   return (
     <Form {...form}>

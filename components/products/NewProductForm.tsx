@@ -1,8 +1,9 @@
 import React from "react";
-import { CreateProductDBType, ProductFormValueType, productFormSchema, unitEnum } from "@/lib/types";
+import { ProductFormValueType, productFormSchema, unitEnum } from "@/lib/types";
 import { NewItemForm } from "@/components/forms";
 import { createProduct } from "@/lib/actions/productActions";
 import ProductForm from "./ProductFormLayout";
+import { createProductRecipe } from "@/lib/actions/productRecipeActions";
 
 const NewProductForm: React.FC = () => {
   const defaultValues: ProductFormValueType = {
@@ -11,8 +12,15 @@ const NewProductForm: React.FC = () => {
     ingredientIds: [{ id: "" }],
   };
 
-  const createRecordFn = (values: ProductFormValueType) => {
-    createProduct(values);
+  const createRecordFn = async (values: ProductFormValueType) => {
+    const { dbError: dbErrorProduct, dbData } = await createProduct(values);
+    if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
+
+    const { dbError: dbErrorRecipe } = await createProductRecipe({
+      ingredientIds: values.ingredientIds,
+      productId: dbData.id,
+    });
+    return { dbError: dbErrorRecipe };
   };
 
   return (
@@ -22,7 +30,7 @@ const NewProductForm: React.FC = () => {
       successToastMessage="Nuevo producto creado con éxito"
       queryKeys={[["products"], ["stats"], ["charts"]]}
       formHeader="Nuevo producto"
-      createRecordFn={createProduct}
+      createRecordFn={createRecordFn}
       FormLayout={ProductForm}
     />
   );

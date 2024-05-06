@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { deleteProduct, getAllProductsWithBatches } from "@/lib/actions/productActions";
+import { deleteProduct, getAllProductsWithBatchesAndIngredients } from "@/lib/actions/productActions";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
@@ -48,9 +48,10 @@ const ProductsDataTable: React.FC = () => {
 
   const { data, isPending: isDataPending } = useQuery({
     queryKey: ["products"],
-    queryFn: () => getAllProductsWithBatches(),
+    queryFn: () => getAllProductsWithBatchesAndIngredients(),
   });
 
+  console.log(data);
   if (isDataPending) return <h2>Cargando...</h2>;
 
   if (!data) {
@@ -64,7 +65,7 @@ const ProductsDataTable: React.FC = () => {
     return null;
   }
 
-  const emptyProductData: ReadProductDBType = { name: "", created_at: "", id: 0, unit: null, user_id: "" };
+  const emptyProductData: ReadProductDBType = { name: "", created_at: "", id: 0, unit: "kg", user_id: "" };
   const emptyProductBatchData: ReadProductBatchDBType = {
     comments: "",
     product_id: 0,

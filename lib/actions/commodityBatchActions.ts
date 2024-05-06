@@ -1,8 +1,13 @@
 "use server";
 
-import { CreateCommodityBatchDBType, UpdateCommodityBatchDBType, CommodityBatchFormValueType } from "../types";
+import {
+  CreateCommodityBatchDBType,
+  UpdateCommodityBatchDBType,
+  CommodityBatchFormValueType,
+  ReadCommodityBatchDBType,
+} from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecord } from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, deleteRecordById, getAllRecords } from "../supabaseUtils";
 
 export async function createCommodityBatch(values: CommodityBatchFormValueType): Promise<{
   dbError: PostgrestError | null;
@@ -46,5 +51,9 @@ export async function updateCommodityBatch(
 }
 
 export async function deleteCommodityBatch(id: number) {
-  return deleteRecord("commodity_batch", id);
+  return deleteRecordById("commodity_batch", id);
+}
+
+export async function getAllCommodityBatches() {
+  return getAllRecords("commodity_batch") as Promise<{ dbData: ReadCommodityBatchDBType[]; dbError: PostgrestError }>;
 }
