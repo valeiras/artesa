@@ -9,15 +9,16 @@ const NewProductForm: React.FC = () => {
   const defaultValues: ProductFormValueType = {
     name: "",
     unit: "kg",
-    ingredientIds: [{ id: "" }],
+    ingredientIds: [],
   };
 
   const createRecordFn = async (values: ProductFormValueType) => {
     const { dbError: dbErrorProduct, dbData } = await createProduct(values);
     if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
 
+    console.log(values.ingredientIds);
     const { dbError: dbErrorRecipe } = await createProductRecipe({
-      ingredientIds: values.ingredientIds,
+      ingredientIds: values.ingredientIds.filter(({ id }) => id !== ""),
       productId: dbData.id,
     });
     return { dbError: dbErrorRecipe };

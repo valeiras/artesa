@@ -14,6 +14,7 @@ type CustomFormSelectFieldArrayProps = {
   items: { value: string; label?: string }[];
   placeholder?: string;
   className?: string;
+  label: string;
 };
 
 function CustomFormSelectFieldArray({
@@ -23,6 +24,7 @@ function CustomFormSelectFieldArray({
   items,
   placeholder,
   className,
+  label,
 }: CustomFormSelectFieldArrayProps) {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -37,7 +39,7 @@ function CustomFormSelectFieldArray({
         return (
           <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
             <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Ingredientes
+              {label}
             </FormLabel>
             {fields.map((field, index) => {
               return (

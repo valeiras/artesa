@@ -43,7 +43,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             name="name"
             control={form.control}
             label="Nombre del producto"
-            placeholder="Manzana"
+            placeholder="Mermelada de fresa"
             className="justify-start"
           />
           <CustomFormSelect
@@ -60,6 +60,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             register={form.register}
             items={[...availableCommodities, ...availableProducts]}
             placeholder="Selecciona un ingrediente"
+            label="Ingredientes"
           />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />

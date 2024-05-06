@@ -35,8 +35,8 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
           <CustomFormField
             name="productName"
             control={form.control}
-            label="Materia prima"
-            placeholder="Manzana"
+            label="Producto final"
+            placeholder="Mermelada de fresa"
             disabled={true}
           />
           <CustomFormSelect
