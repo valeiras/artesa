@@ -64,7 +64,14 @@ const ProductsDataTable: React.FC = () => {
     return null;
   }
 
-  const emptyProductData: ReadProductDBType = { name: "", created_at: "", id: 0, unit: "kg", user_id: "" };
+  const emptyProductData: ReadProductDBType = {
+    name: "",
+    created_at: "",
+    id: 0,
+    unit: "kg",
+    user_id: "",
+  };
+  
   const emptyProductBatchData: ReadProductBatchDBType = {
     comments: "",
     product_id: 0,

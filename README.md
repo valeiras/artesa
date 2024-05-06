@@ -12,3 +12,4 @@ Next app designed for product traceability.
 - Add try/catch to server actions - partially done for the product actions
 - Add try/catch for the supabase utils
 - Remove implicit any[] from the database responses
+- Improve the recipe update mechanism: avoid de deletion and posterior creation of the whole recipe

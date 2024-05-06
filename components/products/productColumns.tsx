@@ -1,4 +1,4 @@
-import { ReadProductWithBatchesType } from "@/lib/types";
+import { ReadProductWithBatchesAndIngredientsType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ function productColumns({
   deleteProductMutation: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
   deleteProductBatchMutation: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
 }) {
-  const columns: ColumnDef<ReadProductWithBatchesType>[] = [
+  const columns: ColumnDef<ReadProductWithBatchesAndIngredientsType>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,

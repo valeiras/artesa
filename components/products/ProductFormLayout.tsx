@@ -18,7 +18,6 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
   setIsFormOpen,
 }) => {
   function onSubmit(values: ProductFormValueType) {
-    // console.log(values);
     mutate(values);
   }
 
@@ -55,7 +54,6 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             placeholder="kg"
             className="justify-start"
           />
-
           <CustomFormSelectFieldArray
             name="ingredientIds"
             control={form.control}

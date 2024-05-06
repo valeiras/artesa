@@ -8,7 +8,6 @@ import {
   ProductFormValueType,
   ReadProductWithBatchesAndIngredientsType,
   ReadProductWithBatchesType,
-  ReadProductRecipeDBType,
 } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
@@ -95,19 +94,21 @@ export async function getAllProductsWithBatches(supabase?: SupabaseClient): Prom
   dbError: PostgrestError | null;
 }> {
   if (!supabase) supabase = await connectAndRedirect();
+
+  let dbProducts: ReadProductDBType[] | null = null;
   let dbData: ReadProductWithBatchesType[] | null = null;
   let dbError: PostgrestError | null = null;
-  let dbDataBatches: ReadProductBatchDBType[] | null = null;
+  let dbBatches: ReadProductBatchDBType[] | null = null;
 
   try {
-    [{ dbData, dbError }, { dbData: dbDataBatches, dbError }] = await Promise.all([
+    [{ dbData: dbProducts, dbError }, { dbData: dbBatches, dbError }] = await Promise.all([
       getAllProducts(supabase),
       getAllProductBatches(supabase),
     ]);
 
     dbData =
-      dbData?.map((item) => {
-        const batches = dbDataBatches?.filter(({ product_id }) => item.id === product_id) || [];
+      dbProducts?.map((item) => {
+        const batches = dbBatches?.filter(({ product_id }) => item.id === product_id) || [];
         return { ...item, batches };
       }) || null;
   } catch (error) {
@@ -122,16 +123,17 @@ export async function getAllProductsWithBatchesAndIngredients(supabase?: Supabas
   dbError: PostgrestError | null;
 }> {
   if (!supabase) supabase = await connectAndRedirect();
+  let dbDataWithBatches: ReadProductWithBatchesType[] | null = null;
   let dbData: ReadProductWithBatchesAndIngredientsType[] | null = null;
   let dbError: PostgrestError | null = null;
 
   try {
-    ({ dbData, dbError } = await getAllProductsWithBatches(supabase));
+    ({ dbData: dbDataWithBatches, dbError } = await getAllProductsWithBatches(supabase));
     const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
       await getAllProductRecipes(supabase);
 
     if (
-      !dbData ||
+      !dbDataWithBatches ||
       dbError ||
       !productIngredients ||
       productIngredientsError ||
@@ -140,7 +142,7 @@ export async function getAllProductsWithBatchesAndIngredients(supabase?: Supabas
     )
       return { dbData, dbError };
 
-    dbData = dbData.map((item) => {
+    dbData = dbDataWithBatches.map((item) => {
       const currProductIngredients = productIngredients
         .filter(({ product_id }) => product_id === item.id)
         .map(({ product_ingredient_id, ingredient_name }) => {

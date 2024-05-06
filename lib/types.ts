@@ -58,12 +58,12 @@ export type CreateProductBatchDBType = Database["public"]["Tables"]["product_bat
 export type UpdateProductBatchDBType = Database["public"]["Tables"]["product_batch"]["Update"];
 
 export type ReadProductWithBatchesType = ReadProductDBType & {
-  batches?: ReadProductBatchDBType[];
+  batches: ReadProductBatchDBType[];
 };
 
 export type ReadProductWithBatchesAndIngredientsType = ReadProductWithBatchesType & {
-  productIngredients?: { ingredient_id: string; ingredient_name: string }[];
-  commodityIngredients?: { ingredient_id: string; ingredient_name: string }[];
+  productIngredients: { ingredient_id: string; ingredient_name: string }[];
+  commodityIngredients: { ingredient_id: string; ingredient_name: string }[];
 };
 
 export const commodityFormSchema = z.object({
@@ -189,30 +189,32 @@ export type ReadItemDBType =
   | ReadSupplierDBType;
 
 export type ReadBatchDBType = ReadCommodityBatchDBType | ReadProductBatchDBType;
-
 export type ReadRecordDBType = ReadItemDBType | ReadBatchDBType;
+export type ReadRecordWithBatchesAndIngredientsType = ReadRecordDBType | ReadProductWithBatchesAndIngredientsType;
 
-export function isReadCommodityDBType(record: ReadRecordDBType): record is ReadCommodityDBType {
+export function isReadCommodityDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadCommodityDBType {
   return "name" in record && "unit" in record;
 }
 
-export function isReadClientDBType(record: ReadRecordDBType): record is ReadClientDBType {
+export function isReadClientDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadClientDBType {
   return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 
-export function isReadProductDBType(record: ReadRecordDBType): record is ReadProductDBType {
+export function isReadProductDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadProductDBType {
   return "name" in record && "unit" in record;
 }
 
-export function isReadSaleDBType(record: ReadRecordDBType): record is ReadSaleDBType {
+export function isReadSaleDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadSaleDBType {
   return "name" in record && "unit" in record;
 }
 
-export function isReadSupplierDBType(record: ReadRecordDBType): record is ReadSupplierDBType {
+export function isReadSupplierDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadSupplierDBType {
   return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 
-export function isReadCommodityBatchDBType(record: ReadRecordDBType | undefined): record is ReadCommodityBatchDBType {
+export function isReadCommodityBatchDBType(
+  record: ReadRecordWithBatchesAndIngredientsType | undefined
+): record is ReadCommodityBatchDBType {
   if (!record) return false;
   return (
     "comments" in record &&
@@ -224,7 +226,9 @@ export function isReadCommodityBatchDBType(record: ReadRecordDBType | undefined)
   );
 }
 
-export function isReadProductBatchDBType(record: ReadRecordDBType | undefined): record is ReadProductBatchDBType {
+export function isReadProductBatchDBType(
+  record: ReadRecordWithBatchesAndIngredientsType | undefined
+): record is ReadProductBatchDBType {
   if (!record) return false;
   return (
     "comments" in record &&
@@ -232,5 +236,18 @@ export function isReadProductBatchDBType(record: ReadRecordDBType | undefined): 
     "external_id" in record &&
     "initial_amount" in record &&
     "user_id" in record
+  );
+}
+
+export function isReadProductWithBatchesAndIngredientsType(
+  record: ReadRecordWithBatchesAndIngredientsType | undefined
+): record is ReadProductWithBatchesAndIngredientsType {
+  if (!record) return false;
+  return (
+    "name" in record &&
+    "unit" in record &&
+    "batches" in record &&
+    "productIngredients" in record &&
+    "commodityIngredients" in record
   );
 }
