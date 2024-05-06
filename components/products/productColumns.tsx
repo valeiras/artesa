@@ -6,6 +6,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { valueToLabel } from "@/lib/units";
 import BatchContainer from "@/components/BatchContainer";
 import { ItemRowActions } from "@/components/rowActions";
+import RecipeContainer from "../RecipeContainer";
 
 function productColumns({
   deleteProductMutation,
@@ -49,13 +50,7 @@ function productColumns({
       header: ({ column }) => <DataTableColumnHeader column={column} title="Ingredientes" />,
       enableSorting: false,
       meta: { columnName: "Lotes" },
-      cell: ({ row }) => (
-        <BatchContainer
-          itemData={row.original}
-          batches={row.original.batches || []}
-          mutateBatch={deleteProductBatchMutation}
-        />
-      ),
+      cell: ({ row }) => <RecipeContainer itemData={row.original} />,
     },
     {
       accessorKey: "created_at",
