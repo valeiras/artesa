@@ -23,7 +23,7 @@ const CommodityBatchFormLayout: RecordFormType<CommodityBatchFormValueType> = ({
     mutate(values);
   }
 
-  const availableSuppliers = getAvailableArray(suppliersData);
+  const availableSuppliers = getAvailableArray(suppliersData?.dbData);
 
   return (
     <Form {...form}>

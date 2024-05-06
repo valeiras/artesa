@@ -1,7 +1,7 @@
 "use server";
 
 import { CreateProductRecipeDBType, UpdateProductRecipeDBType, ReadProductRecipeDBType } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
@@ -49,23 +49,26 @@ export async function createProductRecipe({
   return { dbError };
 }
 
-export async function getAllProductRecipes() {
+export async function getAllProductRecipes(supabase?: SupabaseClient) {
   const [
     { namedIngredients: productIngredients, ingredientsError: productIngredientsError },
     { namedIngredients: commodityIngredients, ingredientsError: commodityIngredientsError },
   ] = await Promise.all([
-    getIngredientsWithName({ ingredientType: "product" }),
-    getIngredientsWithName({ ingredientType: "commodity" }),
+    getIngredientsWithName({ ingredientType: "product" }, supabase),
+    getIngredientsWithName({ ingredientType: "commodity" }, supabase),
   ]);
 
   return { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError };
 }
 
-export async function getIngredientsWithName({ ingredientType }: { ingredientType: "commodity" | "product" }): Promise<{
+export async function getIngredientsWithName(
+  { ingredientType }: { ingredientType: "commodity" | "product" },
+  supabase?: SupabaseClient
+): Promise<{
   namedIngredients: (ReadProductRecipeDBType & { ingredient_name: string })[] | null;
   ingredientsError: PostgrestError | null;
 }> {
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
 
   const { data: ingredientsData, error: ingredientsError } = await supabase
     .from("product_recipe")

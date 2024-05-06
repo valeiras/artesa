@@ -10,7 +10,7 @@ import {
   ReadProductWithBatchesType,
   ReadProductRecipeDBType,
 } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
@@ -25,6 +25,9 @@ export async function createProduct(values: ProductFormValueType): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductDBType | null;
 }> {
+  let dbError: PostgrestError | null = null;
+  let dbData: ReadProductDBType | null = null;
+
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   const newProduct: CreateProductDBType = {
@@ -33,8 +36,13 @@ export async function createProduct(values: ProductFormValueType): Promise<{
     user_id: userId,
   };
 
-  const { error: dbError, data: dbData } = await supabase.from("product").insert(newProduct).select();
-  return { dbError, dbData: dbData?.[0] || null };
+  try {
+    ({ error: dbError, data: dbData } = await supabase.from("product").insert(newProduct).select().maybeSingle());
+  } catch (error) {
+    console.log(error);
+    dbData = null;
+  }
+  return { dbError, dbData };
 }
 
 export async function updateProduct(
@@ -42,7 +50,11 @@ export async function updateProduct(
   id: number
 ): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadProductDBType | null;
 }> {
+  let dbError: PostgrestError | null = null;
+  let dbData: ReadProductDBType | null = null;
+
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   const updatedProduct: UpdateProductDBType = {
@@ -51,60 +63,100 @@ export async function updateProduct(
     user_id: userId,
   };
 
-  const { error: dbError } = await supabase.from("product").update(updatedProduct).eq("id", id);
-  return { dbError };
+  try {
+    ({ error: dbError, data: dbData } = await supabase.from("product").update(updatedProduct).eq("id", id));
+  } catch (error) {
+    console.log(error);
+    dbData = null;
+  }
+  return { dbError, dbData };
 }
 
-export async function getAllProducts() {
-  return getAllRecords("product") as Promise<{ dbData: ReadProductDBType[]; dbError: PostgrestError }>;
-}
-
-export async function getAllProductsWithBatches(): Promise<{
-  dbData: ReadProductWithBatchesType[];
-  dbError: PostgrestError;
+export async function getAllProducts(supabase?: SupabaseClient): Promise<{
+  dbData: ReadProductDBType[] | null;
+  dbError: PostgrestError | null;
 }> {
-  let dbData: ReadProductWithBatchesType[], dbError: PostgrestError, dbDataBatches: ReadProductBatchDBType[];
-  ({ dbData, dbError } = await getAllProducts());
-  if (dbError) return { dbData, dbError };
+  if (!supabase) supabase = await connectAndRedirect();
 
-  ({ dbData: dbDataBatches, dbError } = await getAllProductBatches());
-  if (dbError) return { dbData, dbError };
+  let dbData: ReadProductDBType[] | null = null;
+  let dbError: PostgrestError | null = null;
 
-  dbData = dbData.map((item) => {
-    const batches = dbDataBatches.filter(({ product_id }) => item.id === product_id);
-    return { ...item, batches };
-  });
+  try {
+    ({ data: dbData, error: dbError } = await supabase.from("product").select());
+  } catch (error) {
+    console.log(error);
+    dbData = null;
+  }
   return { dbData, dbError };
 }
 
-export async function getAllProductsWithBatchesAndIngredients(): Promise<{
-  dbData: ReadProductWithBatchesAndIngredientsType[] | null;
-  dbError?: PostgrestError;
-  error?: unknown;
+export async function getAllProductsWithBatches(supabase?: SupabaseClient): Promise<{
+  dbData: ReadProductWithBatchesType[] | null;
+  dbError: PostgrestError | null;
 }> {
-  let { dbData, dbError } = await getAllProductsWithBatches();
-  if (dbError) throw new Error(dbError.message);
+  if (!supabase) supabase = await connectAndRedirect();
+  let dbData: ReadProductWithBatchesType[] | null = null;
+  let dbError: PostgrestError | null = null;
+  let dbDataBatches: ReadProductBatchDBType[] | null = null;
 
-  const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
-    await getAllProductRecipes();
+  try {
+    [{ dbData, dbError }, { dbData: dbDataBatches, dbError }] = await Promise.all([
+      getAllProducts(supabase),
+      getAllProductBatches(supabase),
+    ]);
 
-  if (productIngredientsError) throw new Error(productIngredientsError.message);
-  if (commodityIngredientsError) throw new Error(commodityIngredientsError.message);
+    dbData =
+      dbData?.map((item) => {
+        const batches = dbDataBatches?.filter(({ product_id }) => item.id === product_id) || [];
+        return { ...item, batches };
+      }) || null;
+  } catch (error) {
+    console.log(error);
+  }
 
-  dbData = dbData.map((item) => {
-    const currProductIngredients = productIngredients
-      ?.filter(({ product_id }) => product_id === item.id)
-      .map(({ product_ingredient_id, ingredient_name }) => {
-        return { ingredient_id: product_ingredient_id, ingredient_name };
-      });
-    const currCommodityIngredients = commodityIngredients
-      ?.filter(({ product_id }) => product_id === item.id)
-      .map(({ commodity_ingredient_id, ingredient_name }) => {
-        return { ingredient_id: commodity_ingredient_id, ingredient_name };
-      });
+  return { dbData, dbError };
+}
 
-    return { ...item, productIngredients: currProductIngredients, commodityIngredients: currCommodityIngredients };
-  });
+export async function getAllProductsWithBatchesAndIngredients(supabase?: SupabaseClient): Promise<{
+  dbData: ReadProductWithBatchesAndIngredientsType[] | null;
+  dbError: PostgrestError | null;
+}> {
+  if (!supabase) supabase = await connectAndRedirect();
+  let dbData: ReadProductWithBatchesAndIngredientsType[] | null = null;
+  let dbError: PostgrestError | null = null;
+
+  try {
+    ({ dbData, dbError } = await getAllProductsWithBatches(supabase));
+    const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
+      await getAllProductRecipes(supabase);
+
+    if (
+      !dbData ||
+      dbError ||
+      !productIngredients ||
+      productIngredientsError ||
+      !commodityIngredients ||
+      commodityIngredientsError
+    )
+      return { dbData, dbError };
+
+    dbData = dbData.map((item) => {
+      const currProductIngredients = productIngredients
+        .filter(({ product_id }) => product_id === item.id)
+        .map(({ product_ingredient_id, ingredient_name }) => {
+          return { ingredient_id: String(product_ingredient_id as number), ingredient_name };
+        });
+      const currCommodityIngredients = commodityIngredients
+        .filter(({ product_id }) => product_id === item.id)
+        .map(({ commodity_ingredient_id, ingredient_name }) => {
+          return { ingredient_id: String(commodity_ingredient_id as number), ingredient_name };
+        });
+
+      return { ...item, productIngredients: currProductIngredients, commodityIngredients: currCommodityIngredients };
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
   return { dbData, dbError };
 }

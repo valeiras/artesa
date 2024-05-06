@@ -41,6 +41,8 @@ export type ReadProductDBType = Database["public"]["Tables"]["product"]["Row"];
 export type CreateProductDBType = Database["public"]["Tables"]["product"]["Insert"];
 export type UpdateProductDBType = Database["public"]["Tables"]["product"]["Update"];
 
+export type PublicSchema = Database[Extract<keyof Database, "public">];
+
 export const productBatchFormSchema = z.object({
   productId: z.string({ required_error: "Especifica un producto" }),
   productName: z.string({ required_error: "Especifica un producto" }),

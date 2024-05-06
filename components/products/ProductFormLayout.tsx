@@ -32,8 +32,8 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
     queryFn: () => getAllProducts(),
   });
 
-  const availableCommodities = getAvailableArray(commoditiesData, COMMODITY_PREFIX);
-  const availableProducts = getAvailableArray(productsData, PRODUCT_PREFIX);
+  const availableCommodities = getAvailableArray(commoditiesData?.dbData, COMMODITY_PREFIX);
+  const availableProducts = getAvailableArray(productsData?.dbData, PRODUCT_PREFIX);
 
   return (
     <Form {...form}>
