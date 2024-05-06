@@ -17,7 +17,7 @@ const UpdateProductForm: React.FC = () => {
       formSchema={productFormSchema}
       defaultValues={{ name: itemData.name, unit: itemData.unit || undefined }}
       successToastMessage="Producto actualizado con éxito"
-      queryKeys={[["product", String(itemData.id)], ["products"], ["stats"], ["charts"]]}
+      queryKeys={[["product", String(itemData.id)], ["productsWithBatchesAndIngredients"], ["stats"], ["charts"]]}
       formHeader="Editar producto"
       updateRecordFn={updateProduct}
       FormLayout={ProductForm}

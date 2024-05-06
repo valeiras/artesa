@@ -28,7 +28,7 @@ const NewProductBatchForm: React.FC = () => {
       formSchema={productBatchFormSchema}
       defaultValues={defaultValues}
       successToastMessage="Nuevo lote creado con éxito"
-      queryKeys={[["products"], ["stats"], ["charts"]]}
+      queryKeys={[["productsWithBatchesAndIngredients"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
       createRecordFn={createProductBatch}
       FormLayout={ProductBatchFormLayout}

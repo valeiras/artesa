@@ -35,7 +35,7 @@ const UpdateCommodityBatchForm: React.FC = () => {
       formSchema={commodityBatchFormSchema}
       defaultValues={defaultValues}
       successToastMessage="Lote actualizado con éxito"
-      queryKeys={[["commodity", String(itemData.id)], ["commodities"], ["stats"], ["charts"]]}
+      queryKeys={[["commodity", String(itemData.id)], ["commoditiesWithBatches"], ["stats"], ["charts"]]}
       formHeader="Editar lote"
       updateRecordFn={updateCommodityBatch}
       FormLayout={CommodityBatchFormLayout}

@@ -18,7 +18,7 @@ import {
   getSingleRecordById,
   deleteRecordById,
 } from "../supabaseUtils";
-import { getAllProductRecipes } from "./productRecipeActions";
+import { deleteProductRecipe, getAllProductRecipes } from "./productRecipeActions";
 import { getAllProductBatches } from "./productBatchActions";
 
 export async function createProduct(values: ProductFormValueType): Promise<{
@@ -78,16 +78,18 @@ export async function getAllProductsWithBatches(): Promise<{
 }
 
 export async function getAllProductsWithBatchesAndIngredients(): Promise<{
-  dbData: ReadProductWithBatchesAndIngredientsType[];
-  dbError: PostgrestError;
+  dbData: ReadProductWithBatchesAndIngredientsType[] | null;
+  dbError?: PostgrestError;
+  error?: unknown;
 }> {
   let { dbData, dbError } = await getAllProductsWithBatches();
-  if (dbError) return { dbData, dbError };
+  if (dbError) throw new Error(dbError.message);
 
   const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
     await getAllProductRecipes();
-  if (productIngredientsError) return { dbData: dbData, dbError: productIngredientsError };
-  if (commodityIngredientsError) return { dbData: dbData, dbError: commodityIngredientsError };
+
+  if (productIngredientsError) throw new Error(productIngredientsError.message);
+  if (commodityIngredientsError) throw new Error(commodityIngredientsError.message);
 
   dbData = dbData.map((item) => {
     const currProductIngredients = productIngredients
@@ -113,4 +115,12 @@ export async function getSingleProduct(id: number) {
 
 export async function deleteProduct(id: number) {
   return deleteRecordById("product", id);
+}
+
+export async function deleteProductAndRecipe(id: number) {
+  let { dbError } = await deleteProductRecipe(id);
+  if (dbError) return { dbError };
+
+  ({ dbError } = await deleteProduct(id));
+  return { dbError };
 }

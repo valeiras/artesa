@@ -81,8 +81,9 @@ export async function getIngredientsWithName({ ingredientType }: { ingredientTyp
     .in("id", ingredientIds || []);
   if (ingredientNamesError) return { namedIngredients: null, ingredientsError: ingredientNamesError };
 
-  const namedIngredients = ingredientsData?.map((it, idx) => {
-    return { ...it, ingredient_name: ingredientNames?.[idx].name };
+  const namedIngredients = ingredientsData?.map((it) => {
+    const ingredientName = ingredientNames?.find(({ id }) => id === it[`${ingredientType}_ingredient_id`])?.name || "";
+    return { ...it, ingredient_name: ingredientName };
   });
   return { namedIngredients, ingredientsError: null };
 }

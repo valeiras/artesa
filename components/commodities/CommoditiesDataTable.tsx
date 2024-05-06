@@ -19,12 +19,12 @@ const CommoditiesDataTable: React.FC = () => {
 
   const commoditySuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Materia prima eliminada con éxito",
-    queryKeys: [["commodities"], ["stats"], ["charts"]],
+    queryKeys: [["commoditiesWithBatches"], ["stats"], ["charts"]],
   });
 
   const commodityBatchSuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Lote eliminado con éxito",
-    queryKeys: [["commodities"], ["stats"], ["charts"]],
+    queryKeys: [["commoditiesWithBatches"], ["stats"], ["charts"]],
   });
 
   const { mutate: deleteCommodityMutation } = useMutation({

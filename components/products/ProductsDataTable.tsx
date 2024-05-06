@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { deleteProduct, getAllProductsWithBatchesAndIngredients } from "@/lib/actions/productActions";
+import { deleteProductAndRecipe, getAllProductsWithBatchesAndIngredients } from "@/lib/actions/productActions";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
@@ -20,16 +20,16 @@ const ProductsDataTable: React.FC = () => {
 
   const productSuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Producto eliminado con éxito",
-    queryKeys: [["products"], ["stats"], ["charts"]],
+    queryKeys: [["productsWithBatchesAndIngredients"], ["stats"], ["charts"]],
   });
 
   const productBatchSuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Lote eliminado con éxito",
-    queryKeys: [["products"], ["stats"], ["charts"]],
+    queryKeys: [["productsWithBatchesAndIngredients"], ["stats"], ["charts"]],
   });
 
   const { mutate: deleteProductMutation } = useMutation({
-    mutationFn: (id: number) => deleteProduct(id),
+    mutationFn: (id: number) => deleteProductAndRecipe(id),
     onSuccess: productSuccessHandler,
     onError: (error) => {
       console.log(error);
@@ -47,11 +47,10 @@ const ProductsDataTable: React.FC = () => {
   const columns = productColumns({ deleteProductMutation, deleteProductBatchMutation });
 
   const { data, isPending: isDataPending } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["productsWithBatchesAndIngredients"],
     queryFn: () => getAllProductsWithBatchesAndIngredients(),
   });
 
-  console.log(data);
   if (isDataPending) return <h2>Cargando...</h2>;
 
   if (!data) {
