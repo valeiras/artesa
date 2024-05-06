@@ -10,7 +10,7 @@ function RecipeContainer({ itemData }: { itemData: ReadProductWithBatchesAndIngr
       <ScrollArea className="w-48 h-fit rounded-md border" maxHeight="110px">
         <div className="p-2 w-48">
           {allIngredients.length === 0
-            ? "No hay ingredientes"
+            ? "Sin ingredientes"
             : allIngredients.map(({ ingredient_id, ingredient_name }, idx) => (
                 <React.Fragment key={ingredient_id}>
                   {idx !== 0 && <Separator className="my-2" />}

@@ -9,3 +9,4 @@ Next app designed for product traceability
 - Add "updated_at" column and order records by this field
 - Add a multiple selector to the data table
 - Add info on hover
+- Add trys/catch to server actions
