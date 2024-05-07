@@ -49,7 +49,7 @@ function BatchContainer<
 
   return (
     <div className="flex flex-row items-end justify-start">
-      <ScrollArea className="w-48 h-fit rounded-md border" maxHeight="110px">
+      <ScrollArea className="w-48 h-fit rounded-md border" viewportClassName="max-h-[110px]">
         <div className="p-2 w-48">
           {!batches || batches.length === 0
             ? "No hay lotes disponibles"

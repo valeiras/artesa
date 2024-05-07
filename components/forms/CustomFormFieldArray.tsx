@@ -1,41 +1,39 @@
-import React from "react";
+import React, { HTMLInputTypeAttribute } from "react";
 import { ArrayPath, Control, FieldArray, FieldValues, Path, UseFormRegister, useFieldArray } from "react-hook-form";
-import CustomFormSelect from "./CustomFormSelect";
-import { Button } from "../ui/button";
-import { Plus, Trash2 } from "lucide-react";
 import { FormItem, FormLabel, FormMessage } from "../ui/form";
 import { cn } from "@/lib/utils";
+import CustomFormField from "./CustomFormField";
 import { AddButtonFieldArray, RemoveButtonFieldArray } from "./CustomFormFieldArrayButtons";
 
-type CustomFormSelectFieldArrayProps<T extends FieldValues> = {
+type CustomFormFieldArrayProps<T extends FieldValues> = {
   name: ArrayPath<T>;
   control: Control<T>;
   register: UseFormRegister<T>;
-  commonItems?: { value: string; label?: string }[];
-  independentItems?: { value: string; label: string }[][];
   placeholder?: string;
   className?: string;
   hasVariableAmount?: boolean;
   label?: string;
   emptyValue?: FieldArray<T, ArrayPath<T>>;
+  type?: HTMLInputTypeAttribute;
 };
 
-function CustomFormSelectFieldArray<T extends FieldValues>({
+function CustomFormFieldArray<T extends FieldValues>({
   name,
   control,
   register,
-  commonItems,
-  independentItems,
   placeholder,
   className,
   hasVariableAmount = true,
   label,
   emptyValue,
-}: CustomFormSelectFieldArrayProps<T>) {
+  type,
+}: CustomFormFieldArrayProps<T>) {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
   });
+
+  if (hasVariableAmount && !emptyValue) throw new Error("emptyValue is not defined. The variable amount will not work");
 
   return (
     <div>
@@ -44,13 +42,13 @@ function CustomFormSelectFieldArray<T extends FieldValues>({
         {fields.map((field, index) => {
           return (
             <div key={field.id} className="flex flex-row gap-1 items-center -mt-1">
-              <CustomFormSelect
+              <CustomFormField
                 control={control}
-                items={commonItems ? commonItems : independentItems?.[index] || []}
                 placeholder={placeholder}
                 hasLabel={false}
                 {...register(`${name}.${index}.id` as Path<T>)}
                 className="flex-1"
+                type={type}
               />
               {hasVariableAmount && <RemoveButtonFieldArray remove={remove} index={index} />}
             </div>
@@ -63,4 +61,4 @@ function CustomFormSelectFieldArray<T extends FieldValues>({
   );
 }
 
-export default CustomFormSelectFieldArray;
+export default CustomFormFieldArray;

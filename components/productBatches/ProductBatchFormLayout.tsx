@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCommodityBatches } from "@/lib/actions/commodityBatchActions";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
 import { getProductBatches } from "@/lib/actions/productBatchActions";
+import CustomFormFieldArray from "../forms/CustomFormFieldArray";
 
 const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
   form,
@@ -51,6 +52,7 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
       });
     return { ...it, batches };
   });
+
   const productIngredientsWithBatches = itemData.product_ingredients.map((it) => {
     const batches = productBatchesData?.dbData
       ?.filter(({ product_id }) => product_id === parseInt(it.ingredient_id))
@@ -59,6 +61,7 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
       });
     return { ...it, batches };
   });
+
   const commodityItems = commodityIngredientsWithBatches.map(({ batches }) => {
     return (
       batches?.map(({ external_id, id }) => {
@@ -91,43 +94,59 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
           <CustomFormField name="externalId" control={form.control} label="Identificador del lote" />
           <CustomFormField name="initialAmount" control={form.control} label="Cantidad" placeholder="0" type="number" />
           <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
-          <div></div>
-          <span className="col-span-3 text-center text-lg font-medium">Ingredientes</span>
-          <div className="flex flex-col space-y-2 h-full justify-between">
-            {commodityIngredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
-              return (
-                <div className="fake-input -mt-1" key={`${COMMODITY_PREFIX}${ingredient_id}`}>
-                  {ingredient_name}:
-                </div>
-              );
-            })}
+          <span className="md:col-span-2 lg:col-span-3 text-center text-lg font-medium">Ingredientes</span>
+          <div className="md:col-span-2 lg:col-span-3 grid grid-cols-3 gap-4">
+            <div className="flex flex-col space-y-2 h-full justify-between">
+              {commodityIngredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
+                return (
+                  <div className="fake-input -mt-1" key={`${COMMODITY_PREFIX}${ingredient_id}`}>
+                    {ingredient_name}:
+                  </div>
+                );
+              })}
+            </div>
+            <CustomFormSelectFieldArray
+              name="commodityIngredientBatchIds"
+              control={form.control}
+              register={form.register}
+              independentItems={commodityItems}
+              placeholder="Selecciona un lote"
+              hasVariableAmount={false}
+            />
+            <CustomFormFieldArray
+              name="commodityIngredientAmounts"
+              control={form.control}
+              register={form.register}
+              placeholder="Cantidad empleada"
+              hasVariableAmount={false}
+              type="number"
+            />
+            <div className="flex flex-col">
+              {productIngredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
+                return (
+                  <div className="fake-input" key={`${PRODUCT_PREFIX}${ingredient_id}`}>
+                    {ingredient_name}:
+                  </div>
+                );
+              })}
+            </div>
+            <CustomFormSelectFieldArray
+              name="productIngredientBatchIds"
+              control={form.control}
+              register={form.register}
+              independentItems={productItems}
+              placeholder="Selecciona un lote"
+              hasVariableAmount={false}
+            />
+            <CustomFormFieldArray
+              name="productIngredientAmounts"
+              control={form.control}
+              register={form.register}
+              placeholder="Cantidad empleada"
+              hasVariableAmount={false}
+              type="number"
+            />
           </div>
-          <CustomFormSelectFieldArray
-            name="commodityIngredientBatchIds"
-            control={form.control}
-            register={form.register}
-            independentItems={commodityItems}
-            placeholder="Selecciona un lote"
-            hasVariableAmount={false}
-          />
-          <div></div>
-          <div className="flex flex-col">
-            {productIngredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
-              return (
-                <div className="fake-input" key={`${PRODUCT_PREFIX}${ingredient_id}`}>
-                  {ingredient_name}:
-                </div>
-              );
-            })}
-          </div>
-          <CustomFormSelectFieldArray
-            name="productIngredientBatchIds"
-            control={form.control}
-            register={form.register}
-            independentItems={productItems}
-            placeholder="Selecciona un lote"
-            hasVariableAmount={false}
-          />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>

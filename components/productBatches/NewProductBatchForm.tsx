@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ProductBatchFormValueType,
-  isReadProductDBType,
-  isReadProductWithIngredientsType,
-  productBatchFormSchema,
-} from "@/lib/types";
+import { ProductBatchFormValueType, isReadProductWithIngredientsType, productBatchFormSchema } from "@/lib/types";
 import { NewBatchForm } from "@/components/forms";
 
 import React from "react";
