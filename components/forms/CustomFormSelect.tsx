@@ -1,8 +1,8 @@
-import { Control, RefCallBack } from "react-hook-form";
+import React from "react";
+import { Control } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 type CustomFormSelectProps = {
   name: string;
@@ -12,10 +12,11 @@ type CustomFormSelectProps = {
   placeholder?: string;
   className?: string;
   hasLabel?: boolean;
+  hasMessage?: boolean;
 };
 
 const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>(function CustomFormSelect(
-  { name, control, items, label, placeholder, className, hasLabel = true },
+  { name, control, items, label, placeholder, className, hasLabel = true, hasMessage = true },
   ref
 ) {
   return (
@@ -41,7 +42,7 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
               })}
             </SelectContent>
           </Select>
-          <FormMessage className="absolute top-[60px]" />
+          {hasMessage && <FormMessage className="absolute -bottom-5" />}
         </FormItem>
       )}
     />

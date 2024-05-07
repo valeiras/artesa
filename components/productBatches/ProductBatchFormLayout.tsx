@@ -1,18 +1,11 @@
-import {
-  ProductBatchFormValueType,
-  ReadProductWithIngredientsType,
-  RecordFormType,
-  isReadProductWithIngredientsType,
-} from "@/lib/types";
+import { ProductBatchFormValueType, RecordFormType, isReadProductWithIngredientsType } from "@/lib/types";
 import React from "react";
 import { Form } from "@/components/ui/form";
-import { CustomFormDatePicker, CustomFormField, CustomFormSelectFieldArray, FormButtons } from "@/components/forms";
+import { CustomFormDatePicker, CustomFormField, FormButtons } from "@/components/forms";
 import { useDataTableContext } from "../dataTable";
-import { useQuery } from "@tanstack/react-query";
 import { getCommodityBatches } from "@/lib/actions/commodityBatchActions";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
 import { getProductBatches } from "@/lib/actions/productBatchActions";
-import CustomFormFieldArray from "../forms/CustomFormFieldArray";
 import IngredientsSection from "./IngredientsSection";
 
 const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
@@ -48,8 +41,8 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
           <CustomFormField name="externalId" control={form.control} label="Identificador del lote" />
           <CustomFormField name="initialAmount" control={form.control} label="Cantidad" placeholder="0" type="number" />
           <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
-          <span className="md:col-span-2 lg:col-span-3 text-center text-lg font-medium">Ingredientes</span>
-          <div className="md:col-span-2 lg:col-span-3 grid grid-cols-3 gap-4">
+          <span className="md:col-span-2 lg:col-span-3 text-center text-lg font-medium -mb-4">Ingredientes</span>
+          <div className="md:col-span-2 lg:col-span-3 grid grid-cols-3 gap-7">
             <IngredientsSection
               ingredientType="commodity"
               ingredients={itemData.commodity_ingredients}

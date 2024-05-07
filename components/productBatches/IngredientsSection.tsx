@@ -26,7 +26,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   const ingredientIds = ingredients.map(({ ingredient_id }) => parseInt(ingredient_id));
 
   const { data: batchesData, isPending: isBatchesDataPending } = useQuery({
-    queryKey: [`${ingredientType}Batches`, itemId],
+    queryKey: [`${ingredientType}Batches`],
     queryFn: () => getBatches(ingredientIds),
   });
 
@@ -49,10 +49,10 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 
   return (
     <>
-      <div className="flex flex-col  space-y-2 h-full justify-between">
+      <div className="flex flex-col gap-5 justify-between">
         {ingredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
           return (
-            <div className="fake-input -mt-1" key={`${prefix}${ingredient_id}`}>
+            <div className="fake-input" key={`${prefix}${ingredient_id}`}>
               {ingredient_name}:
             </div>
           );
@@ -60,16 +60,16 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
       </div>
       <CustomFormSelectFieldArray
         name={`${ingredientType}IngredientBatchIds`}
-        control={form.control}
-        register={form.register}
+        objectField="id"
+        form={form}
         independentItems={items}
         placeholder="Selecciona un lote"
         hasVariableAmount={false}
       />
       <CustomFormFieldArray
         name={`${ingredientType}IngredientAmounts`}
-        control={form.control}
-        register={form.register}
+        objectField="amount"
+        form={form}
         placeholder="Cantidad empleada"
         hasVariableAmount={false}
         type="number"

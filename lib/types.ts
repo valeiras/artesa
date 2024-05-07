@@ -46,14 +46,22 @@ export type PublicSchema = Database[Extract<keyof Database, "public">];
 export const productBatchFormSchema = z.object({
   productId: z.string({ required_error: "Especifica un producto" }),
   productName: z.string({ required_error: "Especifica un producto" }),
-  externalId: z.string({ required_error: "Asigna un identificador al lote" }),
+  externalId: z
+    .string({ required_error: "Asigna un identificador al lote" })
+    .min(2, { message: "El identificador debe tener al menos 2 caracteres" }),
   date: z.date(),
-  initialAmount: z.number(),
+  initialAmount: z.coerce
+    .number({ invalid_type_error: "Especifica la cantidad" })
+    .positive({ message: "Especifica una cantidad mayor que 0" }),
   comments: z.string().optional(),
-  commodityIngredientBatchIds: z.object({ id: z.string() }).array(),
-  commodityIngredientAmounts: z.object({ amount: z.number() }).array(),
-  productIngredientBatchIds: z.object({ id: z.string() }).array(),
-  productIngredientAmounts: z.object({ amount: z.number() }).array(),
+  commodityIngredientBatchIds: z.object({ id: z.string().min(1, { message: "Selecciona un lote" }) }).array(),
+  commodityIngredientAmounts: z
+    .object({ amount: z.number().positive({ message: "La cantidad debe ser mayor que 0" }) })
+    .array(),
+  productIngredientBatchIds: z.object({ id: z.string().min(1, { message: "Selecciona un lote" }) }).array(),
+  productIngredientAmounts: z
+    .object({ amount: z.number().positive({ message: "La cantidad debe ser mayor que 0" }) })
+    .array(),
 });
 
 export type ProductBatchFormValueType = z.infer<typeof productBatchFormSchema>;
@@ -95,7 +103,7 @@ export const commodityBatchFormSchema = z.object({
   date: z.date(),
   initialAmount: z.coerce
     .number({ invalid_type_error: "Especifica la cantidad" })
-    .positive({ message: "Especifica una cantidad positiva" }),
+    .positive({ message: "Especifica una cantidad mayor que 0" }),
   comments: z.string().optional(),
 });
 

@@ -181,35 +181,45 @@ export type Database = {
       }
       product_batch_recipe: {
         Row: {
-          commodity_batch_id: number
+          commodity_ingredient_batch_id: number
           created_at: string
           id: number
           product_batch_id: number
+          product_ingredient_batch_id: number | null
           used_amount: number
           user_id: string | null
         }
         Insert: {
-          commodity_batch_id: number
+          commodity_ingredient_batch_id: number
           created_at?: string
           id?: number
           product_batch_id: number
+          product_ingredient_batch_id?: number | null
           used_amount?: number
           user_id?: string | null
         }
         Update: {
-          commodity_batch_id?: number
+          commodity_ingredient_batch_id?: number
           created_at?: string
           id?: number
           product_batch_id?: number
+          product_ingredient_batch_id?: number | null
           used_amount?: number
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "public_product_batch_recipe_commodity_batch_id_fkey"
-            columns: ["commodity_batch_id"]
+            foreignKeyName: "product_batch_recipe_commodity_ingredient_batch_id_fkey"
+            columns: ["commodity_ingredient_batch_id"]
             isOneToOne: false
             referencedRelation: "commodity_batch"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_batch_recipe_product_ingredient_batch_id_fkey"
+            columns: ["product_ingredient_batch_id"]
+            isOneToOne: false
+            referencedRelation: "product_batch"
             referencedColumns: ["id"]
           },
           {

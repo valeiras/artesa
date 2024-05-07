@@ -56,8 +56,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
           />
           <CustomFormSelectFieldArray
             name="ingredientIds"
-            control={form.control}
-            register={form.register}
+            form={form}
             commonItems={[...availableCommodities, ...availableProducts]}
             placeholder="Selecciona un ingrediente"
             label="Ingredientes"

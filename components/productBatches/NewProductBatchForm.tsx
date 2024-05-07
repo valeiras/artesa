@@ -15,6 +15,16 @@ const NewProductBatchForm: React.FC = () => {
 
   if (!isReadProductWithIngredientsType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
+  const createRecordFn = async (values: ProductBatchFormValueType) => {
+    const { dbError: dbErrorProduct, dbData } = await createProductBatch(values);
+    if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
+    // const { dbError: dbErrorRecipe } = await createProductBatchRecipe({
+    //   ingredientIds: values.ingredientIds.filter(({ id }) => id !== null && id !== ""),
+    //   productId: dbData.id,
+    // });
+    // return { dbError: dbErrorRecipe };
+  };
+
   const defaultValues: ProductBatchFormValueType = {
     commodityIngredientAmounts: itemData.commodity_ingredients.map(() => {
       return { amount: 0 };
@@ -41,7 +51,7 @@ const NewProductBatchForm: React.FC = () => {
       formSchema={productBatchFormSchema}
       defaultValues={defaultValues}
       successToastMessage="Nuevo lote creado con éxito"
-      queryKeys={[["productsWithBatchesAndIngredients"], ["stats"], ["charts"]]}
+      queryKeys={[["productsWithBatchesAndIngredients"], ["ProductBatches"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
       createRecordFn={createProductBatch}
       FormLayout={ProductBatchFormLayout}

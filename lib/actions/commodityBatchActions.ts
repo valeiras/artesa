@@ -17,6 +17,7 @@ export async function createCommodityBatch(
 }> {
   const userId = await authenticateAndRedirect();
   if (!supabase) supabase = await connectAndRedirect();
+
   const newCommodityBatch: CreateCommodityBatchDBType = {
     commodity_id: values.commodityId,
     date: values.date.toISOString(),

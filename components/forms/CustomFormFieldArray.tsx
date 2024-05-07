@@ -1,5 +1,14 @@
 import React, { HTMLInputTypeAttribute } from "react";
-import { ArrayPath, Control, FieldArray, FieldValues, Path, UseFormRegister, useFieldArray } from "react-hook-form";
+import {
+  ArrayPath,
+  Control,
+  FieldArray,
+  FieldValues,
+  Path,
+  UseFormRegister,
+  UseFormReturn,
+  useFieldArray,
+} from "react-hook-form";
 import { FormItem, FormLabel, FormMessage } from "../ui/form";
 import { cn } from "@/lib/utils";
 import CustomFormField from "./CustomFormField";
@@ -7,8 +16,8 @@ import { AddButtonFieldArray, RemoveButtonFieldArray } from "./CustomFormFieldAr
 
 type CustomFormFieldArrayProps<T extends FieldValues> = {
   name: ArrayPath<T>;
-  control: Control<T>;
-  register: UseFormRegister<T>;
+  objectField: string;
+  form: UseFormReturn<T>;
   placeholder?: string;
   className?: string;
   hasVariableAmount?: boolean;
@@ -19,8 +28,8 @@ type CustomFormFieldArrayProps<T extends FieldValues> = {
 
 function CustomFormFieldArray<T extends FieldValues>({
   name,
-  control,
-  register,
+  objectField,
+  form,
   placeholder,
   className,
   hasVariableAmount = true,
@@ -29,35 +38,31 @@ function CustomFormFieldArray<T extends FieldValues>({
   type,
 }: CustomFormFieldArrayProps<T>) {
   const { fields, append, remove } = useFieldArray({
-    control,
+    control: form.control,
     name,
   });
 
   if (hasVariableAmount && !emptyValue) throw new Error("emptyValue is not defined. The variable amount will not work");
-
   return (
-    <div>
-      <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
-        {label && <FormLabel className="text-sm font-medium leading-none">{label}</FormLabel>}
-        {fields.map((field, index) => {
-          return (
-            <div key={field.id} className="flex flex-row gap-1 items-center -mt-1">
-              <CustomFormField
-                control={control}
-                placeholder={placeholder}
-                hasLabel={false}
-                {...register(`${name}.${index}.id` as Path<T>)}
-                className="flex-1"
-                type={type}
-              />
-              {hasVariableAmount && <RemoveButtonFieldArray remove={remove} index={index} />}
-            </div>
-          );
-        })}
-        {hasVariableAmount && <AddButtonFieldArray append={append} emptyValue={emptyValue} />}
-        <FormMessage className="absolute -bottom-6" />
-      </FormItem>
-    </div>
+    <FormItem className={cn("flex flex-col h-full justify-between relative gap-5", className)}>
+      {label && <FormLabel className="text-sm font-medium leading-none">{label}</FormLabel>}
+      {fields.map((field, index) => {
+        return (
+          <div key={field.id} className="flex flex-row gap-1 items-center">
+            <CustomFormField
+              control={form.control}
+              placeholder={placeholder}
+              hasLabel={false}
+              {...form.register(`${name}.${index}.${objectField}` as Path<T>)}
+              className="flex-1"
+              type={type}
+            />
+            {hasVariableAmount && <RemoveButtonFieldArray remove={remove} index={index} />}
+          </div>
+        );
+      })}
+      {hasVariableAmount && <AddButtonFieldArray append={append} emptyValue={emptyValue} />}
+    </FormItem>
   );
 }
 

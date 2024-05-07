@@ -9,11 +9,19 @@ import {
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { authenticateAndRedirect, connectAndRedirect, deleteRecordById, getAllRecords } from "../supabaseUtils";
 
-export async function createProductBatch(values: ProductBatchFormValueType): Promise<{
+export async function createProductBatch(
+  values: ProductBatchFormValueType,
+  supabase?: SupabaseClient
+): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadProductBatchDBType | null;
 }> {
   const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+  let dbData: ReadProductBatchDBType | null = null;
+
   const newProductBatch: CreateProductBatchDBType = {
     product_id: parseInt(values.productId),
     date: values.date.toISOString(),
@@ -23,8 +31,17 @@ export async function createProductBatch(values: ProductBatchFormValueType): Pro
     user_id: userId,
   };
 
-  const { error: dbError } = await supabase.from("product_batch").insert(newProductBatch);
-  return { dbError };
+  try {
+    ({ error: dbError, data: dbData } = await supabase
+      .from("product_batch")
+      .insert(newProductBatch)
+      .select()
+      .maybeSingle());
+  } catch (error) {
+    console.log(error);
+  }
+
+  return { dbError, dbData };
 }
 
 export async function updateProductBatch(

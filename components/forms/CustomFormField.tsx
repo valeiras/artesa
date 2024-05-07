@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Control } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { HTMLInputTypeAttribute } from "react";
@@ -13,18 +15,13 @@ type CustomFormFieldProps = {
   type?: HTMLInputTypeAttribute;
   className?: string;
   hasLabel?: boolean;
+  hasMessage?: boolean;
 };
 
-function CustomFormField({
-  name,
-  control,
-  label,
-  placeholder,
-  disabled,
-  type,
-  className,
-  hasLabel = true,
-}: CustomFormFieldProps) {
+const CustomFormField = React.forwardRef<HTMLInputElement, CustomFormFieldProps>(function CustomFormField(
+  { name, control, label, placeholder, disabled, type, className, hasLabel = true, hasMessage = true },
+  ref
+) {
   return (
     <FormField
       control={control}
@@ -33,13 +30,13 @@ function CustomFormField({
         <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           {hasLabel && <FormLabel>{label || name}</FormLabel>}
           <FormControl>
-            <Input placeholder={placeholder} {...field} disabled={disabled} type={type} />
+            <Input placeholder={placeholder} {...field} disabled={disabled} type={type} ref={ref} />
           </FormControl>
-          <FormMessage className="absolute top-[60px]" />
+          {hasMessage && <FormMessage className="absolute -bottom-5" />}
         </FormItem>
       )}
     />
   );
-}
+});
 
 export default CustomFormField;
