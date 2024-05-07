@@ -1,6 +1,11 @@
 "use client";
 
-import { ProductBatchFormValueType, isReadProductDBType, productBatchFormSchema } from "@/lib/types";
+import {
+  ProductBatchFormValueType,
+  isReadProductDBType,
+  isReadProductWithIngredientsType,
+  productBatchFormSchema,
+} from "@/lib/types";
 import { NewBatchForm } from "@/components/forms";
 
 import React from "react";
@@ -12,9 +17,22 @@ const NewProductBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { itemData } = dataTableContext;
-  if (!isReadProductDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
+
+  if (!isReadProductWithIngredientsType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   const defaultValues: ProductBatchFormValueType = {
+    commodityIngredientAmounts: itemData.commodity_ingredients.map(() => {
+      return { amount: 0 };
+    }),
+    commodityIngredientBatchIds: itemData.commodity_ingredients.map(() => {
+      return { id: "" };
+    }),
+    productIngredientAmounts: itemData.product_ingredients.map(() => {
+      return { amount: 0 };
+    }),
+    productIngredientBatchIds: itemData.product_ingredients.map(() => {
+      return { id: "" };
+    }),
     productId: String(itemData.id),
     productName: itemData.name,
     externalId: "",

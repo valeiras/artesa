@@ -4,7 +4,7 @@ import React from "react";
 import {
   ProductBatchFormValueType,
   isReadProductBatchDBType,
-  isReadProductDBType,
+  isReadProductWithBatchesAndIngredientsType,
   productBatchFormSchema,
 } from "@/lib/types";
 import { UpdateBatchForm } from "@/components/forms";
@@ -17,10 +17,23 @@ const UpdateProductBatchForm: React.FC = () => {
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
   const { itemData, batchData } = dataTableContext;
 
-  if (!isReadProductDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
+  if (!isReadProductWithBatchesAndIngredientsType(itemData))
+    throw new Error("El tipo de artículo no coincide con el esperado");
   if (!isReadProductBatchDBType(batchData)) throw new Error("El tipo de lote no coincide con el esperado");
 
   const defaultValues: ProductBatchFormValueType = {
+    commodityIngredientAmounts: itemData.commodity_ingredients.map(() => {
+      return { amount: 0 };
+    }),
+    commodityIngredientBatchIds: itemData.commodity_ingredients.map(() => {
+      return { id: "" };
+    }),
+    productIngredientAmounts: itemData.product_ingredients.map(() => {
+      return { amount: 0 };
+    }),
+    productIngredientBatchIds: itemData.product_ingredients.map(() => {
+      return { id: "" };
+    }),
     productId: String(itemData.id),
     productName: itemData.name,
     externalId: batchData.external_id || "",

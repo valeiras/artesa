@@ -50,6 +50,10 @@ export const productBatchFormSchema = z.object({
   date: z.date(),
   initialAmount: z.number(),
   comments: z.string().optional(),
+  commodityIngredientBatchIds: z.object({ id: z.string() }).array(),
+  commodityIngredientAmounts: z.object({ amount: z.number() }).array(),
+  productIngredientBatchIds: z.object({ id: z.string() }).array(),
+  productIngredientAmounts: z.object({ amount: z.number() }).array(),
 });
 
 export type ProductBatchFormValueType = z.infer<typeof productBatchFormSchema>;
@@ -62,8 +66,13 @@ export type ReadProductWithBatchesType = ReadProductDBType & {
 };
 
 export type ReadProductWithBatchesAndIngredientsType = ReadProductWithBatchesType & {
-  productIngredients: { ingredient_id: string; ingredient_name: string }[];
-  commodityIngredients: { ingredient_id: string; ingredient_name: string }[];
+  product_ingredients: { ingredient_id: string; ingredient_name: string }[];
+  commodity_ingredients: { ingredient_id: string; ingredient_name: string }[];
+};
+
+export type ReadProductWithIngredientsType = ReadProductDBType & {
+  product_ingredients: { ingredient_id: string; ingredient_name: string }[];
+  commodity_ingredients: { ingredient_id: string; ingredient_name: string }[];
 };
 
 export const commodityFormSchema = z.object({
@@ -95,7 +104,7 @@ export type ReadCommodityBatchDBType = Database["public"]["Tables"]["commodity_b
 export type CreateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
 export type UpdateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
 
-export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches?: ReadCommodityBatchDBType[] };
+export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches: ReadCommodityBatchDBType[] };
 
 export const supplierFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
@@ -190,30 +199,35 @@ export type ReadItemDBType =
 
 export type ReadBatchDBType = ReadCommodityBatchDBType | ReadProductBatchDBType;
 export type ReadRecordDBType = ReadItemDBType | ReadBatchDBType;
-export type ReadRecordWithBatchesAndIngredientsType = ReadRecordDBType | ReadProductWithBatchesAndIngredientsType;
+export type ReadRecordWithOptionsType =
+  | ReadRecordDBType
+  | ReadCommodityWithBatchesType
+  | ReadProductWithBatchesType
+  | ReadProductWithIngredientsType
+  | ReadProductWithBatchesAndIngredientsType;
 
-export function isReadCommodityDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadCommodityDBType {
+export function isReadCommodityDBType(record: ReadRecordWithOptionsType): record is ReadCommodityDBType {
   return "name" in record && "unit" in record;
 }
 
-export function isReadClientDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadClientDBType {
+export function isReadClientDBType(record: ReadRecordWithOptionsType): record is ReadClientDBType {
   return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 
-export function isReadProductDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadProductDBType {
+export function isReadProductDBType(record: ReadRecordWithOptionsType): record is ReadProductDBType {
   return "name" in record && "unit" in record;
 }
 
-export function isReadSaleDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadSaleDBType {
+export function isReadSaleDBType(record: ReadRecordWithOptionsType): record is ReadSaleDBType {
   return "name" in record && "unit" in record;
 }
 
-export function isReadSupplierDBType(record: ReadRecordWithBatchesAndIngredientsType): record is ReadSupplierDBType {
+export function isReadSupplierDBType(record: ReadRecordWithOptionsType): record is ReadSupplierDBType {
   return "address" in record && "email" in record && "name" in record && "phone" in record;
 }
 
 export function isReadCommodityBatchDBType(
-  record: ReadRecordWithBatchesAndIngredientsType | undefined
+  record: ReadRecordWithOptionsType | undefined
 ): record is ReadCommodityBatchDBType {
   if (!record) return false;
   return (
@@ -227,7 +241,7 @@ export function isReadCommodityBatchDBType(
 }
 
 export function isReadProductBatchDBType(
-  record: ReadRecordWithBatchesAndIngredientsType | undefined
+  record: ReadRecordWithOptionsType | undefined
 ): record is ReadProductBatchDBType {
   if (!record) return false;
   return (
@@ -239,15 +253,29 @@ export function isReadProductBatchDBType(
   );
 }
 
+export function isReadProductWithBatchesType(
+  record: ReadRecordWithOptionsType | undefined
+): record is ReadProductWithBatchesType {
+  if (!record) return false;
+  return "name" in record && "unit" in record && "batches" in record;
+}
+
+export function isReadProductWithIngredientsType(
+  record: ReadRecordWithOptionsType | undefined
+): record is ReadProductWithIngredientsType {
+  if (!record) return false;
+  return "name" in record && "unit" in record && "product_ingredients" in record && "commodity_ingredients" in record;
+}
+
 export function isReadProductWithBatchesAndIngredientsType(
-  record: ReadRecordWithBatchesAndIngredientsType | undefined
+  record: ReadRecordWithOptionsType | undefined
 ): record is ReadProductWithBatchesAndIngredientsType {
   if (!record) return false;
   return (
     "name" in record &&
     "unit" in record &&
     "batches" in record &&
-    "productIngredients" in record &&
-    "commodityIngredients" in record
+    "product_ingredients" in record &&
+    "commodity_ingredients" in record
   );
 }

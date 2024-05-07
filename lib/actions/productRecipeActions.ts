@@ -1,14 +1,8 @@
 "use server";
 
-import { CreateProductRecipeDBType, UpdateProductRecipeDBType, ReadProductRecipeDBType } from "../types";
+import { CreateProductRecipeDBType, ReadProductRecipeDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import {
-  authenticateAndRedirect,
-  connectAndRedirect,
-  getAllRecords,
-  getSingleRecordById,
-  deleteRecordById,
-} from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect } from "../supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 
 function createProductRecipeArray({
@@ -88,17 +82,18 @@ export async function getIngredientsWithName(
     const ingredientName = ingredientNames?.find(({ id }) => id === it[`${ingredientType}_ingredient_id`])?.name || "";
     return { ...it, ingredient_name: ingredientName };
   });
+
   return { namedIngredients, ingredientsError: null };
 }
 
-export async function getSingleProductRecipe(productId: number) {
-  const supabase = await connectAndRedirect();
+export async function getSingleProductRecipe(productId: number, supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
   const { data: dbData, error: dbError } = await supabase.from("product_recipe").select().eq("product_id", productId);
   return { dbData, dbError };
 }
 
-export async function deleteProductRecipe(productId: number) {
-  const supabase = await connectAndRedirect();
+export async function deleteProductRecipe(productId: number, supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
   const { error: dbError } = await supabase.from("product_recipe").delete().eq("product_id", productId);
   return { dbError };
 }

@@ -8,7 +8,7 @@ import {
   CommodityFormValueType,
   ReadCommodityWithBatchesType,
 } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
@@ -18,11 +18,14 @@ import {
 } from "../supabaseUtils";
 import { getAllCommodityBatches } from "./commodityBatchActions";
 
-export async function createCommodity(values: CommodityFormValueType): Promise<{
+export async function createCommodity(
+  values: CommodityFormValueType,
+  supabase?: SupabaseClient
+): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
   const newCommodity: CreateCommodityDBType = {
     name: values.name,
     unit: values.unit,
@@ -35,12 +38,13 @@ export async function createCommodity(values: CommodityFormValueType): Promise<{
 
 export async function updateCommodity(
   values: CommodityFormValueType,
-  id: number
+  id: number,
+  supabase?: SupabaseClient
 ): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
   const updatedCommodity: UpdateCommodityDBType = {
     name: values.name,
     unit: values.unit,
@@ -51,31 +55,46 @@ export async function updateCommodity(
   return { dbError };
 }
 
-export async function getAllCommodities() {
-  return getAllRecords("commodity") as Promise<{ dbData: ReadCommodityDBType[]; dbError: PostgrestError }>;
+export async function getAllCommodities(supabase?: SupabaseClient) {
+  return getAllRecords("commodity", supabase) as Promise<{ dbData: ReadCommodityDBType[]; dbError: PostgrestError }>;
 }
 
-export async function getAllCommoditiesWithBatches(): Promise<{
-  dbData: ReadCommodityWithBatchesType[];
-  dbError: PostgrestError;
+export async function getAllCommoditiesWithBatches(supabase?: SupabaseClient): Promise<{
+  dbData: ReadCommodityWithBatchesType[] | null;
+  dbError: PostgrestError | null;
 }> {
-  let dbData: ReadCommodityWithBatchesType[], dbError: PostgrestError, dbDataBatches: ReadCommodityBatchDBType[];
-  ({ dbData, dbError } = await getAllCommodities());
-  if (dbError) return { dbData, dbError };
+  if (!supabase) supabase = await connectAndRedirect();
 
-  ({ dbData: dbDataBatches, dbError } = await getAllCommodityBatches());
+  let dbCommoditys: ReadCommodityDBType[] | null = null;
+  let dbData: ReadCommodityWithBatchesType[] | null = null;
+  let dbError: PostgrestError | null = null;
+  let dbBatches: ReadCommodityBatchDBType[] | null = null;
 
-  dbData = dbData.map((item) => {
-    const commodityBatches = dbDataBatches.filter(({ commodity_id }) => item.id === commodity_id);
-    return { ...item, batches: commodityBatches };
-  });
+  try {
+    [{ dbData: dbCommoditys, dbError }, { dbData: dbBatches, dbError }] = await Promise.all([
+      getAllCommodities(supabase),
+      getAllCommodityBatches(supabase),
+    ]);
+
+    dbData =
+      dbCommoditys?.map((item) => {
+        const batches = dbBatches?.filter(({ commodity_id }) => item.id === commodity_id) || [];
+        return { ...item, batches };
+      }) || null;
+  } catch (error) {
+    console.log(error);
+  }
+
   return { dbData, dbError };
 }
 
-export async function getSingleCommodity(id: number) {
-  return getSingleRecordById("commodity", id) as Promise<{ dbData: ReadCommodityDBType; dbError: PostgrestError }>;
+export async function getSingleCommodity(id: number, supabase?: SupabaseClient) {
+  return getSingleRecordById("commodity", id, supabase) as Promise<{
+    dbData: ReadCommodityDBType;
+    dbError: PostgrestError;
+  }>;
 }
 
-export async function deleteCommodity(id: number) {
-  return deleteRecordById("commodity", id);
+export async function deleteCommodity(id: number, supabase?: SupabaseClient) {
+  return deleteRecordById("commodity", id, supabase);
 }

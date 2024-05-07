@@ -20,7 +20,10 @@ import {
 import { deleteProductRecipe, getAllProductRecipes } from "./productRecipeActions";
 import { getAllProductBatches } from "./productBatchActions";
 
-export async function createProduct(values: ProductFormValueType): Promise<{
+export async function createProduct(
+  values: ProductFormValueType,
+  supabase?: SupabaseClient
+): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductDBType | null;
 }> {
@@ -28,7 +31,7 @@ export async function createProduct(values: ProductFormValueType): Promise<{
   let dbData: ReadProductDBType | null = null;
 
   const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
   const newProduct: CreateProductDBType = {
     name: values.name,
     unit: values.unit,
@@ -129,18 +132,19 @@ export async function getAllProductsWithBatchesAndIngredients(supabase?: Supabas
 
   try {
     ({ dbData: dbDataWithBatches, dbError } = await getAllProductsWithBatches(supabase));
+    if (!dbDataWithBatches || dbError) {
+      console.log(dbError);
+      return { dbData, dbError };
+    }
+
     const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
       await getAllProductRecipes(supabase);
 
-    if (
-      !dbDataWithBatches ||
-      dbError ||
-      !productIngredients ||
-      productIngredientsError ||
-      !commodityIngredients ||
-      commodityIngredientsError
-    )
+    if (!productIngredients || productIngredientsError || !commodityIngredients || commodityIngredientsError) {
+      console.log(productIngredientsError);
+      console.log(commodityIngredientsError);
       return { dbData, dbError };
+    }
 
     dbData = dbDataWithBatches.map((item) => {
       const currProductIngredients = productIngredients
@@ -154,7 +158,7 @@ export async function getAllProductsWithBatchesAndIngredients(supabase?: Supabas
           return { ingredient_id: String(commodity_ingredient_id as number), ingredient_name };
         });
 
-      return { ...item, productIngredients: currProductIngredients, commodityIngredients: currCommodityIngredients };
+      return { ...item, product_ingredients: currProductIngredients, commodity_ingredients: currCommodityIngredients };
     });
   } catch (error) {
     console.log(error);
@@ -163,18 +167,23 @@ export async function getAllProductsWithBatchesAndIngredients(supabase?: Supabas
   return { dbData, dbError };
 }
 
-export async function getSingleProduct(id: number) {
-  return getSingleRecordById("product", id) as Promise<{ dbData: ReadProductDBType; dbError: PostgrestError }>;
+export async function getSingleProduct(id: number, supabase?: SupabaseClient) {
+  return getSingleRecordById("product", id, supabase) as Promise<{
+    dbData: ReadProductDBType;
+    dbError: PostgrestError;
+  }>;
 }
 
-export async function deleteProduct(id: number) {
-  return deleteRecordById("product", id);
+export async function deleteProduct(id: number, supabase?: SupabaseClient) {
+  return deleteRecordById("product", id, supabase);
 }
 
-export async function deleteProductAndRecipe(id: number) {
-  let { dbError } = await deleteProductRecipe(id);
+export async function deleteProductAndRecipe(id: number, supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
+
+  let { dbError } = await deleteProductRecipe(id, supabase);
   if (dbError) return { dbError };
 
-  ({ dbError } = await deleteProduct(id));
+  ({ dbError } = await deleteProduct(id, supabase));
   return { dbError };
 }

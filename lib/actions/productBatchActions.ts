@@ -58,3 +58,12 @@ export async function getAllProductBatches(supabase?: SupabaseClient) {
     dbError: PostgrestError;
   }>;
 }
+
+export async function getProductBatches(
+  productIds: number[],
+  supabase?: SupabaseClient
+): Promise<{ dbData: ReadProductBatchDBType[] | null; dbError: PostgrestError | null }> {
+  if (!supabase) supabase = await connectAndRedirect();
+  const { data: dbData, error: dbError } = await supabase.from("product_batch").select().in("product_id", productIds);
+  return { dbData, dbError };
+}

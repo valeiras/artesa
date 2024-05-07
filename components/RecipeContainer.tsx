@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 function RecipeContainer({ itemData }: { itemData: ReadProductWithBatchesAndIngredientsType }) {
-  const allIngredients = [...(itemData?.productIngredients || []), ...(itemData?.commodityIngredients || [])];
+  const allIngredients = [...(itemData?.product_ingredients || []), ...(itemData?.commodity_ingredients || [])];
   return (
     <div className="flex flex-row items-end justify-start">
       <ScrollArea className="w-48 h-fit rounded-md border" maxHeight="110px">

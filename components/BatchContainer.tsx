@@ -1,4 +1,10 @@
-import { ReadCommodityBatchDBType, ReadCommodityDBType, ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
+import {
+  ReadCommodityBatchDBType,
+  ReadCommodityDBType,
+  ReadProductBatchDBType,
+  ReadProductDBType,
+  ReadProductWithIngredientsType,
+} from "@/lib/types";
 import React from "react";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
@@ -11,7 +17,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { useDataTableContext } from "./dataTable/dataTableContext";
 
 function BatchContainer<
-  TItem extends ReadCommodityDBType | ReadProductDBType,
+  TItem extends ReadCommodityDBType | ReadProductWithIngredientsType,
   TBatch extends ReadCommodityBatchDBType | ReadProductBatchDBType
 >({
   itemData,

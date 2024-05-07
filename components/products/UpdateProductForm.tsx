@@ -10,7 +10,6 @@ import { createProductRecipe, deleteProductRecipe } from "@/lib/actions/productR
 
 const updateRecordFn = async (values: ProductFormValueType, id: number) => {
   const { dbError: dbErrorProduct, dbData } = await updateProduct(values, id);
-  console.log(dbErrorProduct, dbData);
   if (dbErrorProduct) return { dbError: dbErrorProduct };
 
   // TODO: improve this: we shouldn't blindly remove everything and create it again
@@ -30,10 +29,10 @@ const UpdateProductForm: React.FC = () => {
     throw new Error("El tipo de artículo no coincide con el esperado");
 
   const ingredientIds = [
-    ...itemData.commodityIngredients.map(({ ingredient_id }) => {
+    ...itemData.commodity_ingredients.map(({ ingredient_id }) => {
       return { id: `${COMMODITY_PREFIX}${ingredient_id}` };
     }),
-    ...itemData.productIngredients.map(({ ingredient_id }) => {
+    ...itemData.product_ingredients.map(({ ingredient_id }) => {
       return { id: `${PRODUCT_PREFIX}${ingredient_id}` };
     }),
   ];

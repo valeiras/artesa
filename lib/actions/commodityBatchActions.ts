@@ -6,14 +6,17 @@ import {
   CommodityBatchFormValueType,
   ReadCommodityBatchDBType,
 } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { authenticateAndRedirect, connectAndRedirect, deleteRecordById, getAllRecords } from "../supabaseUtils";
 
-export async function createCommodityBatch(values: CommodityBatchFormValueType): Promise<{
+export async function createCommodityBatch(
+  values: CommodityBatchFormValueType,
+  supabase?: SupabaseClient
+): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
   const newCommodityBatch: CreateCommodityBatchDBType = {
     commodity_id: values.commodityId,
     date: values.date.toISOString(),
@@ -30,12 +33,13 @@ export async function createCommodityBatch(values: CommodityBatchFormValueType):
 
 export async function updateCommodityBatch(
   values: CommodityBatchFormValueType,
-  id: number
+  id: number,
+  supabase?: SupabaseClient
 ): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
+  if (!supabase) supabase = await connectAndRedirect();
   const updatedCommodityBatch: UpdateCommodityBatchDBType = {
     commodity_id: values.commodityId,
     date: values.date.toISOString(),
@@ -50,10 +54,24 @@ export async function updateCommodityBatch(
   return { dbError };
 }
 
-export async function deleteCommodityBatch(id: number) {
+export async function deleteCommodityBatch(id: number, supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
   return deleteRecordById("commodity_batch", id);
 }
 
-export async function getAllCommodityBatches() {
+export async function getAllCommodityBatches(supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
   return getAllRecords("commodity_batch") as Promise<{ dbData: ReadCommodityBatchDBType[]; dbError: PostgrestError }>;
+}
+
+export async function getCommodityBatches(
+  commodityIds: number[],
+  supabase?: SupabaseClient
+): Promise<{ dbData: ReadCommodityBatchDBType[] | null; dbError: PostgrestError | null }> {
+  if (!supabase) supabase = await connectAndRedirect();
+  const { data: dbData, error: dbError } = await supabase
+    .from("commodity_batch")
+    .select()
+    .in("commodity_id", commodityIds);
+  return { dbData, dbError };
 }

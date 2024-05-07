@@ -1,9 +1,17 @@
-import { ProductBatchFormValueType, RecordFormType } from "@/lib/types";
+import {
+  ProductBatchFormValueType,
+  ReadProductWithIngredientsType,
+  RecordFormType,
+  isReadProductWithIngredientsType,
+} from "@/lib/types";
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Form } from "@/components/ui/form";
-import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
-import { getAllSuppliers } from "@/lib/actions/supplierActions";
+import { CustomFormDatePicker, CustomFormField, CustomFormSelectFieldArray, FormButtons } from "@/components/forms";
+import { useDataTableContext } from "../dataTable";
+import { useQuery } from "@tanstack/react-query";
+import { getCommodityBatches } from "@/lib/actions/commodityBatchActions";
+import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
+import { getProductBatches } from "@/lib/actions/productBatchActions";
 
 const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
   form,
@@ -13,19 +21,59 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
   submitButtonLabel,
   setIsFormOpen,
 }) => {
-  const { data: suppliersData } = useQuery({
-    queryKey: ["suppliers"],
-    queryFn: () => getAllSuppliers(),
-  });
+  const dataTableContext = useDataTableContext();
+  if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+  const { itemData } = dataTableContext;
+  if (!isReadProductWithIngredientsType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   function onSubmit(values: ProductBatchFormValueType) {
     mutate(values);
   }
 
-  const availableSuppliers =
-    suppliersData?.dbData.map(({ name, id }) => {
-      return { value: id.toString(), label: name };
-    }) || [];
+  const commodityIds = itemData.commodity_ingredients.map(({ ingredient_id }) => parseInt(ingredient_id));
+  const productIds = itemData.product_ingredients.map(({ ingredient_id }) => parseInt(ingredient_id));
+
+  const { data: commodityBatchesData, isPending: isCommodityBatchesDataPending } = useQuery({
+    queryKey: ["commodityBatches", itemData.id],
+    queryFn: () => getCommodityBatches(commodityIds),
+  });
+
+  const { data: productBatchesData, isPending: isProductBatchesDataPending } = useQuery({
+    queryKey: ["productBatches", itemData.id],
+    queryFn: () => getProductBatches(productIds),
+  });
+
+  const commodityIngredientsWithBatches = itemData.commodity_ingredients.map((it) => {
+    const batches = commodityBatchesData?.dbData
+      ?.filter(({ commodity_id }) => commodity_id === parseInt(it.ingredient_id))
+      .map(({ id, external_id }) => {
+        return { id, external_id };
+      });
+    return { ...it, batches };
+  });
+  const productIngredientsWithBatches = itemData.product_ingredients.map((it) => {
+    const batches = productBatchesData?.dbData
+      ?.filter(({ product_id }) => product_id === parseInt(it.ingredient_id))
+      .map(({ id, external_id }) => {
+        return { id, external_id };
+      });
+    return { ...it, batches };
+  });
+  const commodityItems = commodityIngredientsWithBatches.map(({ batches }) => {
+    return (
+      batches?.map(({ external_id, id }) => {
+        return { value: String(id), label: external_id };
+      }) || []
+    );
+  });
+
+  const productItems = productIngredientsWithBatches.map(({ batches }) => {
+    return (
+      batches?.map(({ external_id, id }) => {
+        return { value: String(id), label: external_id };
+      }) || []
+    );
+  });
 
   return (
     <Form {...form}>
@@ -39,17 +87,47 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
             placeholder="Mermelada de fresa"
             disabled={true}
           />
-          <CustomFormSelect
-            name="supplierId"
-            items={availableSuppliers}
-            control={form.control}
-            label="Proveedor"
-            placeholder="Selecciona un proveedor"
-          />
           <CustomFormDatePicker name="date" control={form.control} label="Fecha" />
           <CustomFormField name="externalId" control={form.control} label="Identificador del lote" />
           <CustomFormField name="initialAmount" control={form.control} label="Cantidad" placeholder="0" type="number" />
           <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
+          <div></div>
+          <span className="col-span-3 text-center text-lg font-medium">Ingredientes</span>
+          <div className="flex flex-col space-y-2 h-full justify-between">
+            {commodityIngredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
+              return (
+                <div className="fake-input -mt-1" key={`${COMMODITY_PREFIX}${ingredient_id}`}>
+                  {ingredient_name}:
+                </div>
+              );
+            })}
+          </div>
+          <CustomFormSelectFieldArray
+            name="commodityIngredientBatchIds"
+            control={form.control}
+            register={form.register}
+            independentItems={commodityItems}
+            placeholder="Selecciona un lote"
+            hasVariableAmount={false}
+          />
+          <div></div>
+          <div className="flex flex-col">
+            {productIngredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
+              return (
+                <div className="fake-input" key={`${PRODUCT_PREFIX}${ingredient_id}`}>
+                  {ingredient_name}:
+                </div>
+              );
+            })}
+          </div>
+          <CustomFormSelectFieldArray
+            name="productIngredientBatchIds"
+            control={form.control}
+            register={form.register}
+            independentItems={productItems}
+            placeholder="Selecciona un lote"
+            hasVariableAmount={false}
+          />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />
       </form>

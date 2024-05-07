@@ -143,7 +143,7 @@ export type Database = {
           comments: string | null
           created_at: string
           date: string
-          external_id: string | null
+          external_id: string
           id: number
           initial_amount: number
           product_id: number
@@ -153,7 +153,7 @@ export type Database = {
           comments?: string | null
           created_at?: string
           date: string
-          external_id?: string | null
+          external_id: string
           id?: number
           initial_amount?: number
           product_id: number
@@ -163,7 +163,7 @@ export type Database = {
           comments?: string | null
           created_at?: string
           date?: string
-          external_id?: string | null
+          external_id?: string
           id?: number
           initial_amount?: number
           product_id?: number

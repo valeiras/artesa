@@ -46,10 +46,11 @@ const CommoditiesDataTable: React.FC = () => {
   const columns = commodityColumns({ deleteCommodityMutation, deleteCommodityBatchMutation });
 
   const { data, isPending: isDataPending } = useQuery({
-    queryKey: ["commodities"],
+    queryKey: ["commoditiesWithBatches"],
     queryFn: () => getAllCommoditiesWithBatches(),
   });
 
+  console.log(data);
   if (isDataPending) return <h2>Cargando...</h2>;
 
   if (!data) {
