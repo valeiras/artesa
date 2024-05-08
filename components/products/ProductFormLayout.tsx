@@ -61,6 +61,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             placeholder="Selecciona un ingrediente"
             label="Ingredientes"
             emptyValue={{ id: "" }}
+            objectField="id"
           />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />

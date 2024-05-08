@@ -27,6 +27,10 @@ const esMobileValidator = (str: string) => {
   ]);
 };
 
+const positiveNumber = z.coerce
+  .number({ invalid_type_error: "Especifica la cantidad" })
+  .positive({ message: "Especifica una cantidad mayor que 0" });
+
 export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]);
 export type UnitType = z.infer<typeof unitEnum>;
 
@@ -50,18 +54,12 @@ export const productBatchFormSchema = z.object({
     .string({ required_error: "Asigna un identificador al lote" })
     .min(2, { message: "El identificador debe tener al menos 2 caracteres" }),
   date: z.date(),
-  initialAmount: z.coerce
-    .number({ invalid_type_error: "Especifica la cantidad" })
-    .positive({ message: "Especifica una cantidad mayor que 0" }),
+  initialAmount: positiveNumber,
   comments: z.string().optional(),
   commodityIngredientBatchIds: z.object({ id: z.string().min(1, { message: "Selecciona un lote" }) }).array(),
-  commodityIngredientAmounts: z
-    .object({ amount: z.number().positive({ message: "La cantidad debe ser mayor que 0" }) })
-    .array(),
+  commodityIngredientAmounts: z.object({ amount: positiveNumber }).array(),
   productIngredientBatchIds: z.object({ id: z.string().min(1, { message: "Selecciona un lote" }) }).array(),
-  productIngredientAmounts: z
-    .object({ amount: z.number().positive({ message: "La cantidad debe ser mayor que 0" }) })
-    .array(),
+  productIngredientAmounts: z.object({ amount: positiveNumber }).array(),
 });
 
 export type ProductBatchFormValueType = z.infer<typeof productBatchFormSchema>;

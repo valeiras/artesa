@@ -7,6 +7,7 @@ import React from "react";
 import { createProductBatch } from "@/lib/actions/productBatchActions";
 import { useDataTableContext } from "@/components/dataTable/";
 import ProductBatchFormLayout from "./ProductBatchFormLayout";
+import { createProductBatchRecipe } from "@/lib/actions/productBatchRecipeActions";
 
 const NewProductBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -18,11 +19,14 @@ const NewProductBatchForm: React.FC = () => {
   const createRecordFn = async (values: ProductBatchFormValueType) => {
     const { dbError: dbErrorProduct, dbData } = await createProductBatch(values);
     if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
-    // const { dbError: dbErrorRecipe } = await createProductBatchRecipe({
-    //   ingredientIds: values.ingredientIds.filter(({ id }) => id !== null && id !== ""),
-    //   productId: dbData.id,
-    // });
-    // return { dbError: dbErrorRecipe };
+    const { dbError: dbErrorRecipe } = await createProductBatchRecipe({
+      commodityIngredientBatchIds: values.commodityIngredientBatchIds,
+      commodityIngredientAmounts: values.commodityIngredientAmounts,
+      productIngredientBatchIds: values.productIngredientBatchIds,
+      productIngredientAmounts: values.productIngredientAmounts,
+      batchId: dbData.id,
+    });
+    return { dbError: dbErrorRecipe };
   };
 
   const defaultValues: ProductBatchFormValueType = {
@@ -53,7 +57,7 @@ const NewProductBatchForm: React.FC = () => {
       successToastMessage="Nuevo lote creado con éxito"
       queryKeys={[["productsWithBatchesAndIngredients"], ["ProductBatches"], ["stats"], ["charts"]]}
       formHeader="Nuevo lote"
-      createRecordFn={createProductBatch}
+      createRecordFn={createRecordFn}
       FormLayout={ProductBatchFormLayout}
     />
   );

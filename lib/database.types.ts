@@ -181,7 +181,7 @@ export type Database = {
       }
       product_batch_recipe: {
         Row: {
-          commodity_ingredient_batch_id: number
+          commodity_ingredient_batch_id: number | null
           created_at: string
           id: number
           product_batch_id: number
@@ -190,7 +190,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          commodity_ingredient_batch_id: number
+          commodity_ingredient_batch_id?: number | null
           created_at?: string
           id?: number
           product_batch_id: number
@@ -199,7 +199,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          commodity_ingredient_batch_id?: number
+          commodity_ingredient_batch_id?: number | null
           created_at?: string
           id?: number
           product_batch_id?: number
