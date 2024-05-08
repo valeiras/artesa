@@ -73,19 +73,17 @@ export async function deleteRecordsById(tableName: PublicTableName, ids: number[
 export async function createRecord<TForm extends FieldValues, TTable extends PublicTableName>({
   values,
   formToDatabaseFn,
-  supabase,
   tableName,
 }: {
   values: TForm;
   formToDatabaseFn: (values: TForm, userId: string) => TablesInsert<TTable>;
-  supabase?: SupabaseClient;
   tableName: TTable;
 }): Promise<{
   dbError: PostgrestError | null;
   dbData: Tables<TTable> | null;
 }> {
   const userId = await authenticateAndRedirect();
-  if (!supabase) supabase = await connectAndRedirect();
+  const supabase: SupabaseClient = await connectAndRedirect();
   await checkPermissionsAndRedirect(supabase, userId);
 
   let dbError: PostgrestError | null = null;

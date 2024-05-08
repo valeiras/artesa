@@ -22,13 +22,7 @@ const getBatchIds = (batchId: string) => {
   return { commodityBatchId, productBatchId };
 };
 
-export async function createSale({
-  values,
-  supabase,
-}: {
-  values: SaleFormValueType;
-  supabase?: SupabaseClient;
-}): Promise<{
+export async function createSale({ values }: { values: SaleFormValueType }): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadSaleDBType | null;
 }> {
@@ -36,7 +30,6 @@ export async function createSale({
 
   return createRecord({
     values,
-    supabase,
     tableName: "sale",
     formToDatabaseFn: (values, userId) => {
       return {

@@ -1,7 +1,6 @@
 "use server";
 
 import {
-  CreateCommodityDBType,
   ReadCommodityDBType,
   ReadCommodityBatchDBType,
   UpdateCommodityDBType,
@@ -15,24 +14,16 @@ import {
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
-  checkPermissionsAndRedirect,
   createRecord,
 } from "../supabaseUtils";
 import { deleteAllCommodityBatchesByCommodityId, getAllCommodityBatches } from "./commodityBatchActions";
 
-export async function createCommodity({
-  values,
-  supabase,
-}: {
-  values: CommodityFormValueType;
-  supabase?: SupabaseClient;
-}): Promise<{
+export async function createCommodity({ values }: { values: CommodityFormValueType }): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadCommodityDBType | null;
 }> {
   return createRecord({
     values,
-    supabase,
     tableName: "commodity",
     formToDatabaseFn: (values, userId) => {
       return { name: values.name, unit: values.unit, user_id: userId };

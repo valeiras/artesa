@@ -1,11 +1,6 @@
 "use server";
 
-import {
-  CreateCommodityBatchDBType,
-  UpdateCommodityBatchDBType,
-  CommodityBatchFormValueType,
-  ReadCommodityBatchDBType,
-} from "../types";
+import { UpdateCommodityBatchDBType, CommodityBatchFormValueType, ReadCommodityBatchDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
@@ -17,19 +12,12 @@ import {
   getAllRecords,
 } from "../supabaseUtils";
 
-export async function createCommodityBatch({
-  values,
-  supabase,
-}: {
-  values: CommodityBatchFormValueType;
-  supabase?: SupabaseClient;
-}): Promise<{
+export async function createCommodityBatch({ values }: { values: CommodityBatchFormValueType }): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadCommodityBatchDBType | null;
 }> {
   return createRecord({
     values,
-    supabase,
     tableName: "commodity_batch",
     formToDatabaseFn: (values, userId) => {
       return {

@@ -1,11 +1,6 @@
 "use server";
 
-import {
-  CreateProductBatchDBType,
-  UpdateProductBatchDBType,
-  ProductBatchFormValueType,
-  ReadProductBatchDBType,
-} from "../types";
+import { UpdateProductBatchDBType, ProductBatchFormValueType, ReadProductBatchDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
@@ -17,19 +12,12 @@ import {
 } from "../supabaseUtils";
 import { deleteProductBatchRecipe, deleteProductBatchRecipes } from "./productBatchRecipeActions";
 
-export async function createProductBatch({
-  values,
-  supabase,
-}: {
-  values: ProductBatchFormValueType;
-  supabase?: SupabaseClient;
-}): Promise<{
+export async function createProductBatch({ values }: { values: ProductBatchFormValueType }): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductBatchDBType | null;
 }> {
   return createRecord({
     values,
-    supabase,
     tableName: "product_batch",
     formToDatabaseFn: (values, userId) => {
       return {
