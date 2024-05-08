@@ -1,13 +1,21 @@
 import React from "react";
-import underConstruction from "@/assets/under_construction.svg";
-import Image from "next/image";
 
-const SalesPage: React.FC = () => {
+import { getAllSales } from "@/lib/actions/saleActions";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import SalesDataTable from "@/components/sales/SalesDataTable";
+
+const SalesPage: React.FC = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({ queryKey: ["sales"], queryFn: () => getAllSales() });
+
   return (
-    <div className="flex-flex-col">
-      <h2 className="text-4xl font-bold">Estamos trabajando en ello...</h2>
-      <Image src={underConstruction} alt="Trabajo en curso" className="w-1/2 mt-16" />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex flex-row justify-between items-center mb-8">
+        <h2 className="item-list-header">Proveedores:</h2>
+      </div>
+      <SalesDataTable />
+    </HydrationBoundary>
   );
 };
 

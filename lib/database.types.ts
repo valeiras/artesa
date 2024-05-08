@@ -282,42 +282,55 @@ export type Database = {
       }
       sale: {
         Row: {
+          client_id: number
+          commodity_batch_id: number | null
           created_at: string
-          customer_id: number
+          date: string
           id: number
-          product_batch_id: number
+          product_batch_id: number | null
           sold_amount: number
           user_id: string | null
         }
         Insert: {
+          client_id: number
+          commodity_batch_id?: number | null
           created_at?: string
-          customer_id: number
+          date: string
           id?: number
-          product_batch_id: number
+          product_batch_id?: number | null
           sold_amount: number
           user_id?: string | null
         }
         Update: {
+          client_id?: number
+          commodity_batch_id?: number | null
           created_at?: string
-          customer_id?: number
+          date?: string
           id?: number
-          product_batch_id?: number
+          product_batch_id?: number | null
           sold_amount?: number
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "public_sale_customer_id_fkey"
-            columns: ["customer_id"]
+            foreignKeyName: "public_sale_product_batch_id_fkey"
+            columns: ["product_batch_id"]
+            isOneToOne: false
+            referencedRelation: "product_batch"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sale_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "client"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_sale_product_batch_id_fkey"
-            columns: ["product_batch_id"]
+            foreignKeyName: "sale_commodity_batch_id_fkey"
+            columns: ["commodity_batch_id"]
             isOneToOne: false
-            referencedRelation: "product_batch"
+            referencedRelation: "commodity_batch"
             referencedColumns: ["id"]
           },
         ]
@@ -362,7 +375,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
-          role: Database["public"]["Enums"]["role"]
+          role?: Database["public"]["Enums"]["role"]
           user_id: string
         }
         Update: {

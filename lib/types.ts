@@ -145,7 +145,8 @@ export type CreateClientDBType = Database["public"]["Tables"]["client"]["Insert"
 export type UpdateClientDBType = Database["public"]["Tables"]["client"]["Update"];
 
 export const saleFormSchema = z.object({
-  productId: z.string({ required_error: "Especifica un producto" }),
+  productOrCommodityId: z.string({ required_error: "Especifica un producto o materia prima" }),
+  batchId: z.string({ required_error: "Especifica un lote" }),
   clientId: z.string({ required_error: "Especifica un cliente" }),
   amount: z.number({ required_error: "Especifica una cantidad" }),
   date: z.date({ required_error: "Especifica una fecha de venta" }),

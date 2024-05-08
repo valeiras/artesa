@@ -104,3 +104,24 @@ export async function getCommodityBatches(
     .in("commodity_id", commodityIds);
   return { dbData, dbError };
 }
+
+export async function getCommodityId(
+  commodityBatchId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
+  if (!supabase) supabase = await connectAndRedirect();
+  let dbError: PostgrestError | null = null;
+  let dbData: { id: number } | null = null;
+
+  try {
+    ({ error: dbError, data: dbData } = await supabase
+      .from("commodity_batch")
+      .select("commodity_id")
+      .eq("id", commodityBatchId)
+      .maybeSingle());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  }
+  return { dbError, dbData };
+}

@@ -134,3 +134,24 @@ export async function getProductBatches(
   const { data: dbData, error: dbError } = await supabase.from("product_batch").select().in("product_id", productIds);
   return { dbData, dbError };
 }
+
+export async function getProductId(
+  productBatchId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
+  if (!supabase) supabase = await connectAndRedirect();
+  let dbError: PostgrestError | null = null;
+  let dbData: { id: number } | null = null;
+
+  try {
+    ({ error: dbError, data: dbData } = await supabase
+      .from("product_batch")
+      .select("product_id")
+      .eq("id", productBatchId)
+      .maybeSingle());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  }
+  return { dbError, dbData };
+}
