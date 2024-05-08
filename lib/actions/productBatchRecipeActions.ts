@@ -148,3 +148,12 @@ export async function deleteProductBatchRecipe(productBatchId: number, supabase?
     .eq("product_batch_id", productBatchId);
   return { dbError };
 }
+
+export async function deleteProductBatchRecipes(productBatchIds: number[], supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
+  const { error: dbError } = await supabase
+    .from("product_batch_recipe")
+    .delete()
+    .in("product_batch_id", productBatchIds);
+  return { dbError };
+}

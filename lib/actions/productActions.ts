@@ -15,10 +15,10 @@ import {
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
-  deleteRecordById,
+  deleteSingleRecordById,
 } from "../supabaseUtils";
 import { deleteProductRecipe, getAllProductRecipes } from "./productRecipeActions";
-import { getAllProductBatches } from "./productBatchActions";
+import { deleteAllProductBatchesByProductId, getAllProductBatches } from "./productBatchActions";
 
 export async function createProduct(
   values: ProductFormValueType,
@@ -49,7 +49,7 @@ export async function createProduct(
 
 export async function updateProduct(
   values: ProductFormValueType,
-  id: number
+  productId: number
 ): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductDBType | null;
@@ -66,7 +66,7 @@ export async function updateProduct(
   };
 
   try {
-    ({ error: dbError, data: dbData } = await supabase.from("product").update(updatedProduct).eq("id", id));
+    ({ error: dbError, data: dbData } = await supabase.from("product").update(updatedProduct).eq("id", productId));
   } catch (error) {
     console.log(error);
     dbData = null;
@@ -167,23 +167,30 @@ export async function getAllProductsWithBatchesAndIngredients(supabase?: Supabas
   return { dbData, dbError };
 }
 
-export async function getSingleProduct(id: number, supabase?: SupabaseClient) {
-  return getSingleRecordById("product", id, supabase) as Promise<{
+export async function getSingleProduct(productId: number, supabase?: SupabaseClient) {
+  return getSingleRecordById("product", productId, supabase) as Promise<{
     dbData: ReadProductDBType;
     dbError: PostgrestError;
   }>;
 }
 
-export async function deleteProduct(id: number, supabase?: SupabaseClient) {
-  return deleteRecordById("product", id, supabase);
+export async function deleteProduct(productId: number, supabase?: SupabaseClient) {
+  return deleteSingleRecordById("product", productId, supabase);
 }
 
-export async function deleteProductAndRecipe(id: number, supabase?: SupabaseClient) {
+export async function deleteProductAndRecipe(
+  productId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null }> {
   if (!supabase) supabase = await connectAndRedirect();
+  let dbError: PostgrestError | null = null;
 
-  let { dbError } = await deleteProductRecipe(id, supabase);
-  if (dbError) return { dbError };
-
-  ({ dbError } = await deleteProduct(id, supabase));
+  try {
+    ({ dbError } = await deleteAllProductBatchesByProductId(productId, supabase));
+    ({ dbError } = await deleteProductRecipe(productId, supabase));
+    ({ dbError } = await deleteProduct(productId, supabase));
+  } catch (error) {
+    console.log(error);
+  }
   return { dbError };
 }

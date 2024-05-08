@@ -43,9 +43,14 @@ export async function getSingleRecordById(tableName: TableName, id: number, supa
   return { dbData, dbError };
 }
 
-export async function deleteRecordById(tableName: TableName, id: number, supabase?: SupabaseClient) {
+export async function deleteSingleRecordById(tableName: TableName, id: number, supabase?: SupabaseClient) {
   if (!supabase) supabase = await connectAndRedirect();
-
   const { error: dbError } = await supabase.from(tableName).delete().eq("id", id);
+  return { dbError };
+}
+
+export async function deleteRecordsById(tableName: TableName, ids: number[], supabase?: SupabaseClient) {
+  if (!supabase) supabase = await connectAndRedirect();
+  const { error: dbError } = await supabase.from(tableName).delete().in("id", ids);
   return { dbError };
 }

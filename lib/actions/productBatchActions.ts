@@ -7,7 +7,14 @@ import {
   ReadProductBatchDBType,
 } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecordById, getAllRecords } from "../supabaseUtils";
+import {
+  authenticateAndRedirect,
+  connectAndRedirect,
+  deleteSingleRecordById,
+  deleteRecordsById,
+  getAllRecords,
+} from "../supabaseUtils";
+import { deleteProductBatchRecipe, deleteProductBatchRecipes } from "./productBatchRecipeActions";
 
 export async function createProductBatch(
   values: ProductBatchFormValueType,
@@ -74,8 +81,40 @@ export async function updateProductBatch(
   return { dbError, dbData };
 }
 
-export async function deleteProductBatch(id: number, supabase?: SupabaseClient) {
-  return deleteRecordById("product_batch", id, supabase);
+export async function deleteProductBatch(
+  productBatchId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null }> {
+  let dbError: PostgrestError | null = null;
+  if (!supabase) supabase = await connectAndRedirect();
+  try {
+    ({ dbError } = await deleteProductBatchRecipe(productBatchId, supabase));
+    ({ dbError } = await deleteSingleRecordById("product_batch", productBatchId, supabase));
+  } catch (error) {
+    console.log(error);
+  }
+  return { dbError };
+}
+
+export async function deleteAllProductBatchesByProductId(
+  productId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null }> {
+  let dbError: PostgrestError | null = null;
+  if (!supabase) supabase = await connectAndRedirect();
+  try {
+    const { data } = await supabase.from("product_batch").select("id").eq("product_id", productId);
+    const productBatchIds = data?.map(({ id }) => {
+      return id as number;
+    });
+    if (productBatchIds) {
+      ({ dbError } = await deleteProductBatchRecipes(productBatchIds, supabase));
+      ({ dbError } = await deleteRecordsById("product_batch", productBatchIds, supabase));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return { dbError };
 }
 
 export async function getAllProductBatches(supabase?: SupabaseClient) {

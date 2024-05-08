@@ -7,7 +7,7 @@ import {
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
-  deleteRecordById,
+  deleteSingleRecordById,
 } from "../supabaseUtils";
 
 export async function createSupplier(values: SupplierFormValueType): Promise<{
@@ -56,5 +56,5 @@ export async function getSingleSupplier(id: number) {
 }
 
 export async function deleteSupplier(id: number) {
-  return deleteRecordById("supplier", id);
+  return deleteSingleRecordById("supplier", id);
 }

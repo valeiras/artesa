@@ -7,7 +7,7 @@ import {
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
-  deleteRecordById,
+  deleteSingleRecordById,
 } from "../supabaseUtils";
 
 export async function createClient(values: ClientFormValueType): Promise<{
@@ -56,5 +56,5 @@ export async function getSingleClient(id: number) {
 }
 
 export async function deleteClient(id: number) {
-  return deleteRecordById("client", id);
+  return deleteSingleRecordById("client", id);
 }

@@ -14,7 +14,7 @@ import {
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
-  deleteRecordById,
+  deleteSingleRecordById,
 } from "../supabaseUtils";
 import { getAllCommodityBatches } from "./commodityBatchActions";
 
@@ -96,5 +96,5 @@ export async function getSingleCommodity(id: number, supabase?: SupabaseClient) 
 }
 
 export async function deleteCommodity(id: number, supabase?: SupabaseClient) {
-  return deleteRecordById("commodity", id, supabase);
+  return deleteSingleRecordById("commodity", id, supabase);
 }

@@ -7,7 +7,7 @@ import {
   ReadCommodityBatchDBType,
 } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecordById, getAllRecords } from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, deleteSingleRecordById, getAllRecords } from "../supabaseUtils";
 
 export async function createCommodityBatch(
   values: CommodityBatchFormValueType,
@@ -57,7 +57,7 @@ export async function updateCommodityBatch(
 
 export async function deleteCommodityBatch(id: number, supabase?: SupabaseClient) {
   if (!supabase) supabase = await connectAndRedirect();
-  return deleteRecordById("commodity_batch", id);
+  return deleteSingleRecordById("commodity_batch", id);
 }
 
 export async function getAllCommodityBatches(supabase?: SupabaseClient) {
