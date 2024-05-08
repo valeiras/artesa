@@ -13,7 +13,6 @@ import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
-  getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
 } from "../supabaseUtils";
@@ -174,11 +173,7 @@ export async function getSingleProduct(productId: number, supabase?: SupabaseCli
   }>;
 }
 
-export async function deleteProduct(productId: number, supabase?: SupabaseClient) {
-  return deleteSingleRecordById("product", productId, supabase);
-}
-
-export async function deleteProductAndRecipe(
+export async function deleteProduct(
   productId: number,
   supabase?: SupabaseClient
 ): Promise<{ dbError: PostgrestError | null }> {
@@ -188,7 +183,7 @@ export async function deleteProductAndRecipe(
   try {
     ({ dbError } = await deleteAllProductBatchesByProductId(productId, supabase));
     ({ dbError } = await deleteProductRecipe(productId, supabase));
-    ({ dbError } = await deleteProduct(productId, supabase));
+    ({ dbError } = await deleteSingleRecordById("product", productId, supabase));
   } catch (error) {
     console.log(error);
   }

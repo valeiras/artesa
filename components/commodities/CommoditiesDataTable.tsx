@@ -50,7 +50,6 @@ const CommoditiesDataTable: React.FC = () => {
     queryFn: () => getAllCommoditiesWithBatches(),
   });
 
-  console.log(data);
   if (isDataPending) return <h2>Cargando...</h2>;
 
   if (!data) {

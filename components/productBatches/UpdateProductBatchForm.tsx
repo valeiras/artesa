@@ -21,7 +21,6 @@ import {
 } from "@/lib/actions/productBatchRecipeActions";
 
 const updateRecordFn = async (values: ProductBatchFormValueType, productBatchId: number) => {
-  console.log(productBatchId);
   const { dbError: dbErrorProduct, dbData } = await updateProductBatch(values, productBatchId);
   if (dbErrorProduct) return { dbError: dbErrorProduct };
 

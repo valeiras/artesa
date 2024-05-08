@@ -7,7 +7,13 @@ import {
   ReadCommodityBatchDBType,
 } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteSingleRecordById, getAllRecords } from "../supabaseUtils";
+import {
+  authenticateAndRedirect,
+  connectAndRedirect,
+  deleteRecordsById,
+  deleteSingleRecordById,
+  getAllRecords,
+} from "../supabaseUtils";
 
 export async function createCommodityBatch(
   values: CommodityBatchFormValueType,
@@ -58,6 +64,26 @@ export async function updateCommodityBatch(
 export async function deleteCommodityBatch(id: number, supabase?: SupabaseClient) {
   if (!supabase) supabase = await connectAndRedirect();
   return deleteSingleRecordById("commodity_batch", id);
+}
+
+export async function deleteAllCommodityBatchesByCommodityId(
+  commodityId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null }> {
+  let dbError: PostgrestError | null = null;
+  if (!supabase) supabase = await connectAndRedirect();
+
+  try {
+    const { data } = await supabase.from("commodity_batch").select("id").eq("commodity_id", commodityId);
+    const commodityBatchIds = data?.map(({ id }) => {
+      return id as number;
+    });
+    if (commodityBatchIds) ({ dbError } = await deleteRecordsById("commodity_batch", commodityBatchIds, supabase));
+    console.log(dbError);
+  } catch (error) {
+    console.log(error);
+  }
+  return { dbError };
 }
 
 export async function getAllCommodityBatches(supabase?: SupabaseClient) {

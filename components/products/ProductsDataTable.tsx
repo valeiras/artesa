@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { deleteProductAndRecipe, getAllProductsWithBatchesAndIngredients } from "@/lib/actions/productActions";
+import { deleteProduct, getAllProductsWithBatchesAndIngredients } from "@/lib/actions/productActions";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "../ui/use-toast";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
@@ -29,7 +29,7 @@ const ProductsDataTable: React.FC = () => {
   });
 
   const { mutate: deleteProductMutation } = useMutation({
-    mutationFn: (id: number) => deleteProductAndRecipe(id),
+    mutationFn: (id: number) => deleteProduct(id),
     onSuccess: productSuccessHandler,
     onError: (error) => {
       console.log(error);
@@ -71,7 +71,7 @@ const ProductsDataTable: React.FC = () => {
     unit: "kg",
     user_id: "",
   };
-  
+
   const emptyProductBatchData: ReadProductBatchDBType = {
     comments: "",
     product_id: 0,

@@ -16,7 +16,7 @@ import {
   getSingleRecordById,
   deleteSingleRecordById,
 } from "../supabaseUtils";
-import { getAllCommodityBatches } from "./commodityBatchActions";
+import { deleteAllCommodityBatchesByCommodityId, getAllCommodityBatches } from "./commodityBatchActions";
 
 export async function createCommodity(
   values: CommodityFormValueType,
@@ -95,6 +95,21 @@ export async function getSingleCommodity(id: number, supabase?: SupabaseClient) 
   }>;
 }
 
-export async function deleteCommodity(id: number, supabase?: SupabaseClient) {
-  return deleteSingleRecordById("commodity", id, supabase);
+export async function deleteCommodity(
+  commodityId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbError: PostgrestError | null }> {
+  if (!supabase) supabase = await connectAndRedirect();
+  let dbError: PostgrestError | null = null;
+
+  try {
+    ({ dbError } = await deleteAllCommodityBatchesByCommodityId(commodityId, supabase));
+    if (dbError) throw new Error(dbError.message);
+    ({ dbError } = await deleteSingleRecordById("commodity", commodityId, supabase));
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbError };
+  }
 }
