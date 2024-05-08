@@ -8,9 +8,9 @@ import { ItemRowActions } from "@/components/rowActions";
 function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadSupplierDBType>[] = [
     {
-      accessorKey: "name",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
-      meta: { columnName: "Nombre" },
+      accessorKey: "articleName",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Artículo" />,
+      meta: { columnName: "Artículo" },
     },
     {
       accessorKey: "email",

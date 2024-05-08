@@ -7,28 +7,19 @@ import { ItemRowActions } from "@/components/rowActions";
 
 function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadSaleDBType>[] = [
+    // {
+    //   accessorKey: "article_name",
+    //   header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
+    //   meta: { columnName: "Nombre" },
+    // },
     {
-      accessorKey: "name",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
-      meta: { columnName: "Nombre" },
-    },
-    {
-      accessorKey: "email",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
-      meta: { columnName: "Email" },
-      enableSorting: false,
-    },
-    {
-      accessorKey: "phone",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Teléfono" />,
-      enableSorting: false,
-      meta: { columnName: "Teléfono" },
-    },
-    {
-      accessorKey: "address",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Dirección" />,
-      enableSorting: false,
-      meta: { columnName: "Dirección" },
+      accessorKey: "date",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de venta" />,
+      meta: { columnName: "Fecha venta" },
+      cell: ({ row }) => {
+        const formattedDate = new Date(row.getValue("date")).toLocaleDateString();
+        return <>{formattedDate}</>;
+      },
     },
     {
       accessorKey: "created_at",

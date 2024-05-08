@@ -13,44 +13,35 @@ import {
   deleteSingleRecordById,
   deleteRecordsById,
   getAllRecords,
-  checkPermissionsAndRedirect,
+  createRecord,
 } from "../supabaseUtils";
 import { deleteProductBatchRecipe, deleteProductBatchRecipes } from "./productBatchRecipeActions";
 
-export async function createProductBatch(
-  values: ProductBatchFormValueType,
-  supabase?: SupabaseClient
-): Promise<{
+export async function createProductBatch({
+  values,
+  supabase,
+}: {
+  values: ProductBatchFormValueType;
+  supabase?: SupabaseClient;
+}): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductBatchDBType | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  if (!supabase) supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
-
-  let dbError: PostgrestError | null = null;
-  let dbData: ReadProductBatchDBType | null = null;
-
-  const newProductBatch: CreateProductBatchDBType = {
-    product_id: parseInt(values.productId),
-    date: values.date.toISOString(),
-    initial_amount: values.initialAmount,
-    external_id: values.externalId,
-    comments: values.comments,
-    user_id: userId,
-  };
-
-  try {
-    ({ error: dbError, data: dbData } = await supabase
-      .from("product_batch")
-      .insert(newProductBatch)
-      .select()
-      .maybeSingle());
-  } catch (error) {
-    console.log(error);
-  }
-
-  return { dbError, dbData };
+  return createRecord({
+    values,
+    supabase,
+    tableName: "product_batch",
+    formToDatabaseFn: (values, userId) => {
+      return {
+        product_id: parseInt(values.productId),
+        date: values.date.toISOString(),
+        initial_amount: values.initialAmount,
+        external_id: values.externalId,
+        comments: values.comments,
+        user_id: userId,
+      };
+    },
+  });
 }
 
 export async function updateProductBatch(

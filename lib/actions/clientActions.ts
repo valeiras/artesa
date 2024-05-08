@@ -1,33 +1,34 @@
 "use server";
 
-import { CreateClientDBType, UpdateClientDBType, ClientFormValueType, ReadClientDBType } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { UpdateClientDBType, ClientFormValueType, ReadClientDBType } from "../types";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
-  checkPermissionsAndRedirect,
+  createRecord,
 } from "../supabaseUtils";
 
-export async function createClient(values: ClientFormValueType): Promise<{
+export async function createClient({
+  values,
+  supabase,
+}: {
+  values: ClientFormValueType;
+  supabase?: SupabaseClient;
+}): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadClientDBType | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
-
-  const newClient: CreateClientDBType = {
-    name: values.name,
-    user_id: userId,
-    email: values.email,
-    phone: values.phone,
-    address: values.address,
-  };
-
-  const { error: dbError } = await supabase.from("client").insert(newClient);
-  return { dbError };
+  return createRecord({
+    values,
+    supabase,
+    tableName: "client",
+    formToDatabaseFn: (values, userId) => {
+      return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
+    },
+  });
 }
 
 export async function updateClient(
@@ -38,6 +39,7 @@ export async function updateClient(
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
+
   const updatedClient: UpdateClientDBType = {
     name: values.name,
     user_id: userId,

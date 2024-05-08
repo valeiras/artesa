@@ -26,13 +26,7 @@ const updateRecordFn = async (values: ProductBatchFormValueType, productBatchId:
 
   // TODO: improve this: we shouldn't blindly remove everything and create it again
   await deleteProductBatchRecipe(productBatchId);
-  const { dbError: dbErrorRecipe } = await createProductBatchRecipe({
-    commodityIngredientBatchIds: values.commodityIngredientBatchIds,
-    commodityIngredientAmounts: values.commodityIngredientAmounts,
-    productIngredientBatchIds: values.productIngredientBatchIds,
-    productIngredientAmounts: values.productIngredientAmounts,
-    batchId: productBatchId,
-  });
+  const { dbError: dbErrorRecipe } = await createProductBatchRecipe({ values, batchId: productBatchId });
   return { dbError: dbErrorRecipe };
 };
 

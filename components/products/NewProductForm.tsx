@@ -12,8 +12,8 @@ const NewProductForm: React.FC = () => {
     ingredientIds: [],
   };
 
-  const createRecordFn = async (values: ProductFormValueType) => {
-    const { dbError: dbErrorProduct, dbData } = await createProduct(values);
+  const createRecordFn = async ({ values }: { values: ProductFormValueType }) => {
+    const { dbError: dbErrorProduct, dbData } = await createProduct({ values });
     if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
     const { dbError: dbErrorRecipe } = await createProductRecipe({
       ingredientIds: values.ingredientIds.filter(({ id }) => id !== null && id !== ""),

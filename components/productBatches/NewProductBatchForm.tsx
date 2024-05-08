@@ -16,16 +16,11 @@ const NewProductBatchForm: React.FC = () => {
 
   if (!isReadProductWithIngredientsType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
-  const createRecordFn = async (values: ProductBatchFormValueType) => {
-    const { dbError: dbErrorProduct, dbData } = await createProductBatch(values);
+  const createRecordFn = async ({ values }: { values: ProductBatchFormValueType }) => {
+    const { dbError: dbErrorProduct, dbData } = await createProductBatch({ values });
     if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
-    const { dbError: dbErrorRecipe } = await createProductBatchRecipe({
-      commodityIngredientBatchIds: values.commodityIngredientBatchIds,
-      commodityIngredientAmounts: values.commodityIngredientAmounts,
-      productIngredientBatchIds: values.productIngredientBatchIds,
-      productIngredientAmounts: values.productIngredientAmounts,
-      batchId: dbData.id,
-    });
+
+    const { dbError: dbErrorRecipe } = await createProductBatchRecipe({ values, batchId: dbData.id });
     return { dbError: dbErrorRecipe };
   };
 

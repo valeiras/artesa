@@ -33,15 +33,19 @@ export async function createProductRecipe({
   productId: number;
 }): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadProductRecipeDBType[] | null;
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   await checkPermissionsAndRedirect(supabase, userId);
 
+  let dbError: PostgrestError | null = null;
+  let dbData: ReadProductRecipeDBType[] | null = null;
+
   const newProductRecipe: CreateProductRecipeDBType[] = createProductRecipeArray({ userId, productId, ingredientIds });
 
-  const { error: dbError } = await supabase.from("product_recipe").insert(newProductRecipe);
-  return { dbError };
+  ({ error: dbError, data: dbData } = await supabase.from("product_recipe").insert(newProductRecipe));
+  return { dbError, dbData };
 }
 
 export async function getAllProductRecipes(supabase?: SupabaseClient) {

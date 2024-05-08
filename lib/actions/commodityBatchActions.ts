@@ -11,33 +11,38 @@ import {
   authenticateAndRedirect,
   checkPermissionsAndRedirect,
   connectAndRedirect,
+  createRecord,
   deleteRecordsById,
   deleteSingleRecordById,
   getAllRecords,
 } from "../supabaseUtils";
 
-export async function createCommodityBatch(
-  values: CommodityBatchFormValueType,
-  supabase?: SupabaseClient
-): Promise<{
+export async function createCommodityBatch({
+  values,
+  supabase,
+}: {
+  values: CommodityBatchFormValueType;
+  supabase?: SupabaseClient;
+}): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadCommodityBatchDBType | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  if (!supabase) supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
-
-  const newCommodityBatch: CreateCommodityBatchDBType = {
-    commodity_id: values.commodityId,
-    date: values.date.toISOString(),
-    initial_amount: values.initialAmount,
-    external_id: values.externalId,
-    supplier_id: parseInt(values.supplierId),
-    comments: values.comments,
-    user_id: userId,
-  };
-
-  const { error: dbError } = await supabase.from("commodity_batch").insert(newCommodityBatch);
-  return { dbError };
+  return createRecord({
+    values,
+    supabase,
+    tableName: "commodity_batch",
+    formToDatabaseFn: (values, userId) => {
+      return {
+        commodity_id: values.commodityId,
+        date: values.date.toISOString(),
+        initial_amount: values.initialAmount,
+        external_id: values.externalId,
+        supplier_id: parseInt(values.supplierId),
+        comments: values.comments,
+        user_id: userId,
+      };
+    },
+  });
 }
 
 export async function updateCommodityBatch(

@@ -17,8 +17,8 @@ const UpdateSaleForm: React.FC = () => {
   if (!isReadSaleDBType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
   // We need to better define this query keys: we could have the same id for a commodity and a product
-  const { data: productOrCommodityId, isPending: isProductOrCommodityIdPending } = useQuery({
-    queryKey: ["productOrCommodityId", String(itemData.product_batch_id || itemData.commodity_batch_id)],
+  const { data: articleId, isPending: isArticlePending } = useQuery({
+    queryKey: ["articleId", String(itemData.product_batch_id || itemData.commodity_batch_id)],
     queryFn: () =>
       itemData.product_batch_id
         ? getProductId(itemData.product_batch_id)
@@ -26,7 +26,7 @@ const UpdateSaleForm: React.FC = () => {
   });
 
   const defaultValues: SaleFormValueType = {
-    productOrCommodityId: String(productOrCommodityId?.dbData?.id || 0),
+    articleId: String(articleId?.dbData?.id || 0),
     batchId: String(itemData.product_batch_id) || String(itemData.commodity_batch_id) || "",
     amount: itemData.sold_amount || 0,
     clientId: String(itemData.client_id) || "",
@@ -40,7 +40,7 @@ const UpdateSaleForm: React.FC = () => {
       successToastMessage="Proveedor actualizado con éxito"
       queryKeys={[
         ["sale", String(itemData.id)],
-        ["productOrCommodityId", String(itemData.product_batch_id || itemData.commodity_batch_id)],
+        ["articleId", String(itemData.product_batch_id || itemData.commodity_batch_id)],
         ["sales"],
         ["stats"],
         ["charts"],

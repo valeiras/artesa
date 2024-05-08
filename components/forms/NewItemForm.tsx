@@ -24,7 +24,7 @@ function NewItemForm<T extends FieldValues>({
       defaultValues={defaultValues}
       successToastMessage={successToastMessage}
       queryKeys={queryKeys}
-      mutationFn={(values: T) => createRecordFn(values)}
+      mutationFn={(values: T) => createRecordFn({ values })}
       formHeader={formHeader}
       FormLayout={FormLayout}
       setIsDialogOpen={setIsNewItemDialogOpen}

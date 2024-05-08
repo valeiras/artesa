@@ -1,22 +1,23 @@
 "use server";
 
-import { CreateProductBatchRecipeDBType, ReadProductBatchRecipeDBType } from "../types";
+import { CreateProductBatchRecipeDBType, ProductBatchFormValueType, ReadProductBatchRecipeDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { authenticateAndRedirect, checkPermissionsAndRedirect, connectAndRedirect } from "../supabaseUtils";
 
 function createProductBatchRecipeArray({
   batchId,
   userId,
-  ingredientBatchIds,
-  ingredientAmounts,
+  values,
   ingredientType,
 }: {
   batchId: number;
   userId: string;
-  ingredientBatchIds: { id: string }[];
-  ingredientAmounts: { amount: number }[];
+  values: ProductBatchFormValueType;
   ingredientType: "commodity" | "product";
 }): CreateProductBatchRecipeDBType[] {
+  const ingredientAmounts = values[`${ingredientType}IngredientAmounts`];
+  const ingredientBatchIds = values[`${ingredientType}IngredientBatchIds`];
+
   if (ingredientAmounts.length !== ingredientBatchIds.length)
     throw new Error("The length of the batch ids and amounts do not match");
 
@@ -31,49 +32,44 @@ function createProductBatchRecipeArray({
 }
 
 export async function createProductBatchRecipe({
-  commodityIngredientBatchIds,
-  commodityIngredientAmounts,
-  productIngredientBatchIds,
-  productIngredientAmounts,
+  values,
   batchId,
 }: {
-  commodityIngredientBatchIds: { id: string }[];
-  commodityIngredientAmounts: { amount: number }[];
-  productIngredientBatchIds: { id: string }[];
-  productIngredientAmounts: { amount: number }[];
+  values: ProductBatchFormValueType;
   batchId: number;
 }): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadProductBatchRecipeDBType[] | null;
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
   await checkPermissionsAndRedirect(supabase, userId);
 
   let dbError: PostgrestError | null = null;
+  let dbData: ReadProductBatchRecipeDBType[] | null = null;
 
   try {
     const newCommodityIngredientsBatchRecipe = createProductBatchRecipeArray({
       batchId,
       userId,
-      ingredientAmounts: commodityIngredientAmounts,
-      ingredientBatchIds: commodityIngredientBatchIds,
+      values,
       ingredientType: "commodity",
     });
     const newProductIngredientsBatchRecipe = createProductBatchRecipeArray({
       batchId,
       userId,
-      ingredientAmounts: productIngredientAmounts,
-      ingredientBatchIds: productIngredientBatchIds,
+      values,
       ingredientType: "product",
     });
-    ({ error: dbError } = await supabase
+    ({ error: dbError, data: dbData } = await supabase
       .from("product_batch_recipe")
       .insert([...newCommodityIngredientsBatchRecipe, ...newProductIngredientsBatchRecipe]));
+    if (dbError) throw new Error(dbError.message);
   } catch (error) {
     console.log(error);
+  } finally {
+    return { dbError, dbData };
   }
-
-  return { dbError };
 }
 
 export async function getAllProductBatchRecipes(supabase?: SupabaseClient) {

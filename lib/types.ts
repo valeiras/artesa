@@ -1,6 +1,6 @@
 import * as z from "zod";
 import validator from "validator";
-import { Database } from "./database.types";
+import { Database, Enums } from "./database.types";
 import React from "react";
 import { DefaultValues, FieldValues, UseFormReturn } from "react-hook-form";
 import { UseMutateFunction, MutationFunction } from "@tanstack/react-query";
@@ -31,8 +31,13 @@ const positiveNumber = z.coerce
   .number({ invalid_type_error: "Especifica la cantidad" })
   .positive({ message: "Especifica una cantidad mayor que 0" });
 
+// export type UnitType = z.infer<typeof unitEnum>;
+// export const unitEnum = z.enum(UnitType);
+export type UnitType = Enums<"unit">;
 export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]);
-export type UnitType = z.infer<typeof unitEnum>;
+
+export type PublicSchema = Database[Extract<keyof Database, "public">];
+export type PublicTableName = keyof PublicSchema["Tables"];
 
 export const productFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
@@ -44,8 +49,6 @@ export type ProductFormValueType = z.infer<typeof productFormSchema>;
 export type ReadProductDBType = Database["public"]["Tables"]["product"]["Row"];
 export type CreateProductDBType = Database["public"]["Tables"]["product"]["Insert"];
 export type UpdateProductDBType = Database["public"]["Tables"]["product"]["Update"];
-
-export type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export const productBatchFormSchema = z.object({
   productId: z.string({ required_error: "Especifica un producto" }),
@@ -144,8 +147,9 @@ export type ReadClientDBType = Database["public"]["Tables"]["client"]["Row"];
 export type CreateClientDBType = Database["public"]["Tables"]["client"]["Insert"];
 export type UpdateClientDBType = Database["public"]["Tables"]["client"]["Update"];
 
+// Article refers to either a commodity or a product
 export const saleFormSchema = z.object({
-  productOrCommodityId: z.string({ required_error: "Especifica un producto o materia prima" }),
+  articleId: z.string({ required_error: "Especifica un producto o materia prima" }),
   batchId: z.string({ required_error: "Especifica un lote" }),
   clientId: z.string({ required_error: "Especifica un cliente" }),
   amount: z.number({ required_error: "Especifica una cantidad" }),
@@ -184,7 +188,7 @@ type BaseRecordFormProps<T extends FieldValues> = {
 };
 
 export type NewRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
-  createRecordFn: (values: T) => Promise<{ dbError: PostgrestError | null }>;
+  createRecordFn: ({ values }: { values: T }) => Promise<{ dbError: PostgrestError | null }>;
 };
 
 export type UpdateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {

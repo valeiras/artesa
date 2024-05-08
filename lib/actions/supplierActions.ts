@@ -1,33 +1,34 @@
 "use server";
 
 import { CreateSupplierDBType, ReadSupplierDBType, UpdateSupplierDBType, SupplierFormValueType } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
-  checkPermissionsAndRedirect,
+  createRecord,
 } from "../supabaseUtils";
 
-export async function createSupplier(values: SupplierFormValueType): Promise<{
+export async function createSupplier({
+  values,
+  supabase,
+}: {
+  values: SupplierFormValueType;
+  supabase?: SupabaseClient;
+}): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadSupplierDBType | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
-
-  const newSupplier: CreateSupplierDBType = {
-    name: values.name,
-    user_id: userId,
-    email: values.email,
-    phone: values.phone,
-    address: values.address,
-  };
-
-  const { error: dbError } = await supabase.from("supplier").insert(newSupplier);
-  return { dbError };
+  return createRecord({
+    values,
+    supabase,
+    tableName: "supplier",
+    formToDatabaseFn: (values, userId) => {
+      return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
+    },
+  });
 }
 
 export async function updateSupplier(
