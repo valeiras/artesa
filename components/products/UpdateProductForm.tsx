@@ -24,6 +24,7 @@ const updateRecordFn = async (values: ProductFormValueType, id: number) => {
 const UpdateProductForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
+
   const { itemData } = dataTableContext;
   if (!isReadProductWithBatchesAndIngredientsType(itemData))
     throw new Error("El tipo de artículo no coincide con el esperado");

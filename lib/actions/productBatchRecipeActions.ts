@@ -126,14 +126,25 @@ export async function getIngredientsWithName(
   return { namedIngredients, ingredientsError: null };
 }
 
-export async function getSingleProductBatchRecipe(productId: number, supabase?: SupabaseClient) {
+export async function getSingleProductBatchRecipe(
+  productBatchId: number,
+  supabase?: SupabaseClient
+): Promise<{ dbData: ReadProductBatchRecipeDBType[] | null; dbError: PostgrestError | null }> {
   if (!supabase) supabase = await connectAndRedirect();
-  const { data: dbData, error: dbError } = await supabase.from("product_recipe").select().eq("product_id", productId);
+  let dbData: ReadProductBatchRecipeDBType[] | null = null;
+  let dbError: PostgrestError | null = null;
+  ({ data: dbData, error: dbError } = await supabase
+    .from("product_batch_recipe")
+    .select()
+    .eq("product_batch_id", productBatchId));
   return { dbData, dbError };
 }
 
-export async function deleteProductBatchRecipe(productId: number, supabase?: SupabaseClient) {
+export async function deleteProductBatchRecipe(productBatchId: number, supabase?: SupabaseClient) {
   if (!supabase) supabase = await connectAndRedirect();
-  const { error: dbError } = await supabase.from("product_recipe").delete().eq("product_id", productId);
+  const { error: dbError } = await supabase
+    .from("product_batch_recipe")
+    .delete()
+    .eq("product_batch_id", productBatchId);
   return { dbError };
 }
