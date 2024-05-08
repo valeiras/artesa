@@ -2,7 +2,7 @@
 
 import { CreateProductRecipeDBType, ReadProductRecipeDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect } from "../supabaseUtils";
+import { authenticateAndRedirect, checkPermissionsAndRedirect, connectAndRedirect } from "../supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 
 function createProductRecipeArray({
@@ -36,6 +36,7 @@ export async function createProductRecipe({
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
 
   const newProductRecipe: CreateProductRecipeDBType[] = createProductRecipeArray({ userId, productId, ingredientIds });
 

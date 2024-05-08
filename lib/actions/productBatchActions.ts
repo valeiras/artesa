@@ -13,6 +13,7 @@ import {
   deleteSingleRecordById,
   deleteRecordsById,
   getAllRecords,
+  checkPermissionsAndRedirect,
 } from "../supabaseUtils";
 import { deleteProductBatchRecipe, deleteProductBatchRecipes } from "./productBatchRecipeActions";
 
@@ -25,6 +26,7 @@ export async function createProductBatch(
 }> {
   const userId = await authenticateAndRedirect();
   if (!supabase) supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
 
   let dbError: PostgrestError | null = null;
   let dbData: ReadProductBatchDBType | null = null;

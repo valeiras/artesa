@@ -2,7 +2,7 @@
 
 import { CreateProductBatchRecipeDBType, ReadProductBatchRecipeDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect } from "../supabaseUtils";
+import { authenticateAndRedirect, checkPermissionsAndRedirect, connectAndRedirect } from "../supabaseUtils";
 
 function createProductBatchRecipeArray({
   batchId,
@@ -37,24 +37,17 @@ export async function createProductBatchRecipe({
   productIngredientAmounts,
   batchId,
 }: {
-  commodityIngredientBatchIds: {
-    id: string;
-  }[];
-  commodityIngredientAmounts: {
-    amount: number;
-  }[];
-  productIngredientBatchIds: {
-    id: string;
-  }[];
-  productIngredientAmounts: {
-    amount: number;
-  }[];
+  commodityIngredientBatchIds: { id: string }[];
+  commodityIngredientAmounts: { amount: number }[];
+  productIngredientBatchIds: { id: string }[];
+  productIngredientAmounts: { amount: number }[];
   batchId: number;
 }): Promise<{
   dbError: PostgrestError | null;
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
 
   let dbError: PostgrestError | null = null;
 

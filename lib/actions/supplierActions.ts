@@ -8,6 +8,7 @@ import {
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
+  checkPermissionsAndRedirect,
 } from "../supabaseUtils";
 
 export async function createSupplier(values: SupplierFormValueType): Promise<{
@@ -15,6 +16,8 @@ export async function createSupplier(values: SupplierFormValueType): Promise<{
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
+
   const newSupplier: CreateSupplierDBType = {
     name: values.name,
     user_id: userId,

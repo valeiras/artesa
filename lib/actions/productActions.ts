@@ -15,6 +15,7 @@ import {
   connectAndRedirect,
   getSingleRecordById,
   deleteSingleRecordById,
+  checkPermissionsAndRedirect,
 } from "../supabaseUtils";
 import { deleteProductRecipe, getAllProductRecipes } from "./productRecipeActions";
 import { deleteAllProductBatchesByProductId, getAllProductBatches } from "./productBatchActions";
@@ -31,6 +32,8 @@ export async function createProduct(
 
   const userId = await authenticateAndRedirect();
   if (!supabase) supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
+
   const newProduct: CreateProductDBType = {
     name: values.name,
     unit: values.unit,

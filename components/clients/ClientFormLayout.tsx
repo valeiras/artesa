@@ -19,7 +19,7 @@ const ClientFormLayout: RecordFormType<ClientFormValueType> = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="bg-muted p-8 rounded">
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
-        <div className="from-content">
+        <div className="form-content">
           <CustomFormField name="name" control={form.control} label="Nombre del cliente" placeholder="Cliente" />
           <CustomFormField name="email" control={form.control} label="Email" placeholder="cliente@mail.es" />
           <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />

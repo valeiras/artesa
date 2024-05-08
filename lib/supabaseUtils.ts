@@ -23,6 +23,13 @@ export async function connectAndRedirect() {
   return supabase;
 }
 
+export async function checkPermissionsAndRedirect(supabase: SupabaseClient, userId: string) {
+  const { data } = await supabase.from("user_roles").select("role").maybeSingle();
+  if (!data?.role || data.role === "minimum") {
+    redirect("/");
+  }
+}
+
 export function isPostgresError(data: any): data is PostgrestError {
   return data && (data as PostgrestError).message !== undefined;
 }

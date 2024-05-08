@@ -9,6 +9,7 @@ import {
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
+  checkPermissionsAndRedirect,
   connectAndRedirect,
   deleteRecordsById,
   deleteSingleRecordById,
@@ -23,6 +24,7 @@ export async function createCommodityBatch(
 }> {
   const userId = await authenticateAndRedirect();
   if (!supabase) supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
 
   const newCommodityBatch: CreateCommodityBatchDBType = {
     commodity_id: values.commodityId,

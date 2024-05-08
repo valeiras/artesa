@@ -8,6 +8,7 @@ import {
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
+  checkPermissionsAndRedirect,
 } from "../supabaseUtils";
 
 export async function createClient(values: ClientFormValueType): Promise<{
@@ -15,6 +16,8 @@ export async function createClient(values: ClientFormValueType): Promise<{
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
+
   const newClient: CreateClientDBType = {
     name: values.name,
     user_id: userId,

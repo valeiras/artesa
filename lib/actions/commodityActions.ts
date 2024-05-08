@@ -15,6 +15,7 @@ import {
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
+  checkPermissionsAndRedirect,
 } from "../supabaseUtils";
 import { deleteAllCommodityBatchesByCommodityId, getAllCommodityBatches } from "./commodityBatchActions";
 
@@ -26,6 +27,8 @@ export async function createCommodity(
 }> {
   const userId = await authenticateAndRedirect();
   if (!supabase) supabase = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
+
   const newCommodity: CreateCommodityDBType = {
     name: values.name,
     unit: values.unit,
