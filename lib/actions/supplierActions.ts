@@ -9,7 +9,12 @@ import {
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
+  updateRecord,
 } from "../supabaseUtils";
+
+function formToDatabaseFn(values: SupplierFormValueType, userId: string) {
+  return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
+}
 
 export async function createSupplier({ values }: { values: SupplierFormValueType }): Promise<{
   dbError: PostgrestError | null;
@@ -18,30 +23,26 @@ export async function createSupplier({ values }: { values: SupplierFormValueType
   return createRecord({
     values,
     tableName: "supplier",
-    formToDatabaseFn: (values, userId) => {
-      return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
-    },
+    formToDatabaseFn,
   });
 }
 
-export async function updateSupplier(
-  values: SupplierFormValueType,
-  id: number
-): Promise<{
+export async function updateSupplier({
+  values,
+  recordId,
+}: {
+  values: SupplierFormValueType;
+  recordId: number;
+}): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadSupplierDBType | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
-  const updatedSupplier: UpdateSupplierDBType = {
-    name: values.name,
-    user_id: userId,
-    email: values.email,
-    phone: values.phone,
-    address: values.address,
-  };
-
-  const { error: dbError } = await supabase.from("supplier").update(updatedSupplier).eq("id", id);
-  return { dbError };
+  return updateRecord({
+    values,
+    tableName: "supplier",
+    formToDatabaseFn,
+    recordId,
+  });
 }
 
 export async function getAllSuppliers() {

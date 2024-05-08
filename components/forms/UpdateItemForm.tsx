@@ -23,7 +23,7 @@ function UpdateItemForm<T extends FieldValues>({
       defaultValues={defaultValues}
       successToastMessage={successToastMessage}
       queryKeys={queryKeys}
-      mutationFn={(values: T) => updateRecordFn(values, itemData.id)}
+      mutationFn={(values: T) => updateRecordFn({ values, recordId: itemData.id })}
       formHeader={formHeader}
       FormLayout={FormLayout}
       setIsDialogOpen={setIsUpdateItemDialogOpen}

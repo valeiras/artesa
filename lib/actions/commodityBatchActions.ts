@@ -4,45 +4,16 @@ import { UpdateCommodityBatchDBType, CommodityBatchFormValueType, ReadCommodityB
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
   authenticateAndRedirect,
-  checkPermissionsAndRedirect,
   connectAndRedirect,
   createRecord,
   deleteRecordsById,
   deleteSingleRecordById,
   getAllRecords,
+  updateRecord,
 } from "../supabaseUtils";
 
-export async function createCommodityBatch({ values }: { values: CommodityBatchFormValueType }): Promise<{
-  dbError: PostgrestError | null;
-  dbData: ReadCommodityBatchDBType | null;
-}> {
-  return createRecord({
-    values,
-    tableName: "commodity_batch",
-    formToDatabaseFn: (values, userId) => {
-      return {
-        commodity_id: values.commodityId,
-        date: values.date.toISOString(),
-        initial_amount: values.initialAmount,
-        external_id: values.externalId,
-        supplier_id: parseInt(values.supplierId),
-        comments: values.comments,
-        user_id: userId,
-      };
-    },
-  });
-}
-
-export async function updateCommodityBatch(
-  values: CommodityBatchFormValueType,
-  id: number,
-  supabase?: SupabaseClient
-): Promise<{
-  dbError: PostgrestError | null;
-}> {
-  const userId = await authenticateAndRedirect();
-  if (!supabase) supabase = await connectAndRedirect();
-  const updatedCommodityBatch: UpdateCommodityBatchDBType = {
+function formToDatabaseFn(values: CommodityBatchFormValueType, userId: string) {
+  return {
     commodity_id: values.commodityId,
     date: values.date.toISOString(),
     initial_amount: values.initialAmount,
@@ -51,9 +22,35 @@ export async function updateCommodityBatch(
     comments: values.comments,
     user_id: userId,
   };
+}
 
-  const { error: dbError } = await supabase.from("commodity_batch").update(updatedCommodityBatch).eq("id", id);
-  return { dbError };
+export async function createCommodityBatch({ values }: { values: CommodityBatchFormValueType }): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadCommodityBatchDBType | null;
+}> {
+  return createRecord({
+    values,
+    tableName: "commodity_batch",
+    formToDatabaseFn,
+  });
+}
+
+export async function updateCommodityBatch({
+  values,
+  recordId,
+}: {
+  values: CommodityBatchFormValueType;
+  recordId: number;
+}): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadCommodityBatchDBType | null;
+}> {
+  return updateRecord({
+    values,
+    tableName: "commodity_batch",
+    formToDatabaseFn,
+    recordId,
+  });
 }
 
 export async function deleteCommodityBatch(id: number, supabase?: SupabaseClient) {

@@ -9,7 +9,12 @@ import {
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
+  updateRecord,
 } from "../supabaseUtils";
+
+function formToDatabaseFn(values: ClientFormValueType, userId: string) {
+  return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
+}
 
 export async function createClient({ values }: { values: ClientFormValueType }): Promise<{
   dbError: PostgrestError | null;
@@ -18,31 +23,20 @@ export async function createClient({ values }: { values: ClientFormValueType }):
   return createRecord({
     values,
     tableName: "client",
-    formToDatabaseFn: (values, userId) => {
-      return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
-    },
+    formToDatabaseFn,
   });
 }
 
-export async function updateClient(
-  values: ClientFormValueType,
-  id: number
-): Promise<{
+export async function updateClient({ values, recordId }: { values: ClientFormValueType; recordId: number }): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadClientDBType | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
-
-  const updatedClient: UpdateClientDBType = {
-    name: values.name,
-    user_id: userId,
-    email: values.email,
-    phone: values.phone,
-    address: values.address,
-  };
-
-  const { error: dbError } = await supabase.from("client").update(updatedClient).eq("id", id);
-  return { dbError };
+  return updateRecord({
+    values,
+    tableName: "client",
+    formToDatabaseFn,
+    recordId,
+  });
 }
 
 export async function getAllClients() {

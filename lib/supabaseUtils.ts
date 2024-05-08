@@ -32,18 +32,6 @@ export async function checkPermissionsAndRedirect(supabase: SupabaseClient, user
   }
 }
 
-export async function authenticateConnectCheckPermissionAndRedirect(supabase?: SupabaseClient) {
-  const userId = await authenticateAndRedirect();
-  if (!supabase) supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
-
-  return { userId, supabase };
-}
-
-export function isPostgresError(data: any): data is PostgrestError {
-  return data && (data as PostgrestError).message !== undefined;
-}
-
 export async function getAllRecords(tableName: PublicTableName, supabase?: SupabaseClient) {
   if (!supabase) supabase = await connectAndRedirect();
 
@@ -93,6 +81,44 @@ export async function createRecord<TForm extends FieldValues, TTable extends Pub
 
   try {
     ({ error: dbError, data: dbData } = await supabase.from(tableName).insert(newRecord).select().maybeSingle());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbError, dbData };
+  }
+}
+
+export async function updateRecord<TForm extends FieldValues, TTable extends PublicTableName>({
+  values,
+  formToDatabaseFn,
+  tableName,
+  recordId,
+}: {
+  values: TForm;
+  formToDatabaseFn: (values: TForm, userId: string) => TablesInsert<TTable>;
+  tableName: TTable;
+  recordId: number;
+}): Promise<{
+  dbError: PostgrestError | null;
+  dbData: Tables<TTable> | null;
+}> {
+  const userId = await authenticateAndRedirect();
+  const supabase: SupabaseClient = await connectAndRedirect();
+  await checkPermissionsAndRedirect(supabase, userId);
+
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable> | null = null;
+
+  const newRecord: TablesInsert<TTable> = formToDatabaseFn(values, userId);
+
+  try {
+    ({ error: dbError, data: dbData } = await supabase
+      .from(tableName)
+      .update(newRecord)
+      .eq("id", recordId)
+      .select()
+      .maybeSingle());
     if (dbError) throw new Error(dbError.message);
   } catch (error) {
     console.log(error);

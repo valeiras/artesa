@@ -24,7 +24,7 @@ function UpdateBatchForm<T extends FieldValues>({
       defaultValues={defaultValues}
       successToastMessage={successToastMessage}
       queryKeys={queryKeys}
-      mutationFn={(values: T) => updateRecordFn(values, batchData.id)}
+      mutationFn={(values: T) => updateRecordFn({ values, recordId: batchData.id })}
       formHeader={formHeader}
       FormLayout={FormLayout}
       setIsDialogOpen={setIsUpdateBatchDialogOpen}

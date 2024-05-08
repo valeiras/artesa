@@ -192,7 +192,13 @@ export type NewRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> &
 };
 
 export type UpdateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
-  updateRecordFn: (values: T, id: number) => Promise<{ dbError: PostgrestError | null }>;
+  updateRecordFn: ({
+    values,
+    recordId,
+  }: {
+    values: T;
+    recordId: number;
+  }) => Promise<{ dbError: PostgrestError | null }>;
 };
 
 export type MutateRecordFormProps<T extends FieldValues> = BaseRecordFormProps<T> & {
@@ -288,5 +294,15 @@ export function isReadProductWithBatchesAndIngredientsType(
     "batches" in record &&
     "product_ingredients" in record &&
     "commodity_ingredients" in record
+  );
+}
+
+export function isPostgrestError(error: any): error is PostgrestError {
+  return (
+    error &&
+    (error as PostgrestError).message !== undefined &&
+    (error as PostgrestError).details !== undefined &&
+    (error as PostgrestError).hint !== undefined &&
+    (error as PostgrestError).code !== undefined
   );
 }

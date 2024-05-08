@@ -15,9 +15,14 @@ import {
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
+  updateRecord,
 } from "../supabaseUtils";
 import { deleteProductRecipe, getAllProductRecipes } from "./productRecipeActions";
 import { deleteAllProductBatchesByProductId, getAllProductBatches } from "./productBatchActions";
+
+function formToDatabaseFn(values: ProductFormValueType, userId: string) {
+  return { name: values.name, unit: values.unit, user_id: userId };
+}
 
 export async function createProduct({ values }: { values: ProductFormValueType }): Promise<{
   dbError: PostgrestError | null;
@@ -26,37 +31,20 @@ export async function createProduct({ values }: { values: ProductFormValueType }
   return createRecord({
     values,
     tableName: "product",
-    formToDatabaseFn: (values, userId) => {
-      return { name: values.name, unit: values.unit, user_id: userId };
-    },
+    formToDatabaseFn,
   });
 }
 
-export async function updateProduct(
-  values: ProductFormValueType,
-  productId: number
-): Promise<{
+export async function updateProduct({ values, recordId }: { values: ProductFormValueType; recordId: number }): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductDBType | null;
 }> {
-  let dbError: PostgrestError | null = null;
-  let dbData: ReadProductDBType | null = null;
-
-  const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
-  const updatedProduct: UpdateProductDBType = {
-    name: values.name,
-    unit: values.unit,
-    user_id: userId,
-  };
-
-  try {
-    ({ error: dbError, data: dbData } = await supabase.from("product").update(updatedProduct).eq("id", productId));
-  } catch (error) {
-    console.log(error);
-    dbData = null;
-  }
-  return { dbError, dbData };
+  return updateRecord({
+    values,
+    tableName: "product",
+    formToDatabaseFn,
+    recordId,
+  });
 }
 
 export async function getAllProducts(supabase?: SupabaseClient): Promise<{

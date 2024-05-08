@@ -1,16 +1,27 @@
 "use server";
 
-import { UpdateProductBatchDBType, ProductBatchFormValueType, ReadProductBatchDBType } from "../types";
+import { ProductBatchFormValueType, ReadProductBatchDBType } from "../types";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import {
-  authenticateAndRedirect,
   connectAndRedirect,
   deleteSingleRecordById,
   deleteRecordsById,
   getAllRecords,
   createRecord,
+  updateRecord,
 } from "../supabaseUtils";
 import { deleteProductBatchRecipe, deleteProductBatchRecipes } from "./productBatchRecipeActions";
+
+function formToDatabaseFn(values: ProductBatchFormValueType, userId: string) {
+  return {
+    product_id: parseInt(values.productId),
+    date: values.date.toISOString(),
+    initial_amount: values.initialAmount,
+    external_id: values.externalId,
+    comments: values.comments,
+    user_id: userId,
+  };
+}
 
 export async function createProductBatch({ values }: { values: ProductBatchFormValueType }): Promise<{
   dbError: PostgrestError | null;
@@ -19,47 +30,26 @@ export async function createProductBatch({ values }: { values: ProductBatchFormV
   return createRecord({
     values,
     tableName: "product_batch",
-    formToDatabaseFn: (values, userId) => {
-      return {
-        product_id: parseInt(values.productId),
-        date: values.date.toISOString(),
-        initial_amount: values.initialAmount,
-        external_id: values.externalId,
-        comments: values.comments,
-        user_id: userId,
-      };
-    },
+    formToDatabaseFn,
   });
 }
 
-export async function updateProductBatch(
-  values: ProductBatchFormValueType,
-  id: number
-): Promise<{
+export async function updateProductBatch({
+  values,
+  recordId,
+}: {
+  values: ProductBatchFormValueType;
+  recordId: number;
+}): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductBatchDBType | null;
 }> {
-  let dbError: PostgrestError | null = null;
-  let dbData: ReadProductBatchDBType | null = null;
-
-  const userId = await authenticateAndRedirect();
-  const supabase = await connectAndRedirect();
-
-  try {
-    const updatedProductBatch: UpdateProductBatchDBType = {
-      product_id: parseInt(values.productId),
-      date: values.date.toISOString(),
-      initial_amount: values.initialAmount,
-      external_id: values.externalId,
-      comments: values.comments,
-      user_id: userId,
-    };
-
-    ({ error: dbError, data: dbData } = await supabase.from("product_batch").update(updatedProductBatch).eq("id", id));
-  } catch (error) {
-    console.log(error);
-  }
-  return { dbError, dbData };
+  return updateRecord({
+    values,
+    tableName: "product_batch",
+    formToDatabaseFn,
+    recordId,
+  });
 }
 
 export async function deleteProductBatch(

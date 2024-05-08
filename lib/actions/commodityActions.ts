@@ -15,8 +15,13 @@ import {
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
+  updateRecord,
 } from "../supabaseUtils";
 import { deleteAllCommodityBatchesByCommodityId, getAllCommodityBatches } from "./commodityBatchActions";
+
+function formToDatabaseFn(values: CommodityFormValueType, userId: string) {
+  return { name: values.name, unit: values.unit, user_id: userId };
+}
 
 export async function createCommodity({ values }: { values: CommodityFormValueType }): Promise<{
   dbError: PostgrestError | null;
@@ -25,29 +30,25 @@ export async function createCommodity({ values }: { values: CommodityFormValueTy
   return createRecord({
     values,
     tableName: "commodity",
-    formToDatabaseFn: (values, userId) => {
-      return { name: values.name, unit: values.unit, user_id: userId };
-    },
+    formToDatabaseFn,
   });
 }
 
-export async function updateCommodity(
-  values: CommodityFormValueType,
-  id: number,
-  supabase?: SupabaseClient
-): Promise<{
+export async function updateCommodity({
+  values,
+  recordId,
+}: {
+  values: CommodityFormValueType;
+  recordId: number;
+}): Promise<{
   dbError: PostgrestError | null;
 }> {
-  const userId = await authenticateAndRedirect();
-  if (!supabase) supabase = await connectAndRedirect();
-  const updatedCommodity: UpdateCommodityDBType = {
-    name: values.name,
-    unit: values.unit,
-    user_id: userId,
-  };
-
-  const { error: dbError } = await supabase.from("commodity").update(updatedCommodity).eq("id", id);
-  return { dbError };
+  return updateRecord({
+    values,
+    tableName: "commodity",
+    formToDatabaseFn,
+    recordId,
+  });
 }
 
 export async function getAllCommodities(supabase?: SupabaseClient) {

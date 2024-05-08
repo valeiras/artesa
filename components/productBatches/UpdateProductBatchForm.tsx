@@ -20,13 +20,13 @@ import {
   getSingleProductBatchRecipe,
 } from "@/lib/actions/productBatchRecipeActions";
 
-const updateRecordFn = async (values: ProductBatchFormValueType, productBatchId: number) => {
-  const { dbError: dbErrorProduct, dbData } = await updateProductBatch(values, productBatchId);
+const updateRecordFn = async ({ values, recordId }: { values: ProductBatchFormValueType; recordId: number }) => {
+  const { dbError: dbErrorProduct } = await updateProductBatch({ values, recordId });
   if (dbErrorProduct) return { dbError: dbErrorProduct };
 
   // TODO: improve this: we shouldn't blindly remove everything and create it again
-  await deleteProductBatchRecipe(productBatchId);
-  const { dbError: dbErrorRecipe } = await createProductBatchRecipe({ values, batchId: productBatchId });
+  await deleteProductBatchRecipe(recordId);
+  const { dbError: dbErrorRecipe } = await createProductBatchRecipe({ values, batchId: recordId });
   return { dbError: dbErrorRecipe };
 };
 
