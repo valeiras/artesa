@@ -49,20 +49,29 @@ export async function updateProductBatch(
   id: number
 ): Promise<{
   dbError: PostgrestError | null;
+  dbData: ReadProductBatchDBType | null;
 }> {
+  let dbError: PostgrestError | null = null;
+  let dbData: ReadProductBatchDBType | null = null;
+
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
-  const updatedProductBatch: UpdateProductBatchDBType = {
-    product_id: parseInt(values.productId),
-    date: values.date.toISOString(),
-    initial_amount: values.initialAmount,
-    external_id: values.externalId,
-    comments: values.comments,
-    user_id: userId,
-  };
 
-  const { error: dbError } = await supabase.from("product_batch").update(updatedProductBatch).eq("id", id);
-  return { dbError };
+  try {
+    const updatedProductBatch: UpdateProductBatchDBType = {
+      product_id: parseInt(values.productId),
+      date: values.date.toISOString(),
+      initial_amount: values.initialAmount,
+      external_id: values.externalId,
+      comments: values.comments,
+      user_id: userId,
+    };
+
+    ({ error: dbError, data: dbData } = await supabase.from("product_batch").update(updatedProductBatch).eq("id", id));
+  } catch (error) {
+    console.log(error);
+  }
+  return { dbError, dbData };
 }
 
 export async function deleteProductBatch(id: number, supabase?: SupabaseClient) {

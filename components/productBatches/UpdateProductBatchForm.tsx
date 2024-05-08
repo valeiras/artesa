@@ -14,7 +14,28 @@ import { updateProductBatch } from "@/lib/actions/productBatchActions";
 import { useDataTableContext } from "@/components/dataTable";
 import ProductBatchFormLayout from "./ProductBatchFormLayout";
 import { useQuery } from "@tanstack/react-query";
-import { getSingleProductBatchRecipe } from "@/lib/actions/productBatchRecipeActions";
+import {
+  createProductBatchRecipe,
+  deleteProductBatchRecipe,
+  getSingleProductBatchRecipe,
+} from "@/lib/actions/productBatchRecipeActions";
+
+const updateRecordFn = async (values: ProductBatchFormValueType, productBatchId: number) => {
+  console.log(productBatchId);
+  const { dbError: dbErrorProduct, dbData } = await updateProductBatch(values, productBatchId);
+  if (dbErrorProduct) return { dbError: dbErrorProduct };
+
+  // TODO: improve this: we shouldn't blindly remove everything and create it again
+  await deleteProductBatchRecipe(productBatchId);
+  const { dbError: dbErrorRecipe } = await createProductBatchRecipe({
+    commodityIngredientBatchIds: values.commodityIngredientBatchIds,
+    commodityIngredientAmounts: values.commodityIngredientAmounts,
+    productIngredientBatchIds: values.productIngredientBatchIds,
+    productIngredientAmounts: values.productIngredientAmounts,
+    batchId: productBatchId,
+  });
+  return { dbError: dbErrorRecipe };
+};
 
 const UpdateProductBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -26,7 +47,7 @@ const UpdateProductBatchForm: React.FC = () => {
   if (!isReadProductBatchDBType(batchData)) throw new Error("El tipo de lote no coincide con el esperado");
 
   const { data: productBatchRecipeData, isPending: isProductBatchRecipeDataPending } = useQuery({
-    queryKey: ["commoditiesWithBatches", batchData.id],
+    queryKey: ["batchRecipe", String(batchData.id)],
     queryFn: () => getSingleProductBatchRecipe(batchData.id),
   });
 
@@ -52,15 +73,20 @@ const UpdateProductBatchForm: React.FC = () => {
     comments: batchData.comments || "",
   };
 
-  console.log(defaultValues);
   return (
     <UpdateBatchForm<ProductBatchFormValueType>
       formSchema={productBatchFormSchema}
       defaultValues={defaultValues}
       successToastMessage="Lote actualizado con éxito"
-      queryKeys={[["product", String(itemData.id)], ["productsWithBatchesAndIngredients"], ["stats"], ["charts"]]}
+      queryKeys={[
+        ["product", String(itemData.id)],
+        ["batchRecipe", String(batchData.id)],
+        ["productsWithBatchesAndIngredients"],
+        ["stats"],
+        ["charts"],
+      ]}
       formHeader="Editar lote"
-      updateRecordFn={updateProductBatch}
+      updateRecordFn={updateRecordFn}
       FormLayout={ProductBatchFormLayout}
     />
   );

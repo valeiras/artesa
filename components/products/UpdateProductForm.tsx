@@ -8,15 +8,15 @@ import ProductForm from "./ProductFormLayout";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
 import { createProductRecipe, deleteProductRecipe } from "@/lib/actions/productRecipeActions";
 
-const updateRecordFn = async (values: ProductFormValueType, id: number) => {
-  const { dbError: dbErrorProduct, dbData } = await updateProduct(values, id);
+const updateRecordFn = async (values: ProductFormValueType, productId: number) => {
+  const { dbError: dbErrorProduct, dbData } = await updateProduct(values, productId);
   if (dbErrorProduct) return { dbError: dbErrorProduct };
 
   // TODO: improve this: we shouldn't blindly remove everything and create it again
-  await deleteProductRecipe(id);
+  await deleteProductRecipe(productId);
   const { dbError: dbErrorRecipe } = await createProductRecipe({
     ingredientIds: values.ingredientIds,
-    productId: id,
+    productId,
   });
   return { dbError: dbErrorRecipe };
 };
