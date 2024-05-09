@@ -30,11 +30,11 @@ const UpdateProductForm: React.FC = () => {
     throw new Error("El tipo de artículo no coincide con el esperado");
 
   const ingredientIds = [
-    ...itemData.commodity_ingredients.map(({ ingredient_id }) => {
-      return { id: `${COMMODITY_PREFIX}${ingredient_id}` };
+    ...itemData.commodity_ingredients.map(({ id }) => {
+      return { id: `${COMMODITY_PREFIX}${id}` };
     }),
-    ...itemData.product_ingredients.map(({ ingredient_id }) => {
-      return { id: `${PRODUCT_PREFIX}${ingredient_id}` };
+    ...itemData.product_ingredients.map(({ id }) => {
+      return { id: `${PRODUCT_PREFIX}${id}` };
     }),
   ];
 

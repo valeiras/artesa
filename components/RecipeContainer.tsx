@@ -11,10 +11,10 @@ function RecipeContainer({ itemData }: { itemData: ReadProductWithBatchesAndIngr
         <div className="p-2 w-48">
           {allIngredients.length === 0
             ? "Sin ingredientes"
-            : allIngredients.map(({ ingredient_id, ingredient_name }, idx) => (
-                <React.Fragment key={ingredient_id}>
+            : allIngredients.map(({ id, name }, idx) => (
+                <React.Fragment key={id}>
                   {idx !== 0 && <Separator className="my-2" />}
-                  {ingredient_name}
+                  {name}
                 </React.Fragment>
               ))}
         </div>

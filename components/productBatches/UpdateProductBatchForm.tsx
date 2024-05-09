@@ -145,7 +145,7 @@ const createDefaultArray = ({
   ingredients: ReadProductBatchIngredientDBType[] | undefined;
   outputField: "amount" | "id";
   inputField: "used_amount" | "commodity_ingredient_batch_id" | "product_ingredient_batch_id";
-  itemDataIngredients: { ingredient_id: string; ingredient_name: string }[];
+  itemDataIngredients: { id: string; name: string }[];
   defaultValue: 0 | "";
 }) => {
   return ingredients

@@ -16,7 +16,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   form,
 }: {
   itemId: number;
-  ingredients: { ingredient_id: string; ingredient_name: string }[];
+  ingredients: { id: string; name: string }[];
   getBatches: ({
     recordIds,
   }: {
@@ -27,7 +27,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   ingredientType: "product" | "commodity";
   form: UseFormReturn<ProductBatchFormValueType>;
 }) {
-  const ingredientIds = ingredients.map(({ ingredient_id }) => parseInt(ingredient_id));
+  const ingredientIds = ingredients.map(({ id }) => parseInt(id));
 
   const { data: batchesData, isPending: isBatchesDataPending } = useQuery({
     queryKey: [`${ingredientType}Batches`],
@@ -36,7 +36,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 
   const ingredientsWithBatches = ingredients.map((it) => {
     const batches = batchesData?.dbData
-      ?.filter((batch) => batch[idVar] === parseInt(it.ingredient_id))
+      ?.filter((batch) => batch[idVar] === parseInt(it.id))
       .map(({ id, external_id }) => {
         return { id, external_id };
       });
@@ -54,10 +54,10 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   return (
     <>
       <div className="flex flex-col gap-5 justify-between">
-        {ingredientsWithBatches.map(({ ingredient_name, ingredient_id }) => {
+        {ingredientsWithBatches.map(({ name, id }) => {
           return (
-            <div className="fake-input" key={`${prefix}${ingredient_id}`}>
-              {ingredient_name}:
+            <div className="fake-input" key={`${prefix}${id}`}>
+              {name}:
             </div>
           );
         })}

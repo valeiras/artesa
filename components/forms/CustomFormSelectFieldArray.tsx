@@ -37,7 +37,7 @@ function CustomFormSelectFieldArray<T extends FieldValues>({
 
   return (
     <FormItem className={cn("flex flex-col h-full justify-between relative gap-5", className)}>
-      {label && <FormLabel className="text-sm font-medium leading-none">{label}</FormLabel>}
+      {label && <FormLabel className="text-sm font-medium leading-none -mb-5">{label}</FormLabel>}
       {fields.map((field, index) => {
         return (
           <div key={field.id} className="flex flex-row gap-1 items-center">

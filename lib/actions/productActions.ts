@@ -5,6 +5,7 @@ import {
   ProductFormValueType,
   ReadProductWithBatchesAndIngredientsType,
   ReadProductWithBatchesType,
+  TempReadIngredientsType,
 } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
@@ -75,12 +76,25 @@ export async function getAllProductsWithBatchesAndIngredients(): Promise<{
 }> {
   const supabase = await connectAndRedirect();
   let dbData: ReadProductWithBatchesAndIngredientsType[] | null = null;
+  let tempData: (ReadProductWithBatchesType & TempReadIngredientsType)[] | null = null;
   let dbError: PostgrestError | null = null;
 
   try {
-    ({ data: dbData, error: dbError } = await supabase.from("products").select(`*, batches:product_batches (*), 
-                                                                                product_ingredientes:products(ingredient_id:id, ingredient_name:name), 
-                                                                                commodity_ingredientes:commodities(ingredient_id:id, ingredient_name:name)`));
+    ({ data: tempData, error: dbError } = await supabase.from("products").select(`*, batches:product_batches (*), 
+                                                                                commodity_ingredients:product_ingredients!product_id(commodities(id, name)),
+                                                                                product_ingredients:product_ingredients!product_id(products!product_ingredient_id(id, name))`));
+
+    // TODO: this must be doable with the query
+    dbData =
+      tempData?.map((product) => {
+        const commodity_ingredients = product.commodity_ingredients
+          .filter(({ commodities }) => commodities)
+          .map(({ commodities }) => commodities);
+        const product_ingredients = product.product_ingredients
+          .filter(({ products }) => products)
+          .map(({ products }) => products);
+        return { ...product, commodity_ingredients, product_ingredients };
+      }) || null;
     if (dbError) throw new Error(dbError.message);
   } catch (error) {
     console.log(error);

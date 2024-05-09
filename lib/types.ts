@@ -72,15 +72,17 @@ export type ReadProductWithBatchesType = ReadProductDBType & {
   batches: ReadProductBatchDBType[];
 };
 
-export type ReadProductWithBatchesAndIngredientsType = ReadProductWithBatchesType & {
-  product_ingredients: { ingredient_id: string; ingredient_name: string }[];
-  commodity_ingredients: { ingredient_id: string; ingredient_name: string }[];
+export type TempReadIngredientsType = {
+  product_ingredients: { products: { id: string; name: string } }[];
+  commodity_ingredients: { commodities: { id: string; name: string } }[];
 };
 
-export type ReadProductWithIngredientsType = ReadProductDBType & {
-  product_ingredients: { ingredient_id: string; ingredient_name: string }[];
-  commodity_ingredients: { ingredient_id: string; ingredient_name: string }[];
+export type ReadIngredientsType = {
+  product_ingredients: { id: string; name: string }[];
+  commodity_ingredients: { id: string; name: string }[];
 };
+export type ReadProductWithBatchesAndIngredientsType = ReadProductWithBatchesType & ReadIngredientsType;
+export type ReadProductWithIngredientsType = ReadProductDBType & ReadIngredientsType;
 
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
