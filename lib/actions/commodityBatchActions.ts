@@ -7,7 +7,8 @@ import {
   createRecord,
   deleteSingleRecordById,
   getAllRecords,
-  getRecordsByIds,
+  getRecordsByFieldArray,
+  getRecordsByIdArray,
   updateRecord,
 } from "../supabaseUtils";
 
@@ -68,7 +69,7 @@ export async function getCommodityBatchesByIds({
 }: {
   recordIds: number[];
 }): Promise<{ dbData: ReadCommodityBatchDBType[] | null; dbError: PostgrestError | null }> {
-  return getRecordsByIds({ tableName: "commodity_batches", recordIds });
+  return getRecordsByFieldArray({ tableName: "commodity_batches", fieldName: "commodity_id", fieldValues: recordIds });
 }
 
 export async function getCommodityId({

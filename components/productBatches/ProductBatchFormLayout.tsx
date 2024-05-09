@@ -46,7 +46,6 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
             <IngredientsSection
               ingredientType="commodity"
               ingredients={itemData.commodity_ingredients}
-              itemId={itemData.id}
               getBatches={getCommodityBatchesByIds}
               idVar="commodity_id"
               prefix={COMMODITY_PREFIX}
@@ -55,7 +54,6 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
             <IngredientsSection
               ingredientType="product"
               ingredients={itemData.product_ingredients}
-              itemId={itemData.id}
               getBatches={getProductBatchesByIds}
               idVar="product_id"
               prefix={PRODUCT_PREFIX}

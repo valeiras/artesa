@@ -90,9 +90,9 @@ function createProductRecipeArray({
   return ingredientIds.map(({ id }) => {
     const newIngredient: CreateProductIngredientDBType = { product_id: productId, user_id: userId };
     if (id.startsWith(COMMODITY_PREFIX)) {
-      newIngredient.commodity_id = parseInt(id.replace(COMMODITY_PREFIX, ""));
+      newIngredient.commodity_ingredient_id = parseInt(id.replace(COMMODITY_PREFIX, ""));
     } else {
-      newIngredient.product_id = parseInt(id.replace(PRODUCT_PREFIX, ""));
+      newIngredient.product_ingredient_id = parseInt(id.replace(PRODUCT_PREFIX, ""));
     }
     return newIngredient;
   });

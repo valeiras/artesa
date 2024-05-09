@@ -8,7 +8,7 @@ import {
   getAllRecords,
   createRecord,
   updateRecord,
-  getRecordsByIds,
+  getRecordsByFieldArray,
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductBatchFormValueType; userId: string }) {
@@ -67,7 +67,7 @@ export async function getProductBatchesByIds({
 }: {
   recordIds: number[];
 }): Promise<{ dbData: ReadProductBatchDBType[] | null; dbError: PostgrestError | null }> {
-  return getRecordsByIds({ tableName: "product_batches", recordIds });
+  return getRecordsByFieldArray({ tableName: "product_batches", fieldName: "product_id", fieldValues: recordIds });
 }
 
 export async function getProductId({

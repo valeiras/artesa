@@ -73,7 +73,7 @@ export async function getSingleRecordById<TTable extends PublicTableName>({
   }
 }
 
-export async function getRecordsByIds<TTable extends PublicTableName>({
+export async function getRecordsByIdArray<TTable extends PublicTableName>({
   tableName,
   recordIds,
 }: {
@@ -96,6 +96,62 @@ export async function getRecordsByIds<TTable extends PublicTableName>({
     console.log(error);
   } finally {
     return { dbData, dbError };
+  }
+}
+
+export async function getRecordsByField<TTable extends PublicTableName, TField extends keyof Tables<TTable>>({
+  tableName,
+  fieldName,
+  fieldValue,
+}: {
+  tableName: TTable;
+  fieldName: string & TField;
+  fieldValue: NonNullable<Tables<TTable>[TField]>;
+}): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable>[] | null = null;
+
+  try {
+    ({ error: dbError, data: dbData } = await supabase
+      .from(tableName)
+      .select()
+      .eq(fieldName, fieldValue)
+      .returns<Tables<TTable>[]>());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbError, dbData };
+  }
+}
+
+export async function getRecordsByFieldArray<TTable extends PublicTableName, TField extends keyof Tables<TTable>>({
+  tableName,
+  fieldName,
+  fieldValues,
+}: {
+  tableName: TTable;
+  fieldName: string & TField;
+  fieldValues: NonNullable<Tables<TTable>[TField][]>;
+}): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable>[] | null = null;
+
+  try {
+    ({ error: dbError, data: dbData } = await supabase
+      .from(tableName)
+      .select()
+      .in(fieldName, fieldValues)
+      .returns<Tables<TTable>[]>());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbError, dbData };
   }
 }
 

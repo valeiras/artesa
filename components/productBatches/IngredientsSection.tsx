@@ -7,7 +7,6 @@ import { CustomFormSelectFieldArray, CustomFormFieldArray } from "../forms";
 import { UseFormReturn } from "react-hook-form";
 
 function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatchDBType>({
-  itemId,
   ingredients,
   getBatches,
   idVar,
@@ -15,7 +14,6 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   ingredientType,
   form,
 }: {
-  itemId: number;
   ingredients: { id: string; name: string }[];
   getBatches: ({
     recordIds,
@@ -33,6 +31,8 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
     queryKey: [`${ingredientType}Batches`],
     queryFn: () => getBatches({ recordIds: ingredientIds }),
   });
+
+  if (isBatchesDataPending) return <h2>Cargando...</h2>;
 
   const ingredientsWithBatches = ingredients.map((it) => {
     const batches = batchesData?.dbData
