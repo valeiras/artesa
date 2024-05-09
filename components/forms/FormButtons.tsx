@@ -28,6 +28,7 @@ const FormButtons: React.FC<Props> = ({ isPending, submitButtonLabel, setIsFormO
         className="w-32 flex flex-row justify-center gap-x-1 px-2"
         type="button"
         onClick={() => setIsFormOpen(false)}
+        disabled={isPending}
       >
         <X strokeWidth={1.5} />
         {isPending ? <span className="text-left">Cargando</span> : <span className="text-left">Cancelar</span>}
