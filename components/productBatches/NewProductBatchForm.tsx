@@ -7,7 +7,7 @@ import React from "react";
 import { createProductBatch } from "@/lib/actions/productBatchActions";
 import { useDataTableContext } from "@/components/dataTable/";
 import ProductBatchFormLayout from "./ProductBatchFormLayout";
-import { createProductBatchRecipe } from "@/lib/actions/productBatchRecipeActions";
+import { createProductBatchRecipe } from "@/lib/actions/productBatchIngredientActions";
 
 const NewProductBatchForm: React.FC = () => {
   const dataTableContext = useDataTableContext();

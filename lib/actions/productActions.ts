@@ -2,25 +2,21 @@
 
 import {
   ReadProductDBType,
-  ReadProductBatchDBType,
-  UpdateProductDBType,
   ProductFormValueType,
   ReadProductWithBatchesAndIngredientsType,
   ReadProductWithBatchesType,
 } from "../types";
-import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import { PostgrestError } from "@supabase/supabase-js";
 import {
-  authenticateAndRedirect,
   connectAndRedirect,
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
   updateRecord,
+  getAllRecords,
 } from "../supabaseUtils";
-import { deleteProductRecipe, getAllProductRecipes } from "./productRecipeActions";
-import { deleteAllProductBatchesByProductId, getAllProductBatches } from "./productBatchActions";
 
-function formToDatabaseFn(values: ProductFormValueType, userId: string) {
+function formToDatabaseFn({ values, userId }: { values: ProductFormValueType; userId: string }) {
   return { name: values.name, unit: values.unit, user_id: userId };
 }
 
@@ -30,7 +26,7 @@ export async function createProduct({ values }: { values: ProductFormValueType }
 }> {
   return createRecord({
     values,
-    tableName: "product",
+    tableName: "products",
     formToDatabaseFn,
   });
 }
@@ -41,125 +37,65 @@ export async function updateProduct({ values, recordId }: { values: ProductFormV
 }> {
   return updateRecord({
     values,
-    tableName: "product",
+    tableName: "products",
     formToDatabaseFn,
     recordId,
   });
 }
 
-export async function getAllProducts(supabase?: SupabaseClient): Promise<{
+export async function getAllProducts(): Promise<{
   dbData: ReadProductDBType[] | null;
   dbError: PostgrestError | null;
 }> {
-  if (!supabase) supabase = await connectAndRedirect();
-
-  let dbData: ReadProductDBType[] | null = null;
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ data: dbData, error: dbError } = await supabase.from("product").select());
-  } catch (error) {
-    console.log(error);
-    dbData = null;
-  }
-  return { dbData, dbError };
+  return getAllRecords({ tableName: "products" });
 }
 
-export async function getAllProductsWithBatches(supabase?: SupabaseClient): Promise<{
+export async function getAllProductsWithBatches(): Promise<{
   dbData: ReadProductWithBatchesType[] | null;
   dbError: PostgrestError | null;
 }> {
-  if (!supabase) supabase = await connectAndRedirect();
+  const supabase = await connectAndRedirect();
 
-  let dbProducts: ReadProductDBType[] | null = null;
   let dbData: ReadProductWithBatchesType[] | null = null;
   let dbError: PostgrestError | null = null;
-  let dbBatches: ReadProductBatchDBType[] | null = null;
 
   try {
-    [{ dbData: dbProducts, dbError }, { dbData: dbBatches, dbError }] = await Promise.all([
-      getAllProducts(supabase),
-      getAllProductBatches(supabase),
-    ]);
-
-    dbData =
-      dbProducts?.map((item) => {
-        const batches = dbBatches?.filter(({ product_id }) => item.id === product_id) || [];
-        return { ...item, batches };
-      }) || null;
+    ({ data: dbData, error: dbError } = await supabase.from("products").select(`*, batches:product_batches (*)`));
+    if (dbError) throw new Error(dbError.message);
   } catch (error) {
     console.log(error);
+  } finally {
+    return { dbData, dbError };
   }
-
-  return { dbData, dbError };
 }
 
-export async function getAllProductsWithBatchesAndIngredients(supabase?: SupabaseClient): Promise<{
+export async function getAllProductsWithBatchesAndIngredients(): Promise<{
   dbData: ReadProductWithBatchesAndIngredientsType[] | null;
   dbError: PostgrestError | null;
 }> {
-  if (!supabase) supabase = await connectAndRedirect();
-  let dbDataWithBatches: ReadProductWithBatchesType[] | null = null;
+  const supabase = await connectAndRedirect();
   let dbData: ReadProductWithBatchesAndIngredientsType[] | null = null;
   let dbError: PostgrestError | null = null;
 
   try {
-    ({ dbData: dbDataWithBatches, dbError } = await getAllProductsWithBatches(supabase));
-    if (!dbDataWithBatches || dbError) {
-      console.log(dbError);
-      return { dbData, dbError };
-    }
-
-    const { productIngredients, productIngredientsError, commodityIngredients, commodityIngredientsError } =
-      await getAllProductRecipes(supabase);
-
-    if (!productIngredients || productIngredientsError || !commodityIngredients || commodityIngredientsError) {
-      console.log(productIngredientsError);
-      console.log(commodityIngredientsError);
-      return { dbData, dbError };
-    }
-
-    dbData = dbDataWithBatches.map((item) => {
-      const currProductIngredients = productIngredients
-        .filter(({ product_id }) => product_id === item.id)
-        .map(({ product_ingredient_id, ingredient_name }) => {
-          return { ingredient_id: String(product_ingredient_id as number), ingredient_name };
-        });
-      const currCommodityIngredients = commodityIngredients
-        .filter(({ product_id }) => product_id === item.id)
-        .map(({ commodity_ingredient_id, ingredient_name }) => {
-          return { ingredient_id: String(commodity_ingredient_id as number), ingredient_name };
-        });
-
-      return { ...item, product_ingredients: currProductIngredients, commodity_ingredients: currCommodityIngredients };
-    });
+    ({ data: dbData, error: dbError } = await supabase.from("products").select(`*, batches:product_batches (*), 
+                                                                                product_ingredientes:products(ingredient_id:id, ingredient_name:name), 
+                                                                                commodity_ingredientes:commodities(ingredient_id:id, ingredient_name:name)`));
+    if (dbError) throw new Error(dbError.message);
   } catch (error) {
     console.log(error);
+  } finally {
+    return { dbData, dbError };
   }
-
-  return { dbData, dbError };
 }
 
-export async function getSingleProduct(productId: number, supabase?: SupabaseClient) {
-  return getSingleRecordById("product", productId, supabase) as Promise<{
-    dbData: ReadProductDBType;
-    dbError: PostgrestError;
-  }>;
+export async function getSingleProduct({ recordId }: { recordId: number }): Promise<{
+  dbData: ReadProductDBType | null;
+  dbError: PostgrestError | null;
+}> {
+  return getSingleRecordById({ tableName: "products", recordId });
 }
 
-export async function deleteProduct(
-  productId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null }> {
-  if (!supabase) supabase = await connectAndRedirect();
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ dbError } = await deleteAllProductBatchesByProductId(productId, supabase));
-    ({ dbError } = await deleteProductRecipe(productId, supabase));
-    ({ dbError } = await deleteSingleRecordById("product", productId, supabase));
-  } catch (error) {
-    console.log(error);
-  }
-  return { dbError };
+export async function deleteProduct({ recordId }: { recordId: number }): Promise<{ dbError: PostgrestError | null }> {
+  return deleteSingleRecordById({ tableName: "products", recordId });
 }

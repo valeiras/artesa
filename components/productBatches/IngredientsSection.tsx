@@ -17,7 +17,11 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 }: {
   itemId: number;
   ingredients: { ingredient_id: string; ingredient_name: string }[];
-  getBatches: (ids: number[]) => Promise<{ dbData: T[] | null; dbError: PostgrestError | null }>;
+  getBatches: ({
+    recordIds,
+  }: {
+    recordIds: number[];
+  }) => Promise<{ dbData: T[] | null; dbError: PostgrestError | null }>;
   idVar: keyof T;
   prefix: typeof PRODUCT_PREFIX | typeof COMMODITY_PREFIX;
   ingredientType: "product" | "commodity";
@@ -27,7 +31,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 
   const { data: batchesData, isPending: isBatchesDataPending } = useQuery({
     queryKey: [`${ingredientType}Batches`],
-    queryFn: () => getBatches(ingredientIds),
+    queryFn: () => getBatches({ recordIds: ingredientIds }),
   });
 
   const ingredientsWithBatches = ingredients.map((it) => {

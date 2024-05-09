@@ -1,10 +1,8 @@
 "use server";
 
-import { UpdateClientDBType, ClientFormValueType, ReadClientDBType } from "../types";
+import { ClientFormValueType, ReadClientDBType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
-  authenticateAndRedirect,
-  connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
@@ -12,7 +10,7 @@ import {
   updateRecord,
 } from "../supabaseUtils";
 
-function formToDatabaseFn(values: ClientFormValueType, userId: string) {
+function formToDatabaseFn({ values, userId }: { values: ClientFormValueType; userId: string }) {
   return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
 }
 
@@ -22,7 +20,7 @@ export async function createClient({ values }: { values: ClientFormValueType }):
 }> {
   return createRecord({
     values,
-    tableName: "client",
+    tableName: "clients",
     formToDatabaseFn,
   });
 }
@@ -33,20 +31,24 @@ export async function updateClient({ values, recordId }: { values: ClientFormVal
 }> {
   return updateRecord({
     values,
-    tableName: "client",
+    tableName: "clients",
     formToDatabaseFn,
     recordId,
   });
 }
 
-export async function getAllClients() {
-  return getAllRecords("client") as Promise<{ dbData: ReadClientDBType[]; dbError: PostgrestError }>;
+export async function getAllClients(): Promise<{ dbData: ReadClientDBType[] | null; dbError: PostgrestError | null }> {
+  return getAllRecords({ tableName: "clients" });
 }
 
-export async function getSingleClient(id: number) {
-  return getSingleRecordById("client", id) as Promise<{ dbData: ReadClientDBType; dbError: PostgrestError }>;
+export async function getSingleClient({
+  recordId,
+}: {
+  recordId: number;
+}): Promise<{ dbData: ReadClientDBType | null; dbError: PostgrestError | null }> {
+  return getSingleRecordById({ tableName: "clients", recordId });
 }
 
-export async function deleteClient(id: number) {
-  return deleteSingleRecordById("client", id);
+export async function deleteClient({ recordId }: { recordId: number }): Promise<{ dbError: PostgrestError | null }> {
+  return deleteSingleRecordById({ tableName: "clients", recordId });
 }

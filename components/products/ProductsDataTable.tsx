@@ -29,7 +29,7 @@ const ProductsDataTable: React.FC = () => {
   });
 
   const { mutate: deleteProductMutation } = useMutation({
-    mutationFn: (id: number) => deleteProduct(id),
+    mutationFn: (id: number) => deleteProduct({ recordId: id }),
     onSuccess: productSuccessHandler,
     onError: (error) => {
       console.log(error);
@@ -37,7 +37,7 @@ const ProductsDataTable: React.FC = () => {
   });
 
   const { mutate: deleteProductBatchMutation } = useMutation({
-    mutationFn: (id: number) => deleteProductBatch(id),
+    mutationFn: (id: number) => deleteProductBatch({ recordId: id }),
     onSuccess: productBatchSuccessHandler,
     onError: (error) => {
       console.log(error);

@@ -3,9 +3,9 @@ import React from "react";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, FormButtons } from "@/components/forms";
 import { useDataTableContext } from "../dataTable";
-import { getCommodityBatches } from "@/lib/actions/commodityBatchActions";
+import { getCommodityBatchesByIds } from "@/lib/actions/commodityBatchActions";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
-import { getProductBatches } from "@/lib/actions/productBatchActions";
+import { getProductBatchesByIds } from "@/lib/actions/productBatchActions";
 import IngredientsSection from "./IngredientsSection";
 
 const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
@@ -47,7 +47,7 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
               ingredientType="commodity"
               ingredients={itemData.commodity_ingredients}
               itemId={itemData.id}
-              getBatches={getCommodityBatches}
+              getBatches={getCommodityBatchesByIds}
               idVar="commodity_id"
               prefix={COMMODITY_PREFIX}
               form={form}
@@ -56,7 +56,7 @@ const ProductBatchFormLayout: RecordFormType<ProductBatchFormValueType> = ({
               ingredientType="product"
               ingredients={itemData.product_ingredients}
               itemId={itemData.id}
-              getBatches={getProductBatches}
+              getBatches={getProductBatchesByIds}
               idVar="product_id"
               prefix={PRODUCT_PREFIX}
               form={form}

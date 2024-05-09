@@ -9,7 +9,7 @@
 export type Database = {
   public: {
     Tables: {
-      client: {
+      clients: {
         Row: {
           address: string | null
           created_at: string
@@ -39,7 +39,7 @@ export type Database = {
         }
         Relationships: []
       }
-      commodity: {
+      commodities: {
         Row: {
           created_at: string
           id: number
@@ -63,7 +63,7 @@ export type Database = {
         }
         Relationships: []
       }
-      commodity_batch: {
+      commodity_batches: {
         Row: {
           comments: string | null
           commodity_id: number
@@ -102,84 +102,19 @@ export type Database = {
             foreignKeyName: "public_commodity_batch_commodity_id_fkey"
             columns: ["commodity_id"]
             isOneToOne: false
-            referencedRelation: "commodity"
+            referencedRelation: "commodities"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_commodity_batch_supplier_id_fkey"
             columns: ["supplier_id"]
             isOneToOne: false
-            referencedRelation: "supplier"
+            referencedRelation: "suppliers"
             referencedColumns: ["id"]
           },
         ]
       }
-      product: {
-        Row: {
-          created_at: string
-          id: number
-          name: string
-          unit: Database["public"]["Enums"]["unit"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          name: string
-          unit?: Database["public"]["Enums"]["unit"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          name?: string
-          unit?: Database["public"]["Enums"]["unit"]
-          user_id?: string
-        }
-        Relationships: []
-      }
-      product_batch: {
-        Row: {
-          comments: string | null
-          created_at: string
-          date: string
-          external_id: string
-          id: number
-          initial_amount: number
-          product_id: number
-          user_id: string | null
-        }
-        Insert: {
-          comments?: string | null
-          created_at?: string
-          date: string
-          external_id: string
-          id?: number
-          initial_amount?: number
-          product_id: number
-          user_id?: string | null
-        }
-        Update: {
-          comments?: string | null
-          created_at?: string
-          date?: string
-          external_id?: string
-          id?: number
-          initial_amount?: number
-          product_id?: number
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_product_batch_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "product"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      product_batch_recipe: {
+      product_batch_ingredients: {
         Row: {
           commodity_ingredient_batch_id: number | null
           created_at: string
@@ -212,26 +147,67 @@ export type Database = {
             foreignKeyName: "product_batch_recipe_commodity_ingredient_batch_id_fkey"
             columns: ["commodity_ingredient_batch_id"]
             isOneToOne: false
-            referencedRelation: "commodity_batch"
+            referencedRelation: "commodity_batches"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "product_batch_recipe_product_ingredient_batch_id_fkey"
             columns: ["product_ingredient_batch_id"]
             isOneToOne: false
-            referencedRelation: "product_batch"
+            referencedRelation: "product_batches"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_product_batch_recipe_product_batch_id_fkey"
             columns: ["product_batch_id"]
             isOneToOne: false
-            referencedRelation: "product_batch"
+            referencedRelation: "product_batches"
             referencedColumns: ["id"]
           },
         ]
       }
-      product_recipe: {
+      product_batches: {
+        Row: {
+          comments: string | null
+          created_at: string
+          date: string
+          external_id: string
+          id: number
+          initial_amount: number
+          product_id: number
+          user_id: string | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string
+          date: string
+          external_id: string
+          id?: number
+          initial_amount?: number
+          product_id: number
+          user_id?: string | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string
+          date?: string
+          external_id?: string
+          id?: number
+          initial_amount?: number
+          product_id?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_batches_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_ingredients: {
         Row: {
           commodity_ingredient_id: number | null
           created_at: string
@@ -261,26 +237,50 @@ export type Database = {
             foreignKeyName: "product_recipe_commodity_ingredient_id_fkey"
             columns: ["commodity_ingredient_id"]
             isOneToOne: false
-            referencedRelation: "commodity"
+            referencedRelation: "commodities"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "product_recipe_product_ingredient_id_fkey"
             columns: ["product_ingredient_id"]
             isOneToOne: false
-            referencedRelation: "product"
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_recipe_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
-            referencedRelation: "product"
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]
       }
-      sale: {
+      products: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          unit: Database["public"]["Enums"]["unit"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          unit?: Database["public"]["Enums"]["unit"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          unit?: Database["public"]["Enums"]["unit"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sales: {
         Row: {
           client_id: number
           commodity_batch_id: number | null
@@ -316,26 +316,26 @@ export type Database = {
             foreignKeyName: "public_sale_product_batch_id_fkey"
             columns: ["product_batch_id"]
             isOneToOne: false
-            referencedRelation: "product_batch"
+            referencedRelation: "product_batches"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "sale_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: "client"
+            referencedRelation: "clients"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "sale_commodity_batch_id_fkey"
             columns: ["commodity_batch_id"]
             isOneToOne: false
-            referencedRelation: "commodity_batch"
+            referencedRelation: "commodity_batches"
             referencedColumns: ["id"]
           },
         ]
       }
-      supplier: {
+      suppliers: {
         Row: {
           address: string | null
           created_at: string

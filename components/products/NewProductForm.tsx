@@ -1,9 +1,9 @@
 import React from "react";
-import { ProductFormValueType, productFormSchema, unitEnum } from "@/lib/types";
+import { ProductFormValueType, productFormSchema } from "@/lib/types";
 import { NewItemForm } from "@/components/forms";
 import { createProduct } from "@/lib/actions/productActions";
 import ProductForm from "./ProductFormLayout";
-import { createProductRecipe } from "@/lib/actions/productRecipeActions";
+import { createProductRecipe } from "@/lib/actions/productIngredientActions";
 
 const NewProductForm: React.FC = () => {
   const defaultValues: ProductFormValueType = {

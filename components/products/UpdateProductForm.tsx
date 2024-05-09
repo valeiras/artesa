@@ -6,14 +6,14 @@ import { updateProduct } from "@/lib/actions/productActions";
 import { useDataTableContext } from "@/components/dataTable";
 import ProductForm from "./ProductFormLayout";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
-import { createProductRecipe, deleteProductRecipe } from "@/lib/actions/productRecipeActions";
+import { createProductRecipe, deleteProductRecipeByProductId } from "@/lib/actions/productIngredientActions";
 
 const updateRecordFn = async ({ values, recordId }: { values: ProductFormValueType; recordId: number }) => {
   const { dbError: dbErrorProduct } = await updateProduct({ values, recordId });
   if (dbErrorProduct) return { dbError: dbErrorProduct };
 
   // TODO: improve this: we shouldn't blindly remove everything and create it again
-  await deleteProductRecipe(recordId);
+  await deleteProductRecipeByProductId({ productId: recordId });
   const { dbError: dbErrorRecipe } = await createProductRecipe({
     ingredientIds: values.ingredientIds,
     productId: recordId,

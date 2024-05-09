@@ -1,14 +1,11 @@
 "use server";
 
-import { CreateSaleDBType, ReadSaleDBType, UpdateSaleDBType, SaleFormValueType } from "../types";
-import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import { ReadSaleDBType, SaleFormValueType } from "../types";
+import { PostgrestError } from "@supabase/supabase-js";
 import {
-  authenticateAndRedirect,
-  connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
-  checkPermissionsAndRedirect,
   createRecord,
   updateRecord,
 } from "../supabaseUtils";
@@ -23,6 +20,25 @@ const getBatchIds = (batchId: string) => {
   return { commodityBatchId, productBatchId };
 };
 
+const formToDatabaseFn = ({
+  commodityBatchId,
+  productBatchId,
+}: {
+  commodityBatchId: number | null;
+  productBatchId: number | null;
+}) => {
+  return ({ values, userId }: { values: SaleFormValueType; userId: string }) => {
+    return {
+      user_id: userId,
+      commodity_batch_id: commodityBatchId,
+      product_batch_id: productBatchId,
+      sold_amount: values.amount,
+      client_id: parseInt(values.clientId),
+      date: values.date.toISOString(),
+    };
+  };
+};
+
 export async function createSale({ values }: { values: SaleFormValueType }): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadSaleDBType | null;
@@ -31,17 +47,8 @@ export async function createSale({ values }: { values: SaleFormValueType }): Pro
 
   return createRecord({
     values,
-    tableName: "sale",
-    formToDatabaseFn: (values, userId) => {
-      return {
-        user_id: userId,
-        commodity_batch_id: commodityBatchId,
-        product_batch_id: productBatchId,
-        sold_amount: values.amount,
-        client_id: parseInt(values.clientId),
-        date: values.date.toISOString(),
-      };
-    },
+    tableName: "sales",
+    formToDatabaseFn: formToDatabaseFn({ commodityBatchId, productBatchId }),
   });
 }
 
@@ -53,29 +60,23 @@ export async function updateSale({ values, recordId }: { values: SaleFormValueTy
 
   return updateRecord({
     values,
-    tableName: "sale",
-    formToDatabaseFn: (values, userId) => {
-      return {
-        user_id: userId,
-        commodity_batch_id: commodityBatchId,
-        product_batch_id: productBatchId,
-        sold_amount: values.amount,
-        client_id: parseInt(values.clientId),
-        date: values.date.toISOString(),
-      };
-    },
+    tableName: "sales",
+    formToDatabaseFn: formToDatabaseFn({ commodityBatchId, productBatchId }),
     recordId,
   });
 }
 
-export async function getAllSales() {
-  return getAllRecords("sale") as Promise<{ dbData: ReadSaleDBType[]; dbError: PostgrestError }>;
+export async function getAllSales(): Promise<{ dbData: ReadSaleDBType[] | null; dbError: PostgrestError | null }> {
+  return getAllRecords({ tableName: "sales" });
 }
 
-export async function getSingleSale(id: number) {
-  return getSingleRecordById("sale", id) as Promise<{ dbData: ReadSaleDBType; dbError: PostgrestError }>;
+export async function getSingleSale({ recordId }: { recordId: number }): Promise<{
+  dbData: ReadSaleDBType | null;
+  dbError: PostgrestError | null;
+}> {
+  return getSingleRecordById({ tableName: "sales", recordId });
 }
 
-export async function deleteSale(id: number) {
-  return deleteSingleRecordById("sale", id);
+export async function deleteSale({ recordId }: { recordId: number }): Promise<{ dbError: PostgrestError | null }> {
+  return deleteSingleRecordById({ tableName: "sales", recordId });
 }

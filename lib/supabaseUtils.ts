@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { createSupabaseClient } from "@/lib/createSupabaseClient";
-
 import { auth } from "@clerk/nextjs";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { FieldValues } from "react-hook-form";
@@ -32,30 +31,138 @@ export async function checkPermissionsAndRedirect(supabase: SupabaseClient, user
   }
 }
 
-export async function getAllRecords(tableName: PublicTableName, supabase?: SupabaseClient) {
-  if (!supabase) supabase = await connectAndRedirect();
+export async function getAllRecords<TTable extends PublicTableName>({
+  tableName,
+}: {
+  tableName: TTable;
+}): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
+  const supabase = await connectAndRedirect();
 
-  const { data: dbData, error: dbError } = await supabase.from(tableName).select();
-  return { dbData, dbError };
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable>[] | null = null;
+
+  try {
+    ({ data: dbData, error: dbError } = await supabase.from(tableName).select());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbData, dbError };
+  }
 }
 
-export async function getSingleRecordById(tableName: PublicTableName, id: number, supabase?: SupabaseClient) {
-  if (!supabase) supabase = await connectAndRedirect();
+export async function getSingleRecordById<TTable extends PublicTableName>({
+  tableName,
+  recordId,
+}: {
+  tableName: TTable;
+  recordId: number;
+}): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable> | null }> {
+  const supabase = await connectAndRedirect();
 
-  const { data: dbData, error: dbError } = await supabase.from(tableName).select().eq("id", id).maybeSingle();
-  return { dbData, dbError };
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable> | null = null;
+
+  try {
+    ({ data: dbData, error: dbError } = await supabase.from(tableName).select().eq("id", recordId).maybeSingle());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbData, dbError };
+  }
 }
 
-export async function deleteSingleRecordById(tableName: PublicTableName, id: number, supabase?: SupabaseClient) {
-  if (!supabase) supabase = await connectAndRedirect();
-  const { error: dbError } = await supabase.from(tableName).delete().eq("id", id);
-  return { dbError };
+export async function getRecordsByIds<TTable extends PublicTableName>({
+  tableName,
+  recordIds,
+}: {
+  tableName: TTable;
+  recordIds: number[];
+}): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable>[] | null = null;
+
+  try {
+    ({ data: dbData, error: dbError } = await supabase
+      .from(tableName)
+      .select()
+      .in("id", recordIds)
+      .returns<Tables<TTable>[]>());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbData, dbError };
+  }
 }
 
-export async function deleteRecordsById(tableName: PublicTableName, ids: number[], supabase?: SupabaseClient) {
-  if (!supabase) supabase = await connectAndRedirect();
-  const { error: dbError } = await supabase.from(tableName).delete().in("id", ids);
-  return { dbError };
+export async function deleteSingleRecordById<TTable extends PublicTableName>({
+  tableName,
+  recordId,
+}: {
+  tableName: TTable;
+  recordId: number;
+}): Promise<{ dbError: PostgrestError | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+
+  try {
+    ({ error: dbError } = await supabase.from(tableName).delete().eq("id", recordId));
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbError };
+  }
+}
+
+export async function deleteRecordsByField<TTable extends PublicTableName, TField extends keyof Tables<TTable>>({
+  tableName,
+  fieldName,
+  fieldValue,
+}: {
+  tableName: TTable;
+  fieldName: string & TField;
+  fieldValue: NonNullable<Tables<TTable>[TField]>;
+}): Promise<{ dbError: PostgrestError | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+
+  try {
+    ({ error: dbError } = await supabase.from(tableName).delete().eq(fieldName, fieldValue));
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbError };
+  }
+}
+
+export async function deleteRecordsByIds<TTable extends PublicTableName>({
+  tableName,
+  recordIds,
+}: {
+  tableName: TTable;
+  recordIds: number[];
+}): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbError: PostgrestError | null = null;
+  let dbData: Tables<TTable>[] | null = null;
+
+  try {
+    ({ error: dbError } = await supabase.from(tableName).delete().in("id", recordIds).select());
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbData, dbError };
+  }
 }
 
 export async function createRecord<TForm extends FieldValues, TTable extends PublicTableName>({
@@ -64,7 +171,7 @@ export async function createRecord<TForm extends FieldValues, TTable extends Pub
   tableName,
 }: {
   values: TForm;
-  formToDatabaseFn: (values: TForm, userId: string) => TablesInsert<TTable>;
+  formToDatabaseFn: ({ values, userId }: { values: TForm; userId: string }) => TablesInsert<TTable>;
   tableName: TTable;
 }): Promise<{
   dbError: PostgrestError | null;
@@ -77,7 +184,7 @@ export async function createRecord<TForm extends FieldValues, TTable extends Pub
   let dbError: PostgrestError | null = null;
   let dbData: Tables<TTable> | null = null;
 
-  const newRecord: TablesInsert<TTable> = formToDatabaseFn(values, userId);
+  const newRecord: TablesInsert<TTable> = formToDatabaseFn({ values, userId });
 
   try {
     ({ error: dbError, data: dbData } = await supabase.from(tableName).insert(newRecord).select().maybeSingle());
@@ -96,7 +203,7 @@ export async function updateRecord<TForm extends FieldValues, TTable extends Pub
   recordId,
 }: {
   values: TForm;
-  formToDatabaseFn: (values: TForm, userId: string) => TablesInsert<TTable>;
+  formToDatabaseFn: ({ values, userId }: { values: TForm; userId: string }) => TablesInsert<TTable>;
   tableName: TTable;
   recordId: number;
 }): Promise<{
@@ -110,7 +217,7 @@ export async function updateRecord<TForm extends FieldValues, TTable extends Pub
   let dbError: PostgrestError | null = null;
   let dbData: Tables<TTable> | null = null;
 
-  const newRecord: TablesInsert<TTable> = formToDatabaseFn(values, userId);
+  const newRecord: TablesInsert<TTable> = formToDatabaseFn({ values, userId });
 
   try {
     ({ error: dbError, data: dbData } = await supabase

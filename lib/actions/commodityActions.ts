@@ -1,15 +1,8 @@
 "use server";
 
+import { ReadCommodityDBType, CommodityFormValueType, ReadCommodityWithBatchesType } from "../types";
+import { PostgrestError } from "@supabase/supabase-js";
 import {
-  ReadCommodityDBType,
-  ReadCommodityBatchDBType,
-  UpdateCommodityDBType,
-  CommodityFormValueType,
-  ReadCommodityWithBatchesType,
-} from "../types";
-import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import {
-  authenticateAndRedirect,
   connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
@@ -17,9 +10,8 @@ import {
   createRecord,
   updateRecord,
 } from "../supabaseUtils";
-import { deleteAllCommodityBatchesByCommodityId, getAllCommodityBatches } from "./commodityBatchActions";
 
-function formToDatabaseFn(values: CommodityFormValueType, userId: string) {
+function formToDatabaseFn({ values, userId }: { values: CommodityFormValueType; userId: string }) {
   return { name: values.name, unit: values.unit, user_id: userId };
 }
 
@@ -29,7 +21,7 @@ export async function createCommodity({ values }: { values: CommodityFormValueTy
 }> {
   return createRecord({
     values,
-    tableName: "commodity",
+    tableName: "commodities",
     formToDatabaseFn,
   });
 }
@@ -45,67 +37,45 @@ export async function updateCommodity({
 }> {
   return updateRecord({
     values,
-    tableName: "commodity",
+    tableName: "commodities",
     formToDatabaseFn,
     recordId,
   });
 }
 
-export async function getAllCommodities(supabase?: SupabaseClient) {
-  return getAllRecords("commodity", supabase) as Promise<{ dbData: ReadCommodityDBType[]; dbError: PostgrestError }>;
+export async function getAllCommodities(): Promise<{
+  dbData: ReadCommodityDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
+  return getAllRecords({ tableName: "commodities" });
 }
 
-export async function getAllCommoditiesWithBatches(supabase?: SupabaseClient): Promise<{
+export async function getAllCommoditiesWithBatches(): Promise<{
   dbData: ReadCommodityWithBatchesType[] | null;
   dbError: PostgrestError | null;
 }> {
-  if (!supabase) supabase = await connectAndRedirect();
+  const supabase = await connectAndRedirect();
 
-  let dbCommoditys: ReadCommodityDBType[] | null = null;
   let dbData: ReadCommodityWithBatchesType[] | null = null;
   let dbError: PostgrestError | null = null;
-  let dbBatches: ReadCommodityBatchDBType[] | null = null;
 
   try {
-    [{ dbData: dbCommoditys, dbError }, { dbData: dbBatches, dbError }] = await Promise.all([
-      getAllCommodities(supabase),
-      getAllCommodityBatches(supabase),
-    ]);
-
-    dbData =
-      dbCommoditys?.map((item) => {
-        const batches = dbBatches?.filter(({ commodity_id }) => item.id === commodity_id) || [];
-        return { ...item, batches };
-      }) || null;
-  } catch (error) {
-    console.log(error);
-  }
-
-  return { dbData, dbError };
-}
-
-export async function getSingleCommodity(id: number, supabase?: SupabaseClient) {
-  return getSingleRecordById("commodity", id, supabase) as Promise<{
-    dbData: ReadCommodityDBType;
-    dbError: PostgrestError;
-  }>;
-}
-
-export async function deleteCommodity(
-  commodityId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null }> {
-  if (!supabase) supabase = await connectAndRedirect();
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ dbError } = await deleteAllCommodityBatchesByCommodityId(commodityId, supabase));
-    if (dbError) throw new Error(dbError.message);
-    ({ dbError } = await deleteSingleRecordById("commodity", commodityId, supabase));
+    ({ data: dbData, error: dbError } = await supabase.from("commodities").select(`*, batches:commodity_batches (*)`));
     if (dbError) throw new Error(dbError.message);
   } catch (error) {
     console.log(error);
   } finally {
-    return { dbError };
+    return { dbData, dbError };
   }
+}
+
+export async function getSingleCommodity({ recordId }: { recordId: number }): Promise<{
+  dbData: ReadCommodityDBType | null;
+  dbError: PostgrestError | null;
+}> {
+  return getSingleRecordById({ tableName: "commodities", recordId });
+}
+
+export async function deleteCommodity({ recordId }: { recordId: number }): Promise<{ dbError: PostgrestError | null }> {
+  return deleteSingleRecordById({ tableName: "commodities", recordId });
 }

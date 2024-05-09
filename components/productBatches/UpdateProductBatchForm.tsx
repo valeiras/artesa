@@ -3,7 +3,7 @@
 import React from "react";
 import {
   ProductBatchFormValueType,
-  ReadProductBatchRecipeDBType,
+  ReadProductBatchIngredientDBType,
   ReadProductWithBatchesAndIngredientsType,
   isReadProductBatchDBType,
   isReadProductWithBatchesAndIngredientsType,
@@ -16,16 +16,16 @@ import ProductBatchFormLayout from "./ProductBatchFormLayout";
 import { useQuery } from "@tanstack/react-query";
 import {
   createProductBatchRecipe,
-  deleteProductBatchRecipe,
-  getSingleProductBatchRecipe,
-} from "@/lib/actions/productBatchRecipeActions";
+  deleteProductBatchRecipeByProductBatchId,
+  getProductBatchRecipeByProductBatchId,
+} from "@/lib/actions/productBatchIngredientActions";
 
 const updateRecordFn = async ({ values, recordId }: { values: ProductBatchFormValueType; recordId: number }) => {
   const { dbError: dbErrorProduct } = await updateProductBatch({ values, recordId });
   if (dbErrorProduct) return { dbError: dbErrorProduct };
 
   // TODO: improve this: we shouldn't blindly remove everything and create it again
-  await deleteProductBatchRecipe(recordId);
+  await deleteProductBatchRecipeByProductBatchId({ productBatchId: recordId });
   const { dbError: dbErrorRecipe } = await createProductBatchRecipe({ values, batchId: recordId });
   return { dbError: dbErrorRecipe };
 };
@@ -41,7 +41,7 @@ const UpdateProductBatchForm: React.FC = () => {
 
   const { data: productBatchRecipeData, isPending: isProductBatchRecipeDataPending } = useQuery({
     queryKey: ["batchRecipe", String(batchData.id)],
-    queryFn: () => getSingleProductBatchRecipe(batchData.id),
+    queryFn: () => getProductBatchRecipeByProductBatchId({ productBatchId: batchData.id }),
   });
 
   if (isProductBatchRecipeDataPending) return <h2>Cargando...</h2>;
@@ -89,7 +89,7 @@ const createDefaultArrays = ({
   recipeData,
   itemData,
 }: {
-  recipeData: ReadProductBatchRecipeDBType[] | null | undefined;
+  recipeData: ReadProductBatchIngredientDBType[] | null | undefined;
   itemData: ReadProductWithBatchesAndIngredientsType;
 }) => {
   const commodityIngredients = recipeData?.filter(({ commodity_ingredient_batch_id }) => commodity_ingredient_batch_id);
@@ -142,7 +142,7 @@ const createDefaultArray = ({
   itemDataIngredients,
   defaultValue,
 }: {
-  ingredients: ReadProductBatchRecipeDBType[] | undefined;
+  ingredients: ReadProductBatchIngredientDBType[] | undefined;
   outputField: "amount" | "id";
   inputField: "used_amount" | "commodity_ingredient_batch_id" | "product_ingredient_batch_id";
   itemDataIngredients: { ingredient_id: string; ingredient_name: string }[];

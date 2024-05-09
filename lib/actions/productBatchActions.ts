@@ -1,18 +1,17 @@
 "use server";
 
 import { ProductBatchFormValueType, ReadProductBatchDBType } from "../types";
-import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
   deleteSingleRecordById,
-  deleteRecordsById,
   getAllRecords,
   createRecord,
   updateRecord,
+  getRecordsByIds,
 } from "../supabaseUtils";
-import { deleteProductBatchRecipe, deleteProductBatchRecipes } from "./productBatchRecipeActions";
 
-function formToDatabaseFn(values: ProductBatchFormValueType, userId: string) {
+function formToDatabaseFn({ values, userId }: { values: ProductBatchFormValueType; userId: string }) {
   return {
     product_id: parseInt(values.productId),
     date: values.date.toISOString(),
@@ -29,7 +28,7 @@ export async function createProductBatch({ values }: { values: ProductBatchFormV
 }> {
   return createRecord({
     values,
-    tableName: "product_batch",
+    tableName: "product_batches",
     formToDatabaseFn,
   });
 }
@@ -46,75 +45,43 @@ export async function updateProductBatch({
 }> {
   return updateRecord({
     values,
-    tableName: "product_batch",
+    tableName: "product_batches",
     formToDatabaseFn,
     recordId,
   });
 }
 
-export async function deleteProductBatch(
-  productBatchId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null }> {
-  let dbError: PostgrestError | null = null;
-  if (!supabase) supabase = await connectAndRedirect();
-  try {
-    ({ dbError } = await deleteProductBatchRecipe(productBatchId, supabase));
-    ({ dbError } = await deleteSingleRecordById("product_batch", productBatchId, supabase));
-  } catch (error) {
-    console.log(error);
-  }
-  return { dbError };
+export async function deleteProductBatch({ recordId }: { recordId: number }) {
+  return deleteSingleRecordById({ tableName: "product_batches", recordId });
 }
 
-export async function deleteAllProductBatchesByProductId(
-  productId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null }> {
-  let dbError: PostgrestError | null = null;
-  if (!supabase) supabase = await connectAndRedirect();
-  try {
-    const { data } = await supabase.from("product_batch").select("id").eq("product_id", productId);
-    const productBatchIds = data?.map(({ id }) => {
-      return id as number;
-    });
-    if (productBatchIds) {
-      ({ dbError } = await deleteProductBatchRecipes(productBatchIds, supabase));
-      ({ dbError } = await deleteRecordsById("product_batch", productBatchIds, supabase));
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  return { dbError };
+export async function getAllProductBatches(): Promise<{
+  dbData: ReadProductBatchDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
+  return getAllRecords({ tableName: "product_batches" });
 }
 
-export async function getAllProductBatches(supabase?: SupabaseClient) {
-  return getAllRecords("product_batch", supabase) as Promise<{
-    dbData: ReadProductBatchDBType[];
-    dbError: PostgrestError;
-  }>;
+export async function getProductBatchesByIds({
+  recordIds,
+}: {
+  recordIds: number[];
+}): Promise<{ dbData: ReadProductBatchDBType[] | null; dbError: PostgrestError | null }> {
+  return getRecordsByIds({ tableName: "product_batches", recordIds });
 }
 
-export async function getProductBatches(
-  productIds: number[],
-  supabase?: SupabaseClient
-): Promise<{ dbData: ReadProductBatchDBType[] | null; dbError: PostgrestError | null }> {
-  if (!supabase) supabase = await connectAndRedirect();
-  const { data: dbData, error: dbError } = await supabase.from("product_batch").select().in("product_id", productIds);
-  return { dbData, dbError };
-}
-
-export async function getProductId(
-  productBatchId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
-  if (!supabase) supabase = await connectAndRedirect();
+export async function getProductId({
+  productBatchId,
+}: {
+  productBatchId: number;
+}): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
+  const supabase = await connectAndRedirect();
   let dbError: PostgrestError | null = null;
   let dbData: { id: number } | null = null;
 
   try {
     ({ error: dbError, data: dbData } = await supabase
-      .from("product_batch")
+      .from("product_batches")
       .select("product_id")
       .eq("id", productBatchId)
       .maybeSingle());

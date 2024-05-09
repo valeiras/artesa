@@ -1,18 +1,17 @@
 "use server";
 
-import { UpdateCommodityBatchDBType, CommodityBatchFormValueType, ReadCommodityBatchDBType } from "../types";
-import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import { CommodityBatchFormValueType, ReadCommodityBatchDBType } from "../types";
+import { PostgrestError } from "@supabase/supabase-js";
 import {
-  authenticateAndRedirect,
   connectAndRedirect,
   createRecord,
-  deleteRecordsById,
   deleteSingleRecordById,
   getAllRecords,
+  getRecordsByIds,
   updateRecord,
 } from "../supabaseUtils";
 
-function formToDatabaseFn(values: CommodityBatchFormValueType, userId: string) {
+function formToDatabaseFn({ values, userId }: { values: CommodityBatchFormValueType; userId: string }) {
   return {
     commodity_id: values.commodityId,
     date: values.date.toISOString(),
@@ -30,7 +29,7 @@ export async function createCommodityBatch({ values }: { values: CommodityBatchF
 }> {
   return createRecord({
     values,
-    tableName: "commodity_batch",
+    tableName: "commodity_batches",
     formToDatabaseFn,
   });
 }
@@ -47,65 +46,43 @@ export async function updateCommodityBatch({
 }> {
   return updateRecord({
     values,
-    tableName: "commodity_batch",
+    tableName: "commodity_batches",
     formToDatabaseFn,
     recordId,
   });
 }
 
-export async function deleteCommodityBatch(id: number, supabase?: SupabaseClient) {
-  if (!supabase) supabase = await connectAndRedirect();
-  return deleteSingleRecordById("commodity_batch", id);
+export async function deleteCommodityBatch({ recordId }: { recordId: number }) {
+  return deleteSingleRecordById({ tableName: "commodity_batches", recordId });
 }
 
-export async function deleteAllCommodityBatchesByCommodityId(
-  commodityId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null }> {
-  let dbError: PostgrestError | null = null;
-  if (!supabase) supabase = await connectAndRedirect();
-
-  try {
-    const { data } = await supabase.from("commodity_batch").select("id").eq("commodity_id", commodityId);
-    const commodityBatchIds = data?.map(({ id }) => {
-      return id as number;
-    });
-    if (commodityBatchIds) ({ dbError } = await deleteRecordsById("commodity_batch", commodityBatchIds, supabase));
-    console.log(dbError);
-  } catch (error) {
-    console.log(error);
-  }
-  return { dbError };
+export async function getAllCommodityBatches(): Promise<{
+  dbData: ReadCommodityBatchDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
+  return getAllRecords({ tableName: "commodity_batches" });
 }
 
-export async function getAllCommodityBatches(supabase?: SupabaseClient) {
-  if (!supabase) supabase = await connectAndRedirect();
-  return getAllRecords("commodity_batch") as Promise<{ dbData: ReadCommodityBatchDBType[]; dbError: PostgrestError }>;
+export async function getCommodityBatchesByIds({
+  recordIds,
+}: {
+  recordIds: number[];
+}): Promise<{ dbData: ReadCommodityBatchDBType[] | null; dbError: PostgrestError | null }> {
+  return getRecordsByIds({ tableName: "commodity_batches", recordIds });
 }
 
-export async function getCommodityBatches(
-  commodityIds: number[],
-  supabase?: SupabaseClient
-): Promise<{ dbData: ReadCommodityBatchDBType[] | null; dbError: PostgrestError | null }> {
-  if (!supabase) supabase = await connectAndRedirect();
-  const { data: dbData, error: dbError } = await supabase
-    .from("commodity_batch")
-    .select()
-    .in("commodity_id", commodityIds);
-  return { dbData, dbError };
-}
-
-export async function getCommodityId(
-  commodityBatchId: number,
-  supabase?: SupabaseClient
-): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
-  if (!supabase) supabase = await connectAndRedirect();
+export async function getCommodityId({
+  commodityBatchId,
+}: {
+  commodityBatchId: number;
+}): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
+  const supabase = await connectAndRedirect();
   let dbError: PostgrestError | null = null;
   let dbData: { id: number } | null = null;
 
   try {
     ({ error: dbError, data: dbData } = await supabase
-      .from("commodity_batch")
+      .from("commodity_batches")
       .select("commodity_id")
       .eq("id", commodityBatchId)
       .maybeSingle());

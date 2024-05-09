@@ -21,8 +21,8 @@ const UpdateSaleForm: React.FC = () => {
     queryKey: ["articleId", String(itemData.product_batch_id || itemData.commodity_batch_id)],
     queryFn: () =>
       itemData.product_batch_id
-        ? getProductId(itemData.product_batch_id)
-        : getCommodityId(itemData.commodity_batch_id as number),
+        ? getProductId({ productBatchId: itemData.product_batch_id as number })
+        : getCommodityId({ commodityBatchId: itemData.commodity_batch_id as number }),
   });
 
   const defaultValues: SaleFormValueType = {

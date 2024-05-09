@@ -1,10 +1,8 @@
 "use server";
 
-import { ReadSupplierDBType, UpdateSupplierDBType, SupplierFormValueType } from "../types";
+import { ReadSupplierDBType, SupplierFormValueType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
-  authenticateAndRedirect,
-  connectAndRedirect,
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
@@ -12,7 +10,7 @@ import {
   updateRecord,
 } from "../supabaseUtils";
 
-function formToDatabaseFn(values: SupplierFormValueType, userId: string) {
+function formToDatabaseFn({ values, userId }: { values: SupplierFormValueType; userId: string }) {
   return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
 }
 
@@ -22,7 +20,7 @@ export async function createSupplier({ values }: { values: SupplierFormValueType
 }> {
   return createRecord({
     values,
-    tableName: "supplier",
+    tableName: "suppliers",
     formToDatabaseFn,
   });
 }
@@ -39,20 +37,26 @@ export async function updateSupplier({
 }> {
   return updateRecord({
     values,
-    tableName: "supplier",
+    tableName: "suppliers",
     formToDatabaseFn,
     recordId,
   });
 }
 
-export async function getAllSuppliers() {
-  return getAllRecords("supplier") as Promise<{ dbData: ReadSupplierDBType[]; dbError: PostgrestError }>;
+export async function getAllSuppliers(): Promise<{
+  dbData: ReadSupplierDBType[] | null;
+  dbError: PostgrestError | null;
+}> {
+  return getAllRecords({ tableName: "suppliers" });
 }
 
-export async function getSingleSupplier(id: number) {
-  return getSingleRecordById("supplier", id) as Promise<{ dbData: ReadSupplierDBType; dbError: PostgrestError }>;
+export async function getSingleSupplier({ recordId }: { recordId: number }) {
+  return getSingleRecordById({ tableName: "suppliers", recordId }) as Promise<{
+    dbData: ReadSupplierDBType;
+    dbError: PostgrestError;
+  }>;
 }
 
-export async function deleteSupplier(id: number) {
-  return deleteSingleRecordById("supplier", id);
+export async function deleteSupplier({ recordId }: { recordId: number }) {
+  return deleteSingleRecordById({ tableName: "suppliers", recordId });
 }

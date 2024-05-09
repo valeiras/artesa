@@ -1,6 +1,6 @@
 import * as z from "zod";
 import validator from "validator";
-import { Database, Enums } from "./database.types";
+import { Database, Enums, Tables, TablesInsert, TablesUpdate } from "./database.types";
 import React from "react";
 import { DefaultValues, FieldValues, UseFormReturn } from "react-hook-form";
 import { UseMutateFunction, MutationFunction } from "@tanstack/react-query";
@@ -31,8 +31,6 @@ const positiveNumber = z.coerce
   .number({ invalid_type_error: "Especifica la cantidad" })
   .positive({ message: "Especifica una cantidad mayor que 0" });
 
-// export type UnitType = z.infer<typeof unitEnum>;
-// export const unitEnum = z.enum(UnitType);
 export type UnitType = Enums<"unit">;
 export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]);
 
@@ -46,9 +44,9 @@ export const productFormSchema = z.object({
 });
 
 export type ProductFormValueType = z.infer<typeof productFormSchema>;
-export type ReadProductDBType = Database["public"]["Tables"]["product"]["Row"];
-export type CreateProductDBType = Database["public"]["Tables"]["product"]["Insert"];
-export type UpdateProductDBType = Database["public"]["Tables"]["product"]["Update"];
+export type ReadProductDBType = Tables<"products">;
+export type CreateProductDBType = TablesInsert<"products">;
+export type UpdateProductDBType = TablesUpdate<"products">;
 
 export const productBatchFormSchema = z.object({
   productId: z.string({ required_error: "Especifica un producto" }),
@@ -66,9 +64,9 @@ export const productBatchFormSchema = z.object({
 });
 
 export type ProductBatchFormValueType = z.infer<typeof productBatchFormSchema>;
-export type ReadProductBatchDBType = Database["public"]["Tables"]["product_batch"]["Row"];
-export type CreateProductBatchDBType = Database["public"]["Tables"]["product_batch"]["Insert"];
-export type UpdateProductBatchDBType = Database["public"]["Tables"]["product_batch"]["Update"];
+export type ReadProductBatchDBType = Tables<"product_batches">;
+export type CreateProductBatchDBType = TablesInsert<"product_batches">;
+export type UpdateProductBatchDBType = TablesUpdate<"product_batches">;
 
 export type ReadProductWithBatchesType = ReadProductDBType & {
   batches: ReadProductBatchDBType[];
@@ -90,9 +88,9 @@ export const commodityFormSchema = z.object({
 });
 
 export type CommodityFormValueType = z.infer<typeof commodityFormSchema>;
-export type ReadCommodityDBType = Database["public"]["Tables"]["commodity"]["Row"];
-export type CreateCommodityDBType = Database["public"]["Tables"]["commodity"]["Insert"];
-export type UpdateCommodityDBType = Database["public"]["Tables"]["commodity"]["Update"];
+export type ReadCommodityDBType = Tables<"commodities">;
+export type CreateCommodityDBType = TablesInsert<"commodities">;
+export type UpdateCommodityDBType = TablesUpdate<"commodities">;
 
 export const commodityBatchFormSchema = z.object({
   commodityId: z.number({ required_error: "Especifica una materia prima" }),
@@ -109,9 +107,9 @@ export const commodityBatchFormSchema = z.object({
 });
 
 export type CommodityBatchFormValueType = z.infer<typeof commodityBatchFormSchema>;
-export type ReadCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Row"];
-export type CreateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Insert"];
-export type UpdateCommodityBatchDBType = Database["public"]["Tables"]["commodity_batch"]["Update"];
+export type ReadCommodityBatchDBType = Tables<"commodity_batches">;
+export type CreateCommodityBatchDBType = TablesInsert<"commodity_batches">;
+export type UpdateCommodityBatchDBType = TablesUpdate<"commodity_batches">;
 
 export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches: ReadCommodityBatchDBType[] };
 
@@ -127,9 +125,9 @@ export const supplierFormSchema = z.object({
 });
 
 export type SupplierFormValueType = z.infer<typeof supplierFormSchema>;
-export type ReadSupplierDBType = Database["public"]["Tables"]["supplier"]["Row"];
-export type CreateSupplierDBType = Database["public"]["Tables"]["supplier"]["Insert"];
-export type UpdateSupplierDBType = Database["public"]["Tables"]["supplier"]["Update"];
+export type ReadSupplierDBType = Tables<"suppliers">;
+export type CreateSupplierDBType = TablesInsert<"suppliers">;
+export type UpdateSupplierDBType = TablesUpdate<"suppliers">;
 
 export const clientFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
@@ -143,9 +141,9 @@ export const clientFormSchema = z.object({
 });
 
 export type ClientFormValueType = z.infer<typeof clientFormSchema>;
-export type ReadClientDBType = Database["public"]["Tables"]["client"]["Row"];
-export type CreateClientDBType = Database["public"]["Tables"]["client"]["Insert"];
-export type UpdateClientDBType = Database["public"]["Tables"]["client"]["Update"];
+export type ReadClientDBType = Tables<"clients">;
+export type CreateClientDBType = TablesInsert<"clients">;
+export type UpdateClientDBType = TablesUpdate<"clients">;
 
 // Article refers to either a commodity or a product
 export const saleFormSchema = z.object({
@@ -157,17 +155,17 @@ export const saleFormSchema = z.object({
 });
 
 export type SaleFormValueType = z.infer<typeof saleFormSchema>;
-export type ReadSaleDBType = Database["public"]["Tables"]["sale"]["Row"];
-export type CreateSaleDBType = Database["public"]["Tables"]["sale"]["Insert"];
-export type UpdateSaleDBType = Database["public"]["Tables"]["sale"]["Update"];
+export type ReadSaleDBType = Tables<"sales">;
+export type CreateSaleDBType = TablesInsert<"sales">;
+export type UpdateSaleDBType = TablesUpdate<"sales">;
 
-export type ReadProductRecipeDBType = Database["public"]["Tables"]["product_recipe"]["Row"];
-export type CreateProductRecipeDBType = Database["public"]["Tables"]["product_recipe"]["Insert"];
-export type UpdateProductRecipeDBType = Database["public"]["Tables"]["product_recipe"]["Update"];
+export type ReadProductIngredientDBType = Tables<"product_ingredients">;
+export type CreateProductIngredientDBType = TablesInsert<"product_ingredients">;
+export type UpdateProductIngredientDBType = TablesUpdate<"product_ingredients">;
 
-export type ReadProductBatchRecipeDBType = Database["public"]["Tables"]["product_batch_recipe"]["Row"];
-export type CreateProductBatchRecipeDBType = Database["public"]["Tables"]["product_batch_recipe"]["Insert"];
-export type UpdateProductBatchRecipeDBType = Database["public"]["Tables"]["product_batch_recipe"]["Update"];
+export type ReadProductBatchIngredientDBType = Tables<"product_batch_ingredients">;
+export type CreateProductBatchIngredientDBType = TablesInsert<"product_batch_ingredients">;
+export type UpdateProductBatchIngredientDBType = TablesUpdate<"product_batch_ingredients">;
 
 export type RecordFormType<T extends FieldValues> = React.FC<{
   form: UseFormReturn<T>;

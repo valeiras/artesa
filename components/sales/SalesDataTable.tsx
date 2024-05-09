@@ -21,7 +21,7 @@ const SalesDataTable: React.FC = () => {
   });
 
   const { mutate } = useMutation({
-    mutationFn: (id: number) => deleteSale(id),
+    mutationFn: (id: number) => deleteSale({ recordId: id }),
     onSuccess: successHandler,
     onError: (error) => {
       console.log(error);

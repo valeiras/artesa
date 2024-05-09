@@ -21,7 +21,7 @@ const ClientsDataTable: React.FC = () => {
   });
 
   const { mutate } = useMutation({
-    mutationFn: (id: number) => deleteClient(id),
+    mutationFn: (id: number) => deleteClient({ recordId: id }),
     onSuccess: successHandler,
     onError: (error) => {
       console.log(error);

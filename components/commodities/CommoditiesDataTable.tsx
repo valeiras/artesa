@@ -28,7 +28,7 @@ const CommoditiesDataTable: React.FC = () => {
   });
 
   const { mutate: deleteCommodityMutation } = useMutation({
-    mutationFn: (id: number) => deleteCommodity(id),
+    mutationFn: (id: number) => deleteCommodity({ recordId: id }),
     onSuccess: commoditySuccessHandler,
     onError: (error) => {
       console.log(error);
@@ -36,7 +36,7 @@ const CommoditiesDataTable: React.FC = () => {
   });
 
   const { mutate: deleteCommodityBatchMutation } = useMutation({
-    mutationFn: (id: number) => deleteCommodityBatch(id),
+    mutationFn: (id: number) => deleteCommodityBatch({ recordId: id }),
     onSuccess: commodityBatchSuccessHandler,
     onError: (error) => {
       console.log(error);
