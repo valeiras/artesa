@@ -10,10 +10,10 @@ const NewSaleForm: React.FC = () => {
   return (
     <NewItemForm<SaleFormValueType>
       formSchema={saleFormSchema}
-      defaultValues={{ articleId: "", batchId: "", amount: 0, clientId: "" }}
-      successToastMessage="Nuevo proveedor creado con éxito"
+      defaultValues={{ articleId: "", batchId: "", amount: 0, clientId: "", date: new Date(), externalId: "" }}
+      successToastMessage="Nueva venta creada con éxito"
       queryKeys={[["sales"], ["stats"], ["charts"]]}
-      formHeader="Nuevo proveedor"
+      formHeader="Nueva venta"
       createRecordFn={createSale}
       FormLayout={SaleFormLayout}
     />

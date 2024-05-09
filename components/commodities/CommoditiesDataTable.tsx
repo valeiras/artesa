@@ -13,6 +13,7 @@ import { NewCommodityBatchForm, UpdateCommodityBatchForm } from "@/components/co
 import commodityColumns from "./commodityColumns";
 import NewCommodityForm from "./NewCommodityForm";
 import UpdateCommodityForm from "./UpdateCommodityForm";
+import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const CommoditiesDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -52,16 +53,8 @@ const CommoditiesDataTable: React.FC = () => {
 
   if (isDataPending) return <h2>Cargando...</h2>;
 
-  if (!data) {
-    toast({ title: "Ha habido un error", variant: "destructive" });
-    return null;
-  }
-  let { dbData, dbError } = data;
-
-  if (dbError) {
-    toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
-    return null;
-  }
+  const { dbData } = checkDataFromDatabase(data, toast);
+  if (!dbData) return null;
 
   const emptyCommodityData: ReadCommodityDBType = { name: "", created_at: "", id: 0, unit: "kg", user_id: "" };
   const emptyCommodityBatchData: ReadCommodityBatchDBType = {

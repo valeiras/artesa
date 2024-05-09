@@ -12,7 +12,7 @@ const SalesPage: React.FC = async () => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-row justify-between items-center mb-8">
-        <h2 className="item-list-header">Proveedores:</h2>
+        <h2 className="item-list-header">Ventas:</h2>
       </div>
       <SalesDataTable />
     </HydrationBoundary>

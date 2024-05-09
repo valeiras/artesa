@@ -11,6 +11,7 @@ import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components
 import UpdateSupplierForm from "./UpdateSupplierForm";
 import NewSupplierForm from "./NewSupplierForm";
 import supplierColumns from "./supplierColumns";
+import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const SuppliersDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -37,16 +38,8 @@ const SuppliersDataTable: React.FC = () => {
 
   if (isDataPending) return <h2>Cargando...</h2>;
 
-  if (!data) {
-    toast({ title: "Ha habido un error", variant: "destructive" });
-    return null;
-  }
-
-  let { dbData, dbError } = data;
-  if (dbError) {
-    toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
-    return null;
-  }
+  const { dbData } = checkDataFromDatabase(data, toast);
+  if (!dbData) return null;
 
   const emptySupplierData: ReadSupplierDBType = {
     address: "",

@@ -11,12 +11,13 @@ import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components
 import UpdateSaleForm from "./UpdateSaleForm";
 import NewSaleForm from "./NewSaleForm";
 import saleColumns from "./saleColumns";
+import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const SalesDataTable: React.FC = () => {
   const { toast } = useToast();
 
   const successHandler = useQuerySuccessHandler({
-    successToastMessage: "Proveedor eliminado con éxito",
+    successToastMessage: "Venta eliminada con éxito",
     queryKeys: [["sales"], ["stats"], ["charts"]],
   });
 
@@ -37,16 +38,8 @@ const SalesDataTable: React.FC = () => {
 
   if (isDataPending) return <h2>Cargando...</h2>;
 
-  if (!data) {
-    toast({ title: "Ha habido un error", variant: "destructive" });
-    return null;
-  }
-
-  let { dbData, dbError } = data;
-  if (dbError) {
-    toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
-    return null;
-  }
+  const { dbData } = checkDataFromDatabase(data, toast);
+  if (!dbData) return null;
 
   const emptySaleData: ReadSaleDBType = {
     client_id: 0,
@@ -57,11 +50,18 @@ const SalesDataTable: React.FC = () => {
     sold_amount: 0,
     user_id: null,
     date: "",
+    external_id: "",
   };
 
   return (
     <DataTableContextProvider defaultItemData={emptySaleData}>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" />
+      <DataTable
+        columns={columns}
+        data={dbData || []}
+        newItemLabel="Nueva venta"
+        lookupField="product_id"
+        lookupPlaceholder="Buscar por producto"
+      />
       <NewItemDialog RecordForm={NewSaleForm} />
       <UpdateItemDialog RecordForm={UpdateSaleForm} />
       <DeleteAlertDialog />

@@ -8,6 +8,7 @@ import { getAllCommodities } from "@/lib/actions/commodityActions";
 import { getAllProducts } from "@/lib/actions/productActions";
 import { getAvailableArray } from "@/lib/utils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
+import useAvailableArticles from "@/lib/hooks/useAvailableArticles";
 
 const ProductForm: RecordFormType<ProductFormValueType> = ({
   form,
@@ -21,18 +22,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
     mutate(values);
   }
 
-  const { data: commoditiesData } = useQuery({
-    queryKey: ["commodities"],
-    queryFn: () => getAllCommodities(),
-  });
-
-  const { data: productsData } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => getAllProducts(),
-  });
-
-  const availableCommodities = getAvailableArray(commoditiesData?.dbData, COMMODITY_PREFIX);
-  const availableProducts = getAvailableArray(productsData?.dbData, PRODUCT_PREFIX);
+  const { availableArticles } = useAvailableArticles();
 
   return (
     <Form {...form}>
@@ -57,7 +47,7 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
           <CustomFormSelectFieldArray
             name="ingredientIds"
             form={form}
-            commonItems={[...availableCommodities, ...availableProducts]}
+            commonItems={availableArticles}
             placeholder="Selecciona un ingrediente"
             label="Ingredientes"
             emptyValue={{ id: "" }}

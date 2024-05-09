@@ -14,6 +14,7 @@ import NewProductForm from "./NewProductForm";
 import UpdateProductForm from "./UpdateProductForm";
 import NewProductBatchForm from "../productBatches/NewProductBatchForm";
 import UpdateProductBatchForm from "../productBatches/UpdateProductBatchForm";
+import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const ProductsDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -53,16 +54,8 @@ const ProductsDataTable: React.FC = () => {
 
   if (isDataPending) return <h2>Cargando...</h2>;
 
-  if (!data) {
-    toast({ title: "Ha habido un error", variant: "destructive" });
-    return null;
-  }
-  let { dbData, dbError } = data;
-
-  if (dbError) {
-    toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
-    return null;
-  }
+  const { dbData } = checkDataFromDatabase(data, toast);
+  if (!dbData) return null;
 
   const emptyProductData: ReadProductDBType = {
     name: "",

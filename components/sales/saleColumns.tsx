@@ -7,26 +7,37 @@ import { ItemRowActions } from "@/components/rowActions";
 
 function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadSaleDBType>[] = [
-    // {
-    //   accessorKey: "article_name",
-    //   header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
-    //   meta: { columnName: "Nombre" },
-    // },
+    {
+      accessorKey: "client_id",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Cliente" />,
+      meta: { columnName: "Cliente" },
+    },
+    {
+      accessorKey: "product_id",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Producto" />,
+      meta: { columnName: "Producto" },
+    },
+    {
+      accessorKey: "batch",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Lote" />,
+      meta: { columnName: "Lote" },
+    },
+    {
+      accessorKey: "amount",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Cantidad" />,
+      meta: { columnName: "Cantidad" },
+    },
+    {
+      accessorKey: "external_id",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Identificador" />,
+      meta: { columnName: "Identificador" },
+    },
     {
       accessorKey: "date",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de venta" />,
       meta: { columnName: "Fecha venta" },
       cell: ({ row }) => {
         const formattedDate = new Date(row.getValue("date")).toLocaleDateString();
-        return <>{formattedDate}</>;
-      },
-    },
-    {
-      accessorKey: "created_at",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
-      meta: { columnName: "Fecha" },
-      cell: ({ row }) => {
-        const formattedDate = new Date(row.getValue("created_at")).toLocaleDateString();
         return <>{formattedDate}</>;
       },
     },

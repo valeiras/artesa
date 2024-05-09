@@ -26,7 +26,13 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
       render={({ field }) => (
         <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           {hasLabel && <FormLabel>{label || name}</FormLabel>}
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select
+            onValueChange={(e) => {
+              field.onChange(e);
+              console.log(field);
+            }}
+            defaultValue={field.value}
+          >
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder={placeholder || items[0].label || items[0].value} />

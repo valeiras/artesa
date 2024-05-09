@@ -34,8 +34,12 @@ function DataTable<TData, TValue>({
   columns,
   data,
   newItemLabel,
+  lookupField = "name",
+  lookupPlaceholder = "Buscar por nombre",
 }: DataTableProps<TData, TValue> & {
   newItemLabel: string;
+  lookupField?: string;
+  lookupPlaceholder?: string;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -65,8 +69,8 @@ function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Buscar por nombre..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder={lookupPlaceholder}
+          value={(table.getColumn(lookupField)?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />

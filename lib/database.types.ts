@@ -234,6 +234,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "product_ingredients_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "product_recipe_commodity_ingredient_id_fkey"
             columns: ["commodity_ingredient_id"]
             isOneToOne: false
@@ -243,13 +250,6 @@ export type Database = {
           {
             foreignKeyName: "product_recipe_product_ingredient_id_fkey"
             columns: ["product_ingredient_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_recipe_product_id_fkey"
-            columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
@@ -286,6 +286,7 @@ export type Database = {
           commodity_batch_id: number | null
           created_at: string
           date: string
+          external_id: string | null
           id: number
           product_batch_id: number | null
           sold_amount: number
@@ -296,6 +297,7 @@ export type Database = {
           commodity_batch_id?: number | null
           created_at?: string
           date: string
+          external_id?: string | null
           id?: number
           product_batch_id?: number | null
           sold_amount: number
@@ -306,6 +308,7 @@ export type Database = {
           commodity_batch_id?: number | null
           created_at?: string
           date?: string
+          external_id?: string | null
           id?: number
           product_batch_id?: number | null
           sold_amount?: number

@@ -154,6 +154,7 @@ export const saleFormSchema = z.object({
   clientId: z.string({ required_error: "Especifica un cliente" }),
   amount: z.number({ required_error: "Especifica una cantidad" }),
   date: z.date({ required_error: "Especifica una fecha de venta" }),
+  externalId: z.string().optional(),
 });
 
 export type SaleFormValueType = z.infer<typeof saleFormSchema>;

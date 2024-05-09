@@ -9,7 +9,7 @@ import { UseFormReturn } from "react-hook-form";
 function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatchDBType>({
   ingredients,
   getBatches,
-  idVar,
+  idField,
   prefix,
   ingredientType,
   form,
@@ -20,7 +20,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   }: {
     recordIds: number[];
   }) => Promise<{ dbData: T[] | null; dbError: PostgrestError | null }>;
-  idVar: keyof T;
+  idField: keyof T;
   prefix: typeof PRODUCT_PREFIX | typeof COMMODITY_PREFIX;
   ingredientType: "product" | "commodity";
   form: UseFormReturn<ProductBatchFormValueType>;
@@ -34,21 +34,10 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 
   if (isBatchesDataPending) return <h2>Cargando...</h2>;
 
-  const ingredientsWithBatches = ingredients.map((it) => {
-    const batches = batchesData?.dbData
-      ?.filter((batch) => batch[idVar] === parseInt(it.id))
-      .map(({ id, external_id }) => {
-        return { id, external_id };
-      });
-    return { ...it, batches };
-  });
-
-  const items = ingredientsWithBatches.map(({ batches }) => {
-    return (
-      batches?.map(({ external_id, id }) => {
-        return { value: String(id), label: external_id };
-      }) || []
-    );
+  const { items, ingredientsWithBatches } = organizeBatchesAndIngredients({
+    ingredients,
+    batchesData: batchesData?.dbData,
+    idField,
   });
 
   return (
@@ -81,5 +70,34 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
     </>
   );
 }
+
+const organizeBatchesAndIngredients = <T extends ReadCommodityBatchDBType | ReadProductBatchDBType>({
+  ingredients,
+  batchesData,
+  idField,
+}: {
+  ingredients: { id: string; name: string }[];
+  batchesData: T[] | null | undefined;
+  idField: keyof T;
+}) => {
+  const ingredientsWithBatches = ingredients.map((it) => {
+    const batches = batchesData
+      ?.filter((batch) => batch[idField] === parseInt(it.id))
+      .map(({ id, external_id }) => {
+        return { id, external_id };
+      });
+    return { ...it, batches };
+  });
+
+  const items = ingredientsWithBatches.map(({ batches }) => {
+    return (
+      batches?.map(({ external_id, id }) => {
+        return { value: String(id), label: external_id };
+      }) || []
+    );
+  });
+
+  return { ingredientsWithBatches, items };
+};
 
 export default IngredientsSection;

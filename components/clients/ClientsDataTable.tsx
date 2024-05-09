@@ -11,6 +11,7 @@ import { DeleteAlertDialog, NewItemDialog, UpdateItemDialog } from "@/components
 import { ReadClientDBType } from "@/lib/types";
 import NewClientForm from "./NewClientForm";
 import UpdateClientForm from "./UpdateClientForm";
+import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const ClientsDataTable: React.FC = () => {
   const { toast } = useToast();
@@ -30,23 +31,15 @@ const ClientsDataTable: React.FC = () => {
 
   const columns = clientColumns(mutate);
 
-  const { data, isPending: isDataPending } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["clients"],
     queryFn: () => getAllClients(),
   });
 
-  if (isDataPending) return <h2>Cargando...</h2>;
+  if (isPending) return <h2>Cargando...</h2>;
 
-  if (!data) {
-    toast({ title: "Ha habido un error", variant: "destructive" });
-    return null;
-  }
-  let { dbData, dbError } = data;
-
-  if (dbError) {
-    toast({ title: "Ha habido un error", variant: "destructive", description: dbError.message });
-    return null;
-  }
+  const { dbData } = checkDataFromDatabase(data, toast);
+  if (!dbData) return null;
 
   const emptyClientData: ReadClientDBType = {
     address: "",

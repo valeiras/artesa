@@ -9,6 +9,7 @@ import {
   createRecord,
   updateRecord,
   getRecordsByFieldArray,
+  getRecordsByField,
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductBatchFormValueType; userId: string }) {
@@ -62,12 +63,20 @@ export async function getAllProductBatches(): Promise<{
   return getAllRecords({ tableName: "product_batches" });
 }
 
-export async function getProductBatchesByIds({
+export async function getProductBatchesByProductIdArray({
   recordIds,
 }: {
   recordIds: number[];
 }): Promise<{ dbData: ReadProductBatchDBType[] | null; dbError: PostgrestError | null }> {
   return getRecordsByFieldArray({ tableName: "product_batches", fieldName: "product_id", fieldValues: recordIds });
+}
+
+export async function getProductBatchesByProductId({
+  recordId,
+}: {
+  recordId: number;
+}): Promise<{ dbData: ReadProductBatchDBType[] | null; dbError: PostgrestError | null }> {
+  return getRecordsByField({ tableName: "product_batches", fieldName: "product_id", fieldValue: recordId });
 }
 
 export async function getProductId({

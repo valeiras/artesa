@@ -7,6 +7,7 @@ import {
   createRecord,
   deleteSingleRecordById,
   getAllRecords,
+  getRecordsByField,
   getRecordsByFieldArray,
   getRecordsByIdArray,
   updateRecord,
@@ -64,12 +65,20 @@ export async function getAllCommodityBatches(): Promise<{
   return getAllRecords({ tableName: "commodity_batches" });
 }
 
-export async function getCommodityBatchesByIds({
+export async function getCommodityBatchesByCommodityIdArray({
   recordIds,
 }: {
   recordIds: number[];
 }): Promise<{ dbData: ReadCommodityBatchDBType[] | null; dbError: PostgrestError | null }> {
   return getRecordsByFieldArray({ tableName: "commodity_batches", fieldName: "commodity_id", fieldValues: recordIds });
+}
+
+export async function getCommodityBatchesByCommodityId({
+  recordId,
+}: {
+  recordId: number;
+}): Promise<{ dbData: ReadCommodityBatchDBType[] | null; dbError: PostgrestError | null }> {
+  return getRecordsByField({ tableName: "commodity_batches", fieldName: "commodity_id", fieldValue: recordId });
 }
 
 export async function getCommodityId({
