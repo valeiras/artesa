@@ -1,32 +1,43 @@
+import { PostgrestError } from "@supabase/supabase-js";
 import { getAllCommodities } from "../actions/commodityActions";
-import { getAllProducts } from "../actions/productActions";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
-import { getAvailableArray } from "../utils";
+import { ReadCommodityBatchDBType, ReadProductBatchDBType } from "../types";
 import { useQuery } from "@tanstack/react-query";
+import { getCommodityBatchesByCommodityId } from "../actions/commodityBatchActions";
+import { getProductBatchesByProductId } from "../actions/productBatchActions";
 
-const useAvailableBatches = (articleId) => {
-  const { data: commoditiesData, isPending: isCommoditiesDataPending } = useQuery({
-    queryKey: ["commodities"],
-    queryFn: () => getAllCommodities(),
+const useAvailableBatches = (articleId: string) => {
+  type ResponseType = {
+    dbData: ReadCommodityBatchDBType[] | ReadProductBatchDBType[] | null;
+    dbError: PostgrestError | null;
+  };
+  let id: number;
+  let prefix: string;
+  let queryFn: () => Promise<ResponseType>;
+
+  if (articleId.startsWith(PRODUCT_PREFIX)) {
+    prefix = PRODUCT_PREFIX;
+    queryFn = () => getCommodityBatchesByCommodityId({ recordId: id });
+  } else {
+    prefix = COMMODITY_PREFIX;
+    queryFn = () => getProductBatchesByProductId({ recordId: id });
+  }
+  id = parseInt(articleId.replace(prefix, ""));
+
+  const { data, isPending } = useQuery({
+    queryKey: ["articleBatches", articleId],
+    queryFn: queryFn,
   });
 
-  const { data: productsData, isPending: isProductsDataPending } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => getAllProducts(),
-  });
+  if (!data || data.dbError || !data.dbData) return { availableBatches: [], isPending };
 
-  const availableCommodities = getAvailableArray(commoditiesData?.dbData, COMMODITY_PREFIX);
-  const availableProducts = getAvailableArray(productsData?.dbData, PRODUCT_PREFIX);
-  const availableArticles = [...availableCommodities, ...availableProducts];
-  const isPending = isProductsDataPending || isCommoditiesDataPending;
+  const availableBatches = data.dbData.map(({ id, external_id }) => {
+    return { value: `${prefix}${id}`, label: external_id };
+  });
 
   return {
-    availableArticles,
-    availableCommodities,
-    availableProducts,
+    availableBatches,
     isPending,
-    isCommoditiesDataPending,
-    isProductsDataPending,
   };
 };
 

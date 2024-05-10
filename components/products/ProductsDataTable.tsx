@@ -2,23 +2,20 @@
 
 import React from "react";
 import { deleteProduct, getAllProductsWithBatchesAndIngredients } from "@/lib/actions/productActions";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useToast } from "../ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { deleteProductBatch } from "@/lib/actions/productBatchActions";
 import { ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
 import { DeleteAlertDialog, NewBatchDialog, NewItemDialog, UpdateBatchDialog, UpdateItemDialog } from "../dialogs";
+import { useDatabaseData } from "@/lib/hooks";
 import productColumns from "./productColumns";
 import NewProductForm from "./NewProductForm";
 import UpdateProductForm from "./UpdateProductForm";
 import NewProductBatchForm from "../productBatches/NewProductBatchForm";
 import UpdateProductBatchForm from "../productBatches/UpdateProductBatchForm";
-import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const ProductsDataTable: React.FC = () => {
-  const { toast } = useToast();
-
   const productSuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Producto eliminado con éxito",
     queryKeys: [["productsWithBatchesAndIngredients"], ["stats"], ["charts"]],
@@ -47,14 +44,11 @@ const ProductsDataTable: React.FC = () => {
 
   const columns = productColumns({ deleteProductMutation, deleteProductBatchMutation });
 
-  const { data, isPending: isDataPending } = useQuery({
+  const { dbData, isPending } = useDatabaseData({
     queryKey: ["productsWithBatchesAndIngredients"],
     queryFn: () => getAllProductsWithBatchesAndIngredients(),
   });
-
-  if (isDataPending) return <h2>Cargando...</h2>;
-
-  const { dbData } = checkDataFromDatabase(data, toast);
+  if (isPending) return <h2>Cargando...</h2>;
   if (!dbData) return null;
 
   const emptyProductData: ReadProductDBType = {

@@ -2,8 +2,7 @@
 
 import { deleteSupplier, getAllSuppliers } from "@/lib/actions/supplierActions";
 import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useToast } from "../ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { ReadSupplierDBType } from "@/lib/types";
@@ -11,11 +10,9 @@ import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components
 import UpdateSupplierForm from "./UpdateSupplierForm";
 import NewSupplierForm from "./NewSupplierForm";
 import supplierColumns from "./supplierColumns";
-import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
+import { useDatabaseData } from "@/lib/hooks";
 
 const SuppliersDataTable: React.FC = () => {
-  const { toast } = useToast();
-
   const successHandler = useQuerySuccessHandler({
     successToastMessage: "Proveedor eliminado con éxito",
     queryKeys: [["suppliers"], ["stats"], ["charts"]],
@@ -31,14 +28,11 @@ const SuppliersDataTable: React.FC = () => {
 
   const columns = supplierColumns(mutate);
 
-  const { data, isPending: isDataPending } = useQuery({
+  const { dbData, isPending } = useDatabaseData({
     queryKey: ["suppliers"],
     queryFn: () => getAllSuppliers(),
   });
-
-  if (isDataPending) return <h2>Cargando...</h2>;
-
-  const { dbData } = checkDataFromDatabase(data, toast);
+  if (isPending) return <h2>Cargando...</h2>;
   if (!dbData) return null;
 
   const emptySupplierData: ReadSupplierDBType = {

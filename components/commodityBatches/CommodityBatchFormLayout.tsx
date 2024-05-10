@@ -43,6 +43,7 @@ const CommodityBatchFormLayout: RecordFormType<CommodityBatchFormValueType> = ({
             control={form.control}
             label="Proveedor"
             placeholder="Selecciona un proveedor"
+            emptyPlaceholder="No hay proveedores disponibles"
           />
           <CustomFormDatePicker name="date" control={form.control} label="Fecha" />
           <CustomFormField name="externalId" control={form.control} label="Identificador del lote" />

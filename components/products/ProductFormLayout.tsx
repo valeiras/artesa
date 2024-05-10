@@ -49,9 +49,11 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             form={form}
             commonItems={availableArticles}
             placeholder="Selecciona un ingrediente"
+            emptyPlaceholder="No hay ingredientes disponibles"
             label="Ingredientes"
             emptyValue={{ id: "" }}
             objectField="id"
+            gap="2"
           />
         </div>
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />

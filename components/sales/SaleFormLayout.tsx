@@ -3,6 +3,7 @@ import { RecordFormType, SaleFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import useAvailableArticles from "@/lib/hooks/useAvailableArticles";
+import { useAvailableBatches } from "@/lib/hooks";
 
 const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
   form,
@@ -21,7 +22,7 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
 
   const { availableBatches, isPending: isBatchesQueryPending } = useAvailableBatches(articleId);
 
-  if (isQueryPending) return <h2>Cargando...</h2>;
+  if (isArticlesQueryPending) return <h2>Cargando...</h2>;
 
   return (
     <Form {...form}>
@@ -33,7 +34,15 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
             items={availableArticles}
             control={form.control}
             label="Artículo"
-            placeholder=""
+            placeholder="Selecciona un artículo"
+            className="justify-start"
+          />
+          <CustomFormSelect
+            name="batchId"
+            items={availableBatches}
+            control={form.control}
+            label="Lote"
+            placeholder="Selecciona un lote"
             className="justify-start"
           />
           {/* <CustomFormField name="email" control={form.control} label="Email" placeholder="proveedor@mail.es" />

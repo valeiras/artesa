@@ -10,15 +10,20 @@ type CustomFormSelectProps = {
   items: { value: string; label?: string }[];
   label?: string;
   placeholder?: string;
+  emptyPlaceholder?: string;
   className?: string;
   hasLabel?: boolean;
   hasMessage?: boolean;
 };
 
 const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>(function CustomFormSelect(
-  { name, control, items, label, placeholder, className, hasLabel = true, hasMessage = true },
+  { name, control, items, label, placeholder, emptyPlaceholder, className, hasLabel = true, hasMessage = true },
   ref
 ) {
+  let conditionalPlaceholder;
+  if (items.length < 1) conditionalPlaceholder = emptyPlaceholder || placeholder || "";
+  else conditionalPlaceholder = placeholder || items?.[0].label || items?.[0].value;
+
   return (
     <FormField
       control={control}
@@ -26,16 +31,10 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
       render={({ field }) => (
         <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           {hasLabel && <FormLabel>{label || name}</FormLabel>}
-          <Select
-            onValueChange={(e) => {
-              field.onChange(e);
-              console.log(field);
-            }}
-            defaultValue={field.value}
-          >
+          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={items.length < 1}>
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder={placeholder || items[0].label || items[0].value} />
+                <SelectValue placeholder={conditionalPlaceholder} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

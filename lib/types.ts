@@ -97,7 +97,7 @@ export type UpdateCommodityDBType = TablesUpdate<"commodities">;
 export const commodityBatchFormSchema = z.object({
   commodityId: z.number({ required_error: "Especifica una materia prima" }),
   commodityName: z.string({ required_error: "Especifica una materia prima" }),
-  supplierId: z.string().min(1, { message: "Especifica un productor" }),
+  supplierId: z.string().min(1, { message: "Especifica un proveedor" }),
   externalId: z
     .string({ required_error: "Asigna un identificador al lote" })
     .min(2, { message: "El identificador debe tener al menos 2 caracteres" }),

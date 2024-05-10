@@ -5,6 +5,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { PRODUCT_PREFIX, COMMODITY_PREFIX } from "@/lib/constants";
 import { CustomFormSelectFieldArray, CustomFormFieldArray } from "../forms";
 import { UseFormReturn } from "react-hook-form";
+import { useDatabaseData } from "@/lib/hooks";
 
 function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatchDBType>({
   ingredients,
@@ -27,16 +28,23 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 }) {
   const ingredientIds = ingredients.map(({ id }) => parseInt(id));
 
-  const { data: batchesData, isPending: isBatchesDataPending } = useQuery({
+  // const { data: batchesData, isPending: isBatchesDataPending } = useQuery({
+  //   queryKey: [`${ingredientType}Batches`],
+  //   queryFn: () => getBatches({ recordIds: ingredientIds }),
+  // });
+
+  // if (isBatchesDataPending) return <h2>Cargando...</h2>;
+  const { dbData, isPending } = useDatabaseData({
     queryKey: [`${ingredientType}Batches`],
     queryFn: () => getBatches({ recordIds: ingredientIds }),
   });
 
-  if (isBatchesDataPending) return <h2>Cargando...</h2>;
+  if (isPending) return <h2>Cargando...</h2>;
+  if (!dbData) return null;
 
   const { items, ingredientsWithBatches } = organizeBatchesAndIngredients({
     ingredients,
-    batchesData: batchesData?.dbData,
+    batchesData: dbData,
     idField,
   });
 
@@ -57,6 +65,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
         form={form}
         independentItems={items}
         placeholder="Selecciona un lote"
+        emptyPlaceholder="No hay lotes disponibles"
         hasVariableAmount={false}
       />
       <CustomFormFieldArray

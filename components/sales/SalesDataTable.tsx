@@ -2,8 +2,7 @@
 
 import { deleteSale, getAllSales } from "@/lib/actions/saleActions";
 import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useToast } from "../ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { ReadSaleDBType } from "@/lib/types";
@@ -11,11 +10,9 @@ import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components
 import UpdateSaleForm from "./UpdateSaleForm";
 import NewSaleForm from "./NewSaleForm";
 import saleColumns from "./saleColumns";
-import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
+import { useDatabaseData } from "@/lib/hooks";
 
 const SalesDataTable: React.FC = () => {
-  const { toast } = useToast();
-
   const successHandler = useQuerySuccessHandler({
     successToastMessage: "Venta eliminada con éxito",
     queryKeys: [["sales"], ["stats"], ["charts"]],
@@ -31,14 +28,11 @@ const SalesDataTable: React.FC = () => {
 
   const columns = saleColumns(mutate);
 
-  const { data, isPending: isDataPending } = useQuery({
+  const { dbData, isPending } = useDatabaseData({
     queryKey: ["sales"],
     queryFn: () => getAllSales(),
   });
-
-  if (isDataPending) return <h2>Cargando...</h2>;
-
-  const { dbData } = checkDataFromDatabase(data, toast);
+  if (isPending) return <h2>Cargando...</h2>;
   if (!dbData) return null;
 
   const emptySaleData: ReadSaleDBType = {

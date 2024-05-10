@@ -2,20 +2,17 @@
 
 import { deleteClient, getAllClients } from "@/lib/actions/clientActions";
 import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useToast } from "../ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
 import { clientColumns } from "./clientColumns";
 import { DataTable, DataTableContextProvider } from "@/components/dataTable";
 import { DeleteAlertDialog, NewItemDialog, UpdateItemDialog } from "@/components/dialogs/";
 import { ReadClientDBType } from "@/lib/types";
+import { useDatabaseData } from "@/lib/hooks/";
 import NewClientForm from "./NewClientForm";
 import UpdateClientForm from "./UpdateClientForm";
-import checkDataFromDatabase from "@/lib/checkDataFromDatabase";
 
 const ClientsDataTable: React.FC = () => {
-  const { toast } = useToast();
-
   const successHandler = useQuerySuccessHandler({
     successToastMessage: "Cliente eliminado con éxito",
     queryKeys: [["clients"], ["stats"], ["charts"]],
@@ -31,14 +28,9 @@ const ClientsDataTable: React.FC = () => {
 
   const columns = clientColumns(mutate);
 
-  const { data, isPending } = useQuery({
-    queryKey: ["clients"],
-    queryFn: () => getAllClients(),
-  });
+  const { dbData, isPending } = useDatabaseData({ queryKey: ["clients"], queryFn: () => getAllClients() });
 
   if (isPending) return <h2>Cargando...</h2>;
-
-  const { dbData } = checkDataFromDatabase(data, toast);
   if (!dbData) return null;
 
   const emptyClientData: ReadClientDBType = {
