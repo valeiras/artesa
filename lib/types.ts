@@ -149,10 +149,10 @@ export type UpdateClientDBType = TablesUpdate<"clients">;
 
 // Article refers to either a commodity or a product
 export const saleFormSchema = z.object({
-  articleId: z.string({ required_error: "Especifica un producto o materia prima" }),
-  batchId: z.string({ required_error: "Especifica un lote" }),
-  clientId: z.string({ required_error: "Especifica un cliente" }),
-  amount: z.number({ required_error: "Especifica una cantidad" }),
+  articleId: z.string().min(1, { message: "Especifica un producto o materia prima" }),
+  batchId: z.string().min(1, { message: "Especifica un lote" }),
+  clientId: z.string().min(1, { message: "Especifica un cliente" }),
+  amount: positiveNumber,
   date: z.date({ required_error: "Especifica una fecha de venta" }),
   comments: z.string().optional(),
   externalId: z.string().optional(),
@@ -168,8 +168,8 @@ export type UpdateSaleDBType = TablesUpdate<"sales">;
 // However, this requires the supabase client to be started. Script?
 export type ReadSaleType = ReadSaleDBType & {
   clients: { name: string };
-  commodity_batches: { external_id: string; commodities: { name: string } };
-  product_batches: { external_id: string; products: { name: string } };
+  commodity_batches: { external_id: string; commodities: { name: string; id: number } };
+  product_batches: { external_id: string; products: { name: string; id: number } };
 };
 
 export type ReadProductIngredientDBType = Tables<"product_ingredients">;
@@ -223,6 +223,7 @@ export type ReadItemDBType =
   | ReadClientDBType
   | ReadProductDBType
   | ReadSaleDBType
+  | ReadSaleType
   | ReadSupplierDBType;
 
 export type ReadBatchDBType = ReadCommodityBatchDBType | ReadProductBatchDBType;
@@ -306,6 +307,10 @@ export function isReadProductWithBatchesAndIngredientsType(
     "product_ingredients" in record &&
     "commodity_ingredients" in record
   );
+}
+
+export function isReadSaleType(record: ReadRecordWithOptionsType): record is ReadSaleType {
+  return "client_id" in record && "clients" in record && "commodity_batches" in record && "product_batches" in record;
 }
 
 export function isPostgrestError(error: any): error is PostgrestError {

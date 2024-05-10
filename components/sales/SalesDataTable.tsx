@@ -35,7 +35,6 @@ const SalesDataTable: React.FC = () => {
   if (isPending) return <h2>Cargando...</h2>;
   if (!dbData) return null;
 
-  console.log(dbData);
   const emptySaleData: ReadSaleDBType = {
     client_id: 0,
     commodity_batch_id: null,

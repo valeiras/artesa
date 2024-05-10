@@ -3,9 +3,8 @@ import { RecordFormType, SaleFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import useAvailableArticles from "@/lib/hooks/useAvailableArticles";
-import { useAvailableBatches, useDatabaseData } from "@/lib/hooks";
+import { useAvailableBatches } from "@/lib/hooks";
 import LoadingMessage from "../LoadingMessage";
-import { getAllClients } from "@/lib/actions/clientActions";
 import useAvailableClients from "@/lib/hooks/useAvailableClients";
 
 const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
@@ -69,14 +68,7 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
               className="justify-start"
               forceRefresh={forceRefresh}
             />
-
-            <CustomFormField
-              name="initialAmount"
-              control={form.control}
-              label="Cantidad"
-              placeholder="0"
-              type="number"
-            />
+            <CustomFormField name="amount" control={form.control} label="Cantidad" placeholder="0" type="number" />
             <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
           </div>
         )}

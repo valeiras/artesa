@@ -38,6 +38,7 @@ const formToDatabaseFn = ({
       client_id: parseInt(values.clientId),
       date: values.date.toISOString(),
       comments: values.comments,
+      external_id: values.externalId,
     };
   };
 };
@@ -78,8 +79,8 @@ export async function getAllSales(): Promise<{ dbData: ReadSaleType[] | null; db
   try {
     ({ data: dbData, error: dbError } = await supabase.from("sales").select(
       `*, clients(name), 
-        commodity_batches(external_id, commodities(name)), 
-        product_batches(external_id, products(name))`
+        commodity_batches(external_id, commodities(name, id)), 
+        product_batches(external_id, products(name, id))`
     ));
     if (dbError) throw new Error(dbError.message);
   } catch (error) {
