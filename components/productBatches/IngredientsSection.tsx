@@ -28,12 +28,6 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 }) {
   const ingredientIds = ingredients.map(({ id }) => parseInt(id));
 
-  // const { data: batchesData, isPending: isBatchesDataPending } = useQuery({
-  //   queryKey: [`${ingredientType}Batches`],
-  //   queryFn: () => getBatches({ recordIds: ingredientIds }),
-  // });
-
-  // if (isBatchesDataPending) return <h2>Cargando...</h2>;
   const { dbData, isPending } = useDatabaseData({
     queryKey: [`${ingredientType}Batches`],
     queryFn: () => getBatches({ recordIds: ingredientIds }),

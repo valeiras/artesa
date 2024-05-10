@@ -14,10 +14,22 @@ type CustomFormSelectProps = {
   className?: string;
   hasLabel?: boolean;
   hasMessage?: boolean;
+  forceRefresh?: number;
 };
 
 const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>(function CustomFormSelect(
-  { name, control, items, label, placeholder, emptyPlaceholder, className, hasLabel = true, hasMessage = true },
+  {
+    name,
+    control,
+    items,
+    label,
+    placeholder,
+    emptyPlaceholder,
+    className,
+    hasLabel = true,
+    hasMessage = true,
+    forceRefresh,
+  },
   ref
 ) {
   let conditionalPlaceholder;
@@ -31,7 +43,12 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
       render={({ field }) => (
         <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           {hasLabel && <FormLabel>{label || name}</FormLabel>}
-          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={items.length < 1}>
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            disabled={items.length < 1}
+            key={forceRefresh}
+          >
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder={conditionalPlaceholder} />

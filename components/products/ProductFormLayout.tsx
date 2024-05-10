@@ -3,11 +3,6 @@ import { RecordFormType, ProductFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, CustomFormSelectFieldArray, FormButtons } from "@/components/forms";
 import { availableUnits } from "@/lib/units";
-import { useQuery } from "@tanstack/react-query";
-import { getAllCommodities } from "@/lib/actions/commodityActions";
-import { getAllProducts } from "@/lib/actions/productActions";
-import { getAvailableArray } from "@/lib/utils";
-import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
 import useAvailableArticles from "@/lib/hooks/useAvailableArticles";
 
 const ProductForm: RecordFormType<ProductFormValueType> = ({
