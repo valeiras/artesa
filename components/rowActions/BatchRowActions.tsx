@@ -7,10 +7,12 @@ const BatchRowActions = ({
   deleteBatchMutation,
   itemData,
   batchData,
+  seeLink,
 }: {
   deleteBatchMutation: () => void;
   itemData: ReadItemDBType;
   batchData: ReadBatchDBType;
+  seeLink: string;
 }) => {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Las acciones de fila no pueden acceder al contexto de la tabla");
@@ -22,7 +24,7 @@ const BatchRowActions = ({
     setBatchData(batchData);
   };
 
-  return <RowActions handleClick={handleClick} deleteRecordMutation={deleteBatchMutation} />;
+  return <RowActions handleClick={handleClick} deleteRecordMutation={deleteBatchMutation} seeLink={seeLink} />;
 };
 
 export default BatchRowActions;

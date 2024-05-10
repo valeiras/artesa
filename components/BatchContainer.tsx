@@ -23,10 +23,12 @@ function BatchContainer<
   itemData,
   batches,
   mutateBatch,
+  seeLinkbase,
 }: {
   itemData: TItem;
   batches: TBatch[];
   mutateBatch: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>;
+  seeLinkbase: string;
 }) {
   const dataTableContext = useDataTableContext();
   if (dataTableContext === null) throw new Error("Falta el contexto de la tabla...");
@@ -60,6 +62,7 @@ function BatchContainer<
                     batchData={batchData}
                     itemData={itemData}
                     deleteBatchMutation={() => mutateBatch(batchData.id)}
+                    seeLinkbase={seeLinkbase}
                   />
                 </React.Fragment>
               ))}

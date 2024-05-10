@@ -42,6 +42,7 @@ function productColumns({
           itemData={row.original}
           batches={row.original.batches || []}
           mutateBatch={deleteProductBatchMutation}
+          seeLinkbase="productos-finales"
         />
       ),
     },

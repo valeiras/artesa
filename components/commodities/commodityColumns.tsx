@@ -41,6 +41,7 @@ function commodityColumns({
           itemData={row.original}
           batches={row.original.batches || []}
           mutateBatch={deleteCommodityBatchMutation}
+          seeLinkbase="materias-primas"
         />
       ),
     },
