@@ -1,4 +1,4 @@
-import { ReadSaleDBType } from "@/lib/types";
+import { ReadSaleType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
@@ -6,24 +6,29 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { ItemRowActions } from "@/components/rowActions";
 
 function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
-  const columns: ColumnDef<ReadSaleDBType>[] = [
+  const columns: ColumnDef<ReadSaleType>[] = [
     {
-      accessorKey: "client_id",
+      accessorKey: "client_name",
+      accessorFn: (originalRow) => originalRow.clients.name,
       header: ({ column }) => <DataTableColumnHeader column={column} title="Cliente" />,
       meta: { columnName: "Cliente" },
     },
     {
-      accessorKey: "product_id",
+      accessorKey: "product_name",
+      accessorFn: (originalRow) =>
+        originalRow.commodity_batches?.commodities?.name || originalRow.product_batches?.products?.name,
       header: ({ column }) => <DataTableColumnHeader column={column} title="Producto" />,
       meta: { columnName: "Producto" },
     },
     {
-      accessorKey: "batch",
+      accessorKey: "batch_name",
+      accessorFn: (originalRow) =>
+        originalRow.commodity_batches?.external_id || originalRow.product_batches?.external_id,
       header: ({ column }) => <DataTableColumnHeader column={column} title="Lote" />,
       meta: { columnName: "Lote" },
     },
     {
-      accessorKey: "amount",
+      accessorKey: "sold_amount",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Cantidad" />,
       meta: { columnName: "Cantidad" },
     },
@@ -31,6 +36,11 @@ function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null 
       accessorKey: "external_id",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Identificador" />,
       meta: { columnName: "Identificador" },
+    },
+    {
+      accessorKey: "comments",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Comentarios" />,
+      meta: { columnName: "Comentarios" },
     },
     {
       accessorKey: "date",

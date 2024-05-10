@@ -154,6 +154,7 @@ export const saleFormSchema = z.object({
   clientId: z.string({ required_error: "Especifica un cliente" }),
   amount: z.number({ required_error: "Especifica una cantidad" }),
   date: z.date({ required_error: "Especifica una fecha de venta" }),
+  comments: z.string().optional(),
   externalId: z.string().optional(),
 });
 
@@ -161,6 +162,15 @@ export type SaleFormValueType = z.infer<typeof saleFormSchema>;
 export type ReadSaleDBType = Tables<"sales">;
 export type CreateSaleDBType = TablesInsert<"sales">;
 export type UpdateSaleDBType = TablesUpdate<"sales">;
+
+// TODO: Look for a consistent way to infer these types from the queries. From the docs:
+// type CountriesWithCities = QueryData<typeof countriesWithCitiesQuery>.
+// However, this requires the supabase client to be started. Script?
+export type ReadSaleType = ReadSaleDBType & {
+  clients: { name: string };
+  commodity_batches: { external_id: string; commodities: { name: string } };
+  product_batches: { external_id: string; products: { name: string } };
+};
 
 export type ReadProductIngredientDBType = Tables<"product_ingredients">;
 export type CreateProductIngredientDBType = TablesInsert<"product_ingredients">;

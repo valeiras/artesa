@@ -1,15 +1,17 @@
 "use server";
 
-import { ReadSaleDBType, SaleFormValueType } from "../types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { ReadSaleDBType, ReadSaleType, SaleFormValueType } from "../types";
+import { PostgrestError, QueryData, SupabaseClient, createClient } from "@supabase/supabase-js";
 import {
   getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
   updateRecord,
+  connectAndRedirect,
 } from "../supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
+import { Database } from "../database.types";
 
 const getBatchIds = (batchId: string) => {
   const commodityBatchId = batchId.startsWith(COMMODITY_PREFIX)
@@ -35,6 +37,7 @@ const formToDatabaseFn = ({
       sold_amount: values.amount,
       client_id: parseInt(values.clientId),
       date: values.date.toISOString(),
+      comments: values.comments,
     };
   };
 };
@@ -66,8 +69,24 @@ export async function updateSale({ values, recordId }: { values: SaleFormValueTy
   });
 }
 
-export async function getAllSales(): Promise<{ dbData: ReadSaleDBType[] | null; dbError: PostgrestError | null }> {
-  return getAllRecords({ tableName: "sales" });
+export async function getAllSales(): Promise<{ dbData: ReadSaleType[] | null; dbError: PostgrestError | null }> {
+  const supabase = await connectAndRedirect();
+
+  let dbData: ReadSaleType[] | null = null;
+  let dbError: PostgrestError | null = null;
+
+  try {
+    ({ data: dbData, error: dbError } = await supabase.from("sales").select(
+      `*, clients(name), 
+        commodity_batches(external_id, commodities(name)), 
+        product_batches(external_id, products(name))`
+    ));
+    if (dbError) throw new Error(dbError.message);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return { dbData, dbError };
+  }
 }
 
 export async function getSingleSale({ recordId }: { recordId: number }): Promise<{

@@ -15,7 +15,6 @@ const useAvailableBatches = (articleId: string | null) => {
     | { dbData: ReadCommodityBatchDBType[] | ReadProductBatchDBType[] | null; dbError: PostgrestError | null }
     | undefined;
 
-  console.log("articleId: ", articleId);
   if (articleId) {
     if (articleId.startsWith(COMMODITY_PREFIX)) {
       prefix = COMMODITY_PREFIX;
@@ -24,6 +23,7 @@ const useAvailableBatches = (articleId: string | null) => {
       isCommodity = false;
       prefix = PRODUCT_PREFIX;
       productId = parseInt(articleId.replace(PRODUCT_PREFIX, ""));
+      console.log(productId);
     }
   }
 
@@ -31,9 +31,10 @@ const useAvailableBatches = (articleId: string | null) => {
     queryKey: ["commodityBatches", commodityId],
     queryFn: () => getCommodityBatchesByCommodityId({ recordId: commodityId }),
   });
+
   const { data: prodData, isPending: isProdPending } = useQuery({
     queryKey: ["productBatches", productId],
-    queryFn: () => getProductBatchesByProductId({ recordId: commodityId }),
+    queryFn: () => getProductBatchesByProductId({ recordId: productId }),
   });
 
   let availableBatches: { value: string; label: string }[] = [];
@@ -45,6 +46,7 @@ const useAvailableBatches = (articleId: string | null) => {
   } else {
     isPending = isProdPending;
     data = prodData;
+    console.log(prodData);
   }
 
   if (!data || data.dbError || !data.dbData) {

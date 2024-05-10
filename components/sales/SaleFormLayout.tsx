@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { RecordFormType, SaleFormValueType } from "@/lib/types";
 import { Form } from "@/components/ui/form";
-import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
+import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
 import useAvailableArticles from "@/lib/hooks/useAvailableArticles";
-import { useAvailableBatches } from "@/lib/hooks";
+import { useAvailableBatches, useDatabaseData } from "@/lib/hooks";
 import LoadingMessage from "../LoadingMessage";
+import { getAllClients } from "@/lib/actions/clientActions";
+import useAvailableClients from "@/lib/hooks/useAvailableClients";
 
 const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
   form,
@@ -21,22 +23,34 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
   let forceRefresh = new Date().getTime();
   const watchArticleId = form.watch("articleId");
   useEffect(() => {
-    // TODO: this is a workaround to force reset of the field
+    // This is a workaround to force reset of the field
     // eslint-disable-next-line react-hooks/exhaustive-deps
     forceRefresh = new Date().getTime();
     form.resetField("batchId");
   }, [form, watchArticleId]);
+
   const { availableArticles, isPending: isArticlesQueryPending } = useAvailableArticles();
+  const { availableClients, isPending: isClientsQueryPending } = useAvailableClients();
   const { availableBatches, isPending: isBatchesDataPending } = useAvailableBatches(watchArticleId);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="bg-muted p-8 rounded">
         <h2 className="font-semibold text-4xl mb-6">{formHeader}</h2>
-        {isArticlesQueryPending ? (
-          <LoadingMessage message="Cargando artículos..." />
+        {isArticlesQueryPending || isClientsQueryPending ? (
+          <LoadingMessage message="Cargando datos..." />
         ) : (
           <div className="form-content">
+            <CustomFormSelect
+              name="clientId"
+              items={availableClients}
+              control={form.control}
+              label="Cliente"
+              placeholder="Selecciona un cliente"
+              className="justify-start"
+            />
+            <CustomFormDatePicker name="date" control={form.control} label="Fecha" />
+            <CustomFormField name="externalId" control={form.control} label="Identificador de la venta" />
             <CustomFormSelect
               name="articleId"
               items={availableArticles}
@@ -55,12 +69,15 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
               className="justify-start"
               forceRefresh={forceRefresh}
             />
-            {/* <CustomBatchSelector form={form} articleId={watchArticleId} /> */}
 
-            {/* <CustomFormField name="email" control={form.control} label="Email" placeholder="proveedor@mail.es" />
-          <CustomFormField name="phone" control={form.control} label="Número de teléfono" placeholder="600100200" />
-          <CustomFormField name="address" control={form.control} label="Dirección" placeholder="C/" />
-          <CustomFormField name="externalId" control={form.control} label="Identificador de la compra" placeholder="" /> */}
+            <CustomFormField
+              name="initialAmount"
+              control={form.control}
+              label="Cantidad"
+              placeholder="0"
+              type="number"
+            />
+            <CustomFormField name="comments" control={form.control} label="Comentarios" placeholder="" />
           </div>
         )}
         <FormButtons isPending={isPending} submitButtonLabel={submitButtonLabel} setIsFormOpen={setIsFormOpen} />

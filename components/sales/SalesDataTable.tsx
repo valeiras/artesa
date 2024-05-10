@@ -35,6 +35,7 @@ const SalesDataTable: React.FC = () => {
   if (isPending) return <h2>Cargando...</h2>;
   if (!dbData) return null;
 
+  console.log(dbData);
   const emptySaleData: ReadSaleDBType = {
     client_id: 0,
     commodity_batch_id: null,
@@ -45,6 +46,7 @@ const SalesDataTable: React.FC = () => {
     user_id: null,
     date: "",
     external_id: "",
+    comments: "",
   };
 
   return (
@@ -53,7 +55,7 @@ const SalesDataTable: React.FC = () => {
         columns={columns}
         data={dbData || []}
         newItemLabel="Nueva venta"
-        lookupField="product_id"
+        lookupField="product_name"
         lookupPlaceholder="Buscar por producto"
       />
       <NewItemDialog RecordForm={NewSaleForm} />

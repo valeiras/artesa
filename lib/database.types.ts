@@ -283,6 +283,7 @@ export type Database = {
       sales: {
         Row: {
           client_id: number
+          comments: string | null
           commodity_batch_id: number | null
           created_at: string
           date: string
@@ -294,6 +295,7 @@ export type Database = {
         }
         Insert: {
           client_id: number
+          comments?: string | null
           commodity_batch_id?: number | null
           created_at?: string
           date: string
@@ -305,6 +307,7 @@ export type Database = {
         }
         Update: {
           client_id?: number
+          comments?: string | null
           commodity_batch_id?: number | null
           created_at?: string
           date?: string
