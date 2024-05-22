@@ -5,15 +5,27 @@ import { SaleFormValueType, saleFormSchema } from "@/lib/types";
 import { NewItemForm } from "@/components/forms";
 import { createSale } from "@/lib/actions/saleActions";
 import SaleFormLayout from "./SaleFormLayout";
+import { createSaleRecipe } from "@/lib/actions/saleIngredientActions";
+
+const createRecordFn = async ({ values }: { values: SaleFormValueType }) => {
+  const { dbError: dbErrorProduct, dbData } = await createSale({ values });
+  if (dbErrorProduct || !dbData) return { dbError: dbErrorProduct };
+
+  const { dbError: dbErrorRecipe } = await createSaleRecipe({
+    values,
+    saleId: dbData.id,
+  });
+  return { dbError: dbErrorRecipe };
+};
 
 const NewSaleForm: React.FC = () => {
   return (
     <NewItemForm<SaleFormValueType>
       formSchema={saleFormSchema}
       defaultValues={{
-        articleId: "",
-        batchId: "",
-        amount: 0,
+        articleIds: [{ id: "" }],
+        batchIds: [{ id: "" }],
+        amounts: [{ amount: 0 }],
         clientId: "",
         date: new Date(),
         externalId: "",
@@ -22,7 +34,7 @@ const NewSaleForm: React.FC = () => {
       successToastMessage="Nueva venta creada con éxito"
       queryKeys={[["sales"], ["stats"], ["charts"]]}
       formHeader="Nueva venta"
-      createRecordFn={createSale}
+      createRecordFn={createRecordFn}
       FormLayout={SaleFormLayout}
     />
   );

@@ -1,14 +1,5 @@
 import React, { HTMLInputTypeAttribute } from "react";
-import {
-  ArrayPath,
-  Control,
-  FieldArray,
-  FieldValues,
-  Path,
-  UseFormRegister,
-  UseFormReturn,
-  useFieldArray,
-} from "react-hook-form";
+import { ArrayPath, FieldArray, FieldValues, Path, UseFormReturn, useFieldArray } from "react-hook-form";
 import { FormItem, FormLabel, FormMessage } from "../ui/form";
 import { cn } from "@/lib/utils";
 import CustomFormField from "./CustomFormField";

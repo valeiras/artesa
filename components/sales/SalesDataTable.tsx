@@ -37,11 +37,8 @@ const SalesDataTable: React.FC = () => {
 
   const emptySaleData: ReadSaleDBType = {
     client_id: 0,
-    commodity_batch_id: null,
     created_at: "",
     id: 0,
-    product_batch_id: null,
-    sold_amount: 0,
     user_id: null,
     date: "",
     external_id: "",

@@ -280,63 +280,92 @@ export type Database = {
         }
         Relationships: []
       }
-      sales: {
+      sale_ingredients: {
         Row: {
-          client_id: number
-          comments: string | null
           commodity_batch_id: number | null
           created_at: string
-          date: string
-          external_id: string | null
           id: number
           product_batch_id: number | null
+          sale_id: number
           sold_amount: number
-          user_id: string | null
+          user_id: string
         }
         Insert: {
-          client_id: number
-          comments?: string | null
           commodity_batch_id?: number | null
           created_at?: string
-          date: string
-          external_id?: string | null
           id?: number
           product_batch_id?: number | null
+          sale_id: number
           sold_amount: number
-          user_id?: string | null
+          user_id: string
         }
         Update: {
-          client_id?: number
-          comments?: string | null
           commodity_batch_id?: number | null
           created_at?: string
-          date?: string
-          external_id?: string | null
           id?: number
           product_batch_id?: number | null
+          sale_id?: number
           sold_amount?: number
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_sale_product_batch_id_fkey"
+            foreignKeyName: "sale_ingredients_commodity_batch_id_fkey"
+            columns: ["commodity_batch_id"]
+            isOneToOne: false
+            referencedRelation: "commodity_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sale_ingredients_product_batch_id_fkey"
             columns: ["product_batch_id"]
             isOneToOne: false
             referencedRelation: "product_batches"
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "sale_ingredients_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          client_id: number
+          comments: string | null
+          created_at: string
+          date: string
+          external_id: string | null
+          id: number
+          user_id: string | null
+        }
+        Insert: {
+          client_id: number
+          comments?: string | null
+          created_at?: string
+          date: string
+          external_id?: string | null
+          id?: number
+          user_id?: string | null
+        }
+        Update: {
+          client_id?: number
+          comments?: string | null
+          created_at?: string
+          date?: string
+          external_id?: string | null
+          id?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
             foreignKeyName: "sale_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sale_commodity_batch_id_fkey"
-            columns: ["commodity_batch_id"]
-            isOneToOne: false
-            referencedRelation: "commodity_batches"
             referencedColumns: ["id"]
           },
         ]

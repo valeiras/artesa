@@ -1,45 +1,22 @@
 "use server";
 
 import { ReadSaleDBType, ReadSaleType, SaleFormValueType } from "../types";
-import { PostgrestError, QueryData, SupabaseClient, createClient } from "@supabase/supabase-js";
+import { PostgrestError } from "@supabase/supabase-js";
 import {
-  getAllRecords,
   getSingleRecordById,
   deleteSingleRecordById,
   createRecord,
   updateRecord,
   connectAndRedirect,
 } from "../supabaseUtils";
-import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
-import { Database } from "../database.types";
 
-const getBatchIds = (batchId: string) => {
-  const commodityBatchId = batchId.startsWith(COMMODITY_PREFIX)
-    ? parseInt(batchId.replace(COMMODITY_PREFIX, ""))
-    : null;
-  const productBatchId = batchId.startsWith(PRODUCT_PREFIX) ? parseInt(batchId.replace(PRODUCT_PREFIX, "")) : null;
-
-  return { commodityBatchId, productBatchId };
-};
-
-const formToDatabaseFn = ({
-  commodityBatchId,
-  productBatchId,
-}: {
-  commodityBatchId: number | null;
-  productBatchId: number | null;
-}) => {
-  return ({ values, userId }: { values: SaleFormValueType; userId: string }) => {
-    return {
-      user_id: userId,
-      commodity_batch_id: commodityBatchId,
-      product_batch_id: productBatchId,
-      sold_amount: values.amount,
-      client_id: parseInt(values.clientId),
-      date: values.date.toISOString(),
-      comments: values.comments,
-      external_id: values.externalId,
-    };
+const formToDatabaseFn = ({ values, userId }: { values: SaleFormValueType; userId: string }) => {
+  return {
+    user_id: userId,
+    client_id: parseInt(values.clientId),
+    date: values.date.toISOString(),
+    comments: values.comments,
+    external_id: values.externalId,
   };
 };
 
@@ -47,12 +24,10 @@ export async function createSale({ values }: { values: SaleFormValueType }): Pro
   dbError: PostgrestError | null;
   dbData: ReadSaleDBType | null;
 }> {
-  const { commodityBatchId, productBatchId } = getBatchIds(values.batchId);
-
   return createRecord({
     values,
     tableName: "sales",
-    formToDatabaseFn: formToDatabaseFn({ commodityBatchId, productBatchId }),
+    formToDatabaseFn,
   });
 }
 
@@ -60,12 +35,10 @@ export async function updateSale({ values, recordId }: { values: SaleFormValueTy
   dbError: PostgrestError | null;
   dbData: ReadSaleDBType | null;
 }> {
-  const { commodityBatchId, productBatchId } = getBatchIds(values.batchId);
-
   return updateRecord({
     values,
     tableName: "sales",
-    formToDatabaseFn: formToDatabaseFn({ commodityBatchId, productBatchId }),
+    formToDatabaseFn,
     recordId,
   });
 }
@@ -79,8 +52,8 @@ export async function getAllSales(): Promise<{ dbData: ReadSaleType[] | null; db
   try {
     ({ data: dbData, error: dbError } = await supabase.from("sales").select(
       `*, clients(name), 
-        commodity_batches(external_id, commodities(name, id)), 
-        product_batches(external_id, products(name, id))`
+        sale_ingredients(sold_amount, commodity_batches(external_id, id, commodities(name, id)),  
+                         product_batches(external_id, id, products(name, id)))`
     ));
     if (dbError) throw new Error(dbError.message);
   } catch (error) {

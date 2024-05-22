@@ -149,10 +149,10 @@ export type UpdateClientDBType = TablesUpdate<"clients">;
 
 // Article refers to either a commodity or a product
 export const saleFormSchema = z.object({
-  articleId: z.string().min(1, { message: "Especifica un producto o materia prima" }),
-  batchId: z.string().min(1, { message: "Especifica un lote" }),
+  articleIds: z.object({ id: z.string() }).array(),
+  batchIds: z.object({ id: z.string() }).array(),
+  amounts: z.object({ amount: positiveNumber }).array(),
   clientId: z.string().min(1, { message: "Especifica un cliente" }),
-  amount: positiveNumber,
   date: z.date({ required_error: "Especifica una fecha de venta" }),
   comments: z.string().optional(),
   externalId: z.string().optional(),
@@ -163,13 +163,23 @@ export type ReadSaleDBType = Tables<"sales">;
 export type CreateSaleDBType = TablesInsert<"sales">;
 export type UpdateSaleDBType = TablesUpdate<"sales">;
 
+export type ReadSaleIngredientDBType = Tables<"sale_ingredients">;
+export type CreateSaleIngredientDBType = TablesInsert<"sale_ingredients">;
+export type UpdateSaleIngredientDBType = TablesUpdate<"sale_ingredients">;
+
 // TODO: Look for a consistent way to infer these types from the queries. From the docs:
 // type CountriesWithCities = QueryData<typeof countriesWithCitiesQuery>.
 // However, this requires the supabase client to be started. Script?
 export type ReadSaleType = ReadSaleDBType & {
-  clients: { name: string };
-  commodity_batches: { external_id: string; commodities: { name: string; id: number } };
-  product_batches: { external_id: string; products: { name: string; id: number } };
+  clients: { name: string; id: string };
+  date: string;
+  comments: string;
+  external_id: string;
+  sale_ingredients: {
+    sold_amount: number;
+    commodity_batches: { id: string; external_id: string; commodities: { name: string; id: number } };
+    product_batches: { id: string; external_id: string; products: { name: string; id: number } };
+  }[];
 };
 
 export type ReadProductIngredientDBType = Tables<"product_ingredients">;
@@ -310,7 +320,7 @@ export function isReadProductWithBatchesAndIngredientsType(
 }
 
 export function isReadSaleType(record: ReadRecordWithOptionsType): record is ReadSaleType {
-  return "client_id" in record && "clients" in record && "commodity_batches" in record && "product_batches" in record;
+  return "client_id" in record && "clients" in record && "sale_ingredients" in record;
 }
 
 export function isPostgrestError(error: any): error is PostgrestError {

@@ -6,6 +6,7 @@
     "dev": "next dev --turbo",
     "dev-slow": "next dev",
     "build": "next build",
+    "build-and-start": "next build && npm start",
     "start": "next start",
     "lint": "next lint"
   },

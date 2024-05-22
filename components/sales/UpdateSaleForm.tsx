@@ -7,6 +7,7 @@ import { updateSale } from "@/lib/actions/saleActions";
 import { useDataTableContext } from "@/components/dataTable";
 import SaleFormLayout from "./SaleFormLayout";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "@/lib/constants";
+import { createSaleRecipe, deleteSaleRecipeBySaleId } from "@/lib/actions/saleIngredientActions";
 
 const UpdateSaleForm: React.FC = () => {
   const dataTableContext = useDataTableContext();
@@ -14,21 +15,30 @@ const UpdateSaleForm: React.FC = () => {
   const { itemData } = dataTableContext;
   if (!isReadSaleType(itemData)) throw new Error("El tipo de artículo no coincide con el esperado");
 
-  const articleId = itemData.commodity_batch_id
-    ? `${COMMODITY_PREFIX}${itemData.commodity_batches?.commodities?.id}`
-    : `${PRODUCT_PREFIX}${itemData.product_batches?.products?.id}`;
-  const batchId = itemData.commodity_batch_id
-    ? `${COMMODITY_PREFIX}${itemData.commodity_batch_id}`
-    : `${PRODUCT_PREFIX}${itemData.product_batch_id}`;
+  const articleIds = itemData.sale_ingredients.map(({ product_batches, commodity_batches }) => {
+    return product_batches
+      ? { id: `${PRODUCT_PREFIX}${product_batches.products.id}` }
+      : { id: `${COMMODITY_PREFIX}${commodity_batches.commodities.id}` };
+  });
+  const batchIds = itemData.sale_ingredients.map(({ product_batches, commodity_batches }) => {
+    return product_batches
+      ? { id: `${PRODUCT_PREFIX}${product_batches.id}` }
+      : { id: `${COMMODITY_PREFIX}${commodity_batches.id}` };
+  });
+  const amounts = itemData.sale_ingredients.map(({ sold_amount }) => {
+    return { amount: sold_amount };
+  });
 
-  const defaultValues: SaleFormValueType = {
-    articleId,
-    batchId,
-    clientId: String(itemData.client_id) || "",
-    amount: itemData.sold_amount || 0,
+  console.log(itemData.client_id);
+
+  const defaultValues = {
+    articleIds,
+    batchIds,
+    amounts,
+    clientId: String(itemData.client_id),
     date: new Date(itemData.date),
-    comments: itemData.comments || "",
-    externalId: itemData.external_id || "",
+    externalId: itemData.external_id,
+    comments: itemData.comments,
   };
 
   return (
@@ -38,10 +48,23 @@ const UpdateSaleForm: React.FC = () => {
       successToastMessage="Venta actualizada con éxito"
       queryKeys={[["sale", String(itemData.id)], ["sales"], ["stats"], ["charts"]]}
       formHeader="Editar venta"
-      updateRecordFn={updateSale}
+      updateRecordFn={updateRecordFn}
       FormLayout={SaleFormLayout}
     />
   );
+};
+
+const updateRecordFn = async ({ values, recordId }: { values: SaleFormValueType; recordId: number }) => {
+  const { dbError: dbErrorProduct } = await updateSale({ values, recordId });
+  if (dbErrorProduct) return { dbError: dbErrorProduct };
+
+  // TODO: improve this: we shouldn't blindly remove everything and create it again
+  await deleteSaleRecipeBySaleId({ saleId: recordId });
+  const { dbError: dbErrorRecipe } = await createSaleRecipe({
+    values,
+    saleId: recordId,
+  });
+  return { dbError: dbErrorRecipe };
 };
 
 export default UpdateSaleForm;

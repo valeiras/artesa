@@ -1,62 +1,39 @@
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 import { useQuery } from "@tanstack/react-query";
-import { getCommodityBatchesByCommodityId } from "../actions/commodityBatchActions";
-import { getProductBatchesByProductId } from "../actions/productBatchActions";
-import { ReadCommodityBatchDBType } from "@/lib/types";
-import { ReadProductBatchDBType } from "@/lib/types";
-import { PostgrestError } from "@supabase/supabase-js";
+import { getAllCommodityBatches } from "../actions/commodityBatchActions";
+import { getAllProductBatches } from "../actions/productBatchActions";
 
-const useAvailableBatches = (articleId: string | null) => {
-  let isCommodity: boolean = true;
-  let commodityId: number = 0;
-  let productId: number = 0;
-  let prefix: string;
-  let data:
-    | { dbData: ReadCommodityBatchDBType[] | ReadProductBatchDBType[] | null; dbError: PostgrestError | null }
-    | undefined;
-
-  if (articleId) {
-    if (articleId.startsWith(COMMODITY_PREFIX)) {
-      prefix = COMMODITY_PREFIX;
-      commodityId = parseInt(articleId.replace(COMMODITY_PREFIX, ""));
-    } else {
-      isCommodity = false;
-      prefix = PRODUCT_PREFIX;
-      productId = parseInt(articleId.replace(PRODUCT_PREFIX, ""));
-      console.log(productId);
-    }
-  }
-
+const useAvailableBatches = () => {
   const { data: commData, isPending: isCommPending } = useQuery({
-    queryKey: ["commodityBatches", commodityId],
-    queryFn: () => getCommodityBatchesByCommodityId({ recordId: commodityId }),
+    queryKey: ["commodityBatches"],
+    queryFn: () => getAllCommodityBatches(),
   });
 
   const { data: prodData, isPending: isProdPending } = useQuery({
-    queryKey: ["productBatches", productId],
-    queryFn: () => getProductBatchesByProductId({ recordId: productId }),
+    queryKey: ["productBatches"],
+    queryFn: () => getAllProductBatches(),
   });
 
-  let availableBatches: { value: string; label: string }[] = [];
-  let isPending: boolean = true;
+  let availableBatches: { value: string; label: string; articleId: string }[] = [];
 
-  if (isCommodity) {
-    isPending = isCommPending;
-    data = commData;
-  } else {
-    isPending = isProdPending;
-    data = prodData;
-    console.log(prodData);
-  }
-
-  if (!data || data.dbError || !data.dbData) {
+  if (!prodData || prodData.dbError || !commData || commData.dbError) {
     availableBatches = [];
   } else {
-    availableBatches = data.dbData.map(({ id, external_id }) => {
-      return { value: `${prefix}${id}`, label: external_id };
-    });
+    const availableCommBatches =
+      commData.dbData?.map(({ id, external_id, commodity_id }) => {
+        return {
+          value: `${COMMODITY_PREFIX}${id}`,
+          label: external_id,
+          articleId: `${COMMODITY_PREFIX}${commodity_id}`,
+        };
+      }) || [];
+    const availableProdBatches =
+      prodData.dbData?.map(({ id, external_id, product_id }) => {
+        return { value: `${PRODUCT_PREFIX}${id}`, label: external_id, articleId: `${PRODUCT_PREFIX}${product_id}` };
+      }) || [];
+    availableBatches = [...availableCommBatches, ...availableProdBatches];
   }
-  return { availableBatches, isPending };
+  return { availableBatches, isPending: isCommPending || isProdPending };
 };
 
 export default useAvailableBatches;

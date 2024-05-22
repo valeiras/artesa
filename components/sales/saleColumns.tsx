@@ -1,3 +1,4 @@
+import React from "react";
 import { ReadSaleType } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
@@ -14,23 +15,24 @@ function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null 
       meta: { columnName: "Cliente" },
     },
     {
-      accessorKey: "product_name",
-      accessorFn: (originalRow) =>
-        originalRow.commodity_batches?.commodities?.name || originalRow.product_batches?.products?.name,
+      accessorKey: "products",
+      cell: ({ row }) => {
+        return (
+          <div className="grid grid-cols-3 gap-2">
+            {row.original.sale_ingredients.map(({ commodity_batches, product_batches, sold_amount }) => {
+              return (
+                <React.Fragment key={commodity_batches?.id || product_batches?.id}>
+                  <div>{commodity_batches?.commodities?.name || product_batches?.products?.name}</div>
+                  <div>{commodity_batches?.external_id || product_batches?.external_id}</div>
+                  <div>{sold_amount}</div>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        );
+      },
       header: ({ column }) => <DataTableColumnHeader column={column} title="Producto" />,
       meta: { columnName: "Producto" },
-    },
-    {
-      accessorKey: "batch_name",
-      accessorFn: (originalRow) =>
-        originalRow.commodity_batches?.external_id || originalRow.product_batches?.external_id,
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Lote" />,
-      meta: { columnName: "Lote" },
-    },
-    {
-      accessorKey: "sold_amount",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Cantidad" />,
-      meta: { columnName: "Cantidad" },
     },
     {
       accessorKey: "external_id",
