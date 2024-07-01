@@ -50,7 +50,14 @@ const CommoditiesDataTable: React.FC = () => {
   if (isPending) return <h2>Cargando...</h2>;
   if (!dbData) return null;
 
-  const emptyCommodityData: ReadCommodityDBType = { name: "", created_at: "", id: 0, unit: "kg", user_id: "" };
+  const emptyCommodityData: ReadCommodityDBType = {
+    name: "",
+    created_at: "",
+    id: 0,
+    unit: "kg",
+    user_id: "",
+    external_id: "",
+  };
   const emptyCommodityBatchData: ReadCommodityBatchDBType = {
     comments: "",
     commodity_id: 0,

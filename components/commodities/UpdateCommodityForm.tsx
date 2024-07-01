@@ -16,7 +16,7 @@ const UpdateCommodityForm: React.FC = () => {
   return (
     <UpdateItemForm<CommodityFormValueType>
       formSchema={commodityFormSchema}
-      defaultValues={{ name: itemData.name, unit: itemData.unit || undefined }}
+      defaultValues={{ name: itemData.name || "", unit: itemData.unit || undefined }}
       successToastMessage="Materia prima actualizada con éxito"
       queryKeys={[["commodity", String(itemData.id)], ["commoditiesWithBatches"], ["stats"], ["charts"]]}
       formHeader="Editar materia prima"

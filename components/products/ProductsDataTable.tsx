@@ -52,6 +52,7 @@ const ProductsDataTable: React.FC = () => {
   if (!dbData) return null;
 
   const emptyProductData: ReadProductDBType = {
+    external_id: "",
     name: "",
     created_at: "",
     id: 0,

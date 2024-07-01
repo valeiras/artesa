@@ -15,7 +15,7 @@ const NewCommodityBatchForm: React.FC = () => {
 
   const defaultValues: CommodityBatchFormValueType = {
     commodityId: itemData.id,
-    commodityName: itemData.name,
+    commodityName: itemData.name || "",
     supplierId: "",
     externalId: "",
     date: new Date(),

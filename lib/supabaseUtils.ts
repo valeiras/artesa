@@ -168,7 +168,7 @@ export async function updateRecord<TForm extends FieldValues, TTable extends Pub
 }> {
   const userId = await authenticateAndRedirect();
   const supabase: SupabaseClient = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
+  await checkPermissionsAndRedirect(supabase);
 
   const newRecord: TablesInsert<TTable> = formToDatabaseFn({ values, userId });
 

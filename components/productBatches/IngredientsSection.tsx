@@ -95,7 +95,7 @@ const organizeBatchesAndIngredients = <T extends ReadCommodityBatchDBType | Read
   const items = ingredientsWithBatches.map(({ batches }) => {
     return (
       batches?.map(({ external_id, id }) => {
-        return { value: String(id), label: external_id };
+        return { value: String(id), label: external_id || "" };
       }) || []
     );
   });

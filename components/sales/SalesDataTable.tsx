@@ -39,7 +39,7 @@ const SalesDataTable: React.FC = () => {
     client_id: 0,
     created_at: "",
     id: 0,
-    user_id: null,
+    user_id: "",
     date: "",
     external_id: "",
     comments: "",

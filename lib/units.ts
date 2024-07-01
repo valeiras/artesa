@@ -1,6 +1,7 @@
 import { UnitType, unitEnum } from "@/lib/types";
 
 export const valueToLabel: { [key in UnitType]: string } = {
+  unit: "unidades",
   box: "cajas",
   jar: "botes",
   g: "g",

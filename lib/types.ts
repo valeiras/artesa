@@ -32,7 +32,7 @@ const positiveNumber = z.coerce
   .positive({ message: "Especifica una cantidad mayor que 0" });
 
 export type UnitType = Enums<"unit">;
-export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml"]);
+export const unitEnum = z.enum(["box", "jar", "g", "mg", "kg", "l", "dl", "cl", "ml", "unit"]);
 
 export type PublicSchema = Database[Extract<keyof Database, "public">];
 export type PublicTableName = keyof PublicSchema["Tables"];

@@ -22,7 +22,7 @@ export async function createProductRecipe({
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
+  await checkPermissionsAndRedirect(supabase);
 
   let dbError: PostgrestError | null = null;
   let dbData: ReadProductIngredientDBType[] | null = null;

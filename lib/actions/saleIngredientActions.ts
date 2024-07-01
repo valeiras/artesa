@@ -49,7 +49,7 @@ export async function createSaleRecipe({ values, saleId }: { values: SaleFormVal
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase, userId);
+  await checkPermissionsAndRedirect(supabase);
 
   let dbError: PostgrestError | null = null;
   let dbData: ReadSaleIngredientDBType[] | null = null;
