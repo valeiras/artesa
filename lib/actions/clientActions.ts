@@ -18,6 +18,7 @@ export async function createClient({ values }: { values: ClientFormValueType }):
   dbError: PostgrestError | null;
   dbData: ReadClientDBType | null;
 }> {
+  console.log("Creating client...");
   return createRecord({
     values,
     tableName: "clients",

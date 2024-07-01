@@ -30,7 +30,7 @@
     "@tanstack/react-query-devtools": "^5.29.2",
     "@tanstack/react-table": "^8.16.0",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
+    "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
     "lucide-react": "^0.368.0",
@@ -44,7 +44,7 @@
     "react-hook-form": "^7.51.3",
     "react-loader-spinner": "^6.1.6",
     "recharts": "^2.12.5",
-    "tailwind-merge": "^2.2.2",
+    "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "validator": "^13.11.0",
     "zod": "^3.22.4"
