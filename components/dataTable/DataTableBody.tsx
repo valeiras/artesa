@@ -2,6 +2,7 @@ import React from "react";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Table, flexRender } from "@tanstack/react-table";
 import { ColumnDef } from "@tanstack/react-table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props<TData, TValue> = { table: Table<TData>; columns: ColumnDef<TData, TValue>[]; isPending: boolean };
 
@@ -15,9 +16,19 @@ export default function DataTableBody<TData, TValue>({
   if (!rows?.length) {
     return (
       <TableBody>
-        <TableCell colSpan={columns.length} className="h-24 text-center">
-          {isPending ? "Cargando..." : "No hay ningún registro disponible."}
-        </TableCell>
+        <TableRow>
+          {isPending ? (
+            columns.map((_, idx) => (
+              <TableCell key={idx} className="h-24">
+                <Skeleton className="h-4 w-3/4" />
+              </TableCell>
+            ))
+          ) : (
+            <TableCell colSpan={columns.length} className="h-24 text-center">
+              No hay ningún registro disponible.
+            </TableCell>
+          )}
+        </TableRow>
       </TableBody>
     );
   }
