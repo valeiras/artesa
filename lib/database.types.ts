@@ -12,6 +12,7 @@ export type Database = {
       clients: {
         Row: {
           address: string | null
+          comments: string | null
           created_at: string
           email: string | null
           id: number
@@ -21,18 +22,20 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          comments?: string | null
           created_at?: string
           email?: string | null
-          id?: number
+          id?: never
           name: string
           phone?: string | null
           user_id?: string
         }
         Update: {
           address?: string | null
+          comments?: string | null
           created_at?: string
           email?: string | null
-          id?: number
+          id?: never
           name?: string
           phone?: string | null
           user_id?: string
@@ -51,15 +54,15 @@ export type Database = {
         Insert: {
           created_at?: string
           external_id?: string | null
-          id?: number
+          id?: never
           name: string
-          unit?: Database["public"]["Enums"]["unit"]
+          unit: Database["public"]["Enums"]["unit"]
           user_id?: string
         }
         Update: {
           created_at?: string
           external_id?: string | null
-          id?: number
+          id?: never
           name?: string
           unit?: Database["public"]["Enums"]["unit"]
           user_id?: string
@@ -82,9 +85,9 @@ export type Database = {
           comments?: string | null
           commodity_id: number
           created_at?: string
-          date?: string
+          date: string
           external_id: string
-          id?: number
+          id?: never
           initial_amount: number
           supplier_id: number
           user_id?: string
@@ -95,7 +98,7 @@ export type Database = {
           created_at?: string
           date?: string
           external_id?: string
-          id?: number
+          id?: never
           initial_amount?: number
           supplier_id?: number
           user_id?: string
@@ -130,7 +133,7 @@ export type Database = {
         Insert: {
           commodity_ingredient_batch_id?: number | null
           created_at?: string
-          id?: number
+          id?: never
           product_batch_id: number
           product_ingredient_batch_id?: number | null
           used_amount: number
@@ -139,7 +142,7 @@ export type Database = {
         Update: {
           commodity_ingredient_batch_id?: number | null
           created_at?: string
-          id?: number
+          id?: never
           product_batch_id?: number
           product_ingredient_batch_id?: number | null
           used_amount?: number
@@ -183,9 +186,9 @@ export type Database = {
         Insert: {
           comments?: string | null
           created_at?: string
-          date?: string
+          date: string
           external_id: string
-          id?: number
+          id?: never
           initial_amount: number
           product_id: number
           user_id?: string
@@ -195,7 +198,7 @@ export type Database = {
           created_at?: string
           date?: string
           external_id?: string
-          id?: number
+          id?: never
           initial_amount?: number
           product_id?: number
           user_id?: string
@@ -222,7 +225,7 @@ export type Database = {
         Insert: {
           commodity_ingredient_id?: number | null
           created_at?: string
-          id?: number
+          id?: never
           product_id: number
           product_ingredient_id?: number | null
           user_id?: string
@@ -230,7 +233,7 @@ export type Database = {
         Update: {
           commodity_ingredient_id?: number | null
           created_at?: string
-          id?: number
+          id?: never
           product_id?: number
           product_ingredient_id?: number | null
           user_id?: string
@@ -271,15 +274,15 @@ export type Database = {
         Insert: {
           created_at?: string
           external_id?: string | null
-          id?: number
+          id?: never
           name: string
-          unit?: Database["public"]["Enums"]["unit"]
+          unit: Database["public"]["Enums"]["unit"]
           user_id?: string
         }
         Update: {
           created_at?: string
           external_id?: string | null
-          id?: number
+          id?: never
           name?: string
           unit?: Database["public"]["Enums"]["unit"]
           user_id?: string
@@ -289,7 +292,7 @@ export type Database = {
       sale_ingredients: {
         Row: {
           commodity_batch_id: number | null
-          created_at: string
+          created_at: string | null
           id: number
           product_batch_id: number | null
           sale_id: number
@@ -298,8 +301,8 @@ export type Database = {
         }
         Insert: {
           commodity_batch_id?: number | null
-          created_at?: string
-          id?: number
+          created_at?: string | null
+          id?: never
           product_batch_id?: number | null
           sale_id: number
           sold_amount: number
@@ -307,8 +310,8 @@ export type Database = {
         }
         Update: {
           commodity_batch_id?: number | null
-          created_at?: string
-          id?: number
+          created_at?: string | null
+          id?: never
           product_batch_id?: number | null
           sale_id?: number
           sold_amount?: number
@@ -342,7 +345,7 @@ export type Database = {
         Row: {
           client_id: number
           comments: string | null
-          created_at: string
+          created_at: string | null
           date: string
           external_id: string | null
           id: number
@@ -351,19 +354,19 @@ export type Database = {
         Insert: {
           client_id: number
           comments?: string | null
-          created_at?: string
+          created_at?: string | null
           date: string
           external_id?: string | null
-          id?: number
+          id?: never
           user_id?: string
         }
         Update: {
           client_id?: number
           comments?: string | null
-          created_at?: string
+          created_at?: string | null
           date?: string
           external_id?: string | null
-          id?: number
+          id?: never
           user_id?: string
         }
         Relationships: [
@@ -379,6 +382,7 @@ export type Database = {
       suppliers: {
         Row: {
           address: string | null
+          comments: string | null
           created_at: string
           email: string | null
           id: number
@@ -388,18 +392,20 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          comments?: string | null
           created_at?: string
           email?: string | null
-          id?: number
+          id?: never
           name: string
           phone?: string | null
           user_id?: string
         }
         Update: {
           address?: string | null
+          comments?: string | null
           created_at?: string
           email?: string | null
-          id?: number
+          id?: never
           name?: string
           phone?: string | null
           user_id?: string
@@ -408,21 +414,21 @@ export type Database = {
       }
       user_roles: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: number
-          role: Database["public"]["Enums"]["role"]
+          role: Database["public"]["Enums"]["role"] | null
           user_id: string
         }
         Insert: {
-          created_at?: string
-          id?: number
-          role?: Database["public"]["Enums"]["role"]
-          user_id: string
+          created_at?: string | null
+          id?: never
+          role?: Database["public"]["Enums"]["role"] | null
+          user_id?: string
         }
         Update: {
-          created_at?: string
-          id?: number
-          role?: Database["public"]["Enums"]["role"]
+          created_at?: string | null
+          id?: never
+          role?: Database["public"]["Enums"]["role"] | null
           user_id?: string
         }
         Relationships: []
@@ -444,8 +450,8 @@ export type Database = {
         | "box"
         | "jar"
         | "g"
-        | "kg"
         | "mg"
+        | "kg"
         | "l"
         | "dl"
         | "cl"

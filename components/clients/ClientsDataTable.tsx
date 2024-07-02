@@ -41,6 +41,7 @@ const ClientsDataTable: React.FC = () => {
     name: "",
     phone: "",
     user_id: "",
+    comments: "",
   };
 
   return (

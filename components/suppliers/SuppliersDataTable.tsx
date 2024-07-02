@@ -43,6 +43,7 @@ const SuppliersDataTable: React.FC = () => {
     name: "",
     phone: "",
     user_id: "",
+    comments: "",
   };
 
   return (
