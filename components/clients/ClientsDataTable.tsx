@@ -8,7 +8,7 @@ import { clientColumns } from "./clientColumns";
 import { DataTable, DataTableContextProvider } from "@/components/dataTable";
 import { DeleteAlertDialog, NewItemDialog, UpdateItemDialog } from "@/components/dialogs/";
 import { ReadClientDBType } from "@/lib/types";
-import { useDatabaseData } from "@/lib/hooks/";
+import { useDatabase } from "@/lib/hooks/";
 import NewClientForm from "./NewClientForm";
 import UpdateClientForm from "./UpdateClientForm";
 
@@ -28,10 +28,7 @@ const ClientsDataTable: React.FC = () => {
 
   const columns = clientColumns(mutate);
 
-  const { dbData, isPending } = useDatabaseData({ queryKey: ["clients"], queryFn: () => getAllClients() });
-
-  if (isPending) return <h2>Cargando...</h2>;
-  if (!dbData) return null;
+  const { dbData, isPending } = useDatabase({ queryKey: ["clients"], queryFn: () => getAllClients() });
 
   const emptyClientData: ReadClientDBType = {
     address: "",
@@ -46,7 +43,7 @@ const ClientsDataTable: React.FC = () => {
 
   return (
     <DataTableContextProvider defaultItemData={emptyClientData}>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo cliente" />
+      <DataTable columns={columns} data={dbData || []} isPending={isPending} newItemLabel="Nuevo cliente" />
       <NewItemDialog RecordForm={NewClientForm} />
       <UpdateItemDialog RecordForm={UpdateClientForm} />
       <DeleteAlertDialog />

@@ -19,7 +19,7 @@ export default function Home() {
             Gestión simplificada de trazabilidad para pequeños y medianos productores.
           </p>
           <Button asChild className="text-lg">
-            <Link href="/clientes">Comenzar</Link>
+            <Link href="/materias-primas">Comenzar</Link>
           </Button>
         </div>
         <Image src={landingImg} alt="landing" className="hidden lg:block" />

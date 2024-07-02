@@ -10,7 +10,7 @@ import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components
 import UpdateSupplierForm from "./UpdateSupplierForm";
 import NewSupplierForm from "./NewSupplierForm";
 import supplierColumns from "./supplierColumns";
-import { useDatabaseData } from "@/lib/hooks";
+import { useDatabase } from "@/lib/hooks";
 
 const SuppliersDataTable: React.FC = () => {
   const successHandler = useQuerySuccessHandler({
@@ -28,12 +28,10 @@ const SuppliersDataTable: React.FC = () => {
 
   const columns = supplierColumns(mutate);
 
-  const { dbData, isPending } = useDatabaseData({
+  const { dbData, isPending } = useDatabase({
     queryKey: ["suppliers"],
     queryFn: () => getAllSuppliers(),
   });
-  if (isPending) return <h2>Cargando...</h2>;
-  if (!dbData) return null;
 
   const emptySupplierData: ReadSupplierDBType = {
     address: "",
@@ -48,7 +46,7 @@ const SuppliersDataTable: React.FC = () => {
 
   return (
     <DataTableContextProvider defaultItemData={emptySupplierData}>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" />
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo proveedor" isPending={isPending} />
       <NewItemDialog RecordForm={NewSupplierForm} />
       <UpdateItemDialog RecordForm={UpdateSupplierForm} />
       <DeleteAlertDialog />

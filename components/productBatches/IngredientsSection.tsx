@@ -5,7 +5,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { PRODUCT_PREFIX, COMMODITY_PREFIX } from "@/lib/constants";
 import { CustomFormSelectFieldArray, CustomFormFieldArray } from "../forms";
 import { UseFormReturn } from "react-hook-form";
-import { useDatabaseData } from "@/lib/hooks";
+import { useDatabase } from "@/lib/hooks";
 
 function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatchDBType>({
   ingredients,
@@ -28,7 +28,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 }) {
   const ingredientIds = ingredients.map(({ id }) => parseInt(id));
 
-  const { dbData, isPending } = useDatabaseData({
+  const { dbData, isPending } = useDatabase({
     queryKey: [`${ingredientType}Batches`],
     queryFn: () => getBatches({ recordIds: ingredientIds }),
   });

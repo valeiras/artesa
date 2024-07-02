@@ -10,7 +10,7 @@ import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components
 import UpdateSaleForm from "./UpdateSaleForm";
 import NewSaleForm from "./NewSaleForm";
 import saleColumns from "./saleColumns";
-import { useDatabaseData } from "@/lib/hooks";
+import { useDatabase } from "@/lib/hooks";
 
 const SalesDataTable: React.FC = () => {
   const successHandler = useQuerySuccessHandler({
@@ -28,12 +28,10 @@ const SalesDataTable: React.FC = () => {
 
   const columns = saleColumns(mutate);
 
-  const { dbData, isPending } = useDatabaseData({
+  const { dbData, isPending } = useDatabase({
     queryKey: ["sales"],
     queryFn: () => getAllSales(),
   });
-  if (isPending) return <h2>Cargando...</h2>;
-  if (!dbData) return null;
 
   const emptySaleData: ReadSaleDBType = {
     client_id: 0,
@@ -53,6 +51,7 @@ const SalesDataTable: React.FC = () => {
         newItemLabel="Nueva venta"
         lookupField="product_name"
         lookupPlaceholder="Buscar por producto"
+        isPending={isPending}
       />
       <NewItemDialog RecordForm={NewSaleForm} />
       <UpdateItemDialog RecordForm={UpdateSaleForm} />

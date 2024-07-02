@@ -3,4 +3,4 @@ export { default as useAvailableBatches } from "./useAvailableBatches";
 export { default as useAvailableClients } from "./useAvailableClients";
 export { default as useCustomFormSelectFieldArray } from "./useCustomFormSelectFieldArray";
 export { default as useCustomFormFieldArray } from "./useCustomFormFieldArray";
-export { default as useDatabaseData } from "./useDatabaseData";
+export { default as useDatabase } from "./useDatabase";

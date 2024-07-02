@@ -4,7 +4,10 @@ Next app designed for product traceability.
 
 # TODO:
 
-- Use drizzle to manage the database structure -> enforce a coherent naming convention
+- Rethink fetching strategies: the prefetch is causing undesired delays.
+- Create skeletons
+- Rethink SSR and CSR strategies
+
 - Use pagination to lighten the request to the database.
 - Add "updated_at" column and order records by this field
 - Add a multiple selector to the data table

@@ -2,7 +2,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
 
-const useDatabaseData = <T,>({
+const useDatabase = <T,>({
   queryKey,
   queryFn,
 }: {
@@ -32,4 +32,4 @@ const useDatabaseData = <T,>({
   return { dbData, isPending };
 };
 
-export default useDatabaseData;
+export default useDatabase;

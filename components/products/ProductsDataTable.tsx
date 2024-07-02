@@ -8,7 +8,7 @@ import { DataTableContextProvider, DataTable } from "@/components/dataTable";
 import { deleteProductBatch } from "@/lib/actions/productBatchActions";
 import { ReadProductBatchDBType, ReadProductDBType } from "@/lib/types";
 import { DeleteAlertDialog, NewBatchDialog, NewItemDialog, UpdateBatchDialog, UpdateItemDialog } from "../dialogs";
-import { useDatabaseData } from "@/lib/hooks";
+import { useDatabase } from "@/lib/hooks";
 import productColumns from "./productColumns";
 import NewProductForm from "./NewProductForm";
 import UpdateProductForm from "./UpdateProductForm";
@@ -44,12 +44,10 @@ const ProductsDataTable: React.FC = () => {
 
   const columns = productColumns({ deleteProductMutation, deleteProductBatchMutation });
 
-  const { dbData, isPending } = useDatabaseData({
+  const { dbData, isPending } = useDatabase({
     queryKey: ["productsWithBatchesAndIngredients"],
     queryFn: () => getAllProductsWithBatchesAndIngredients(),
   });
-  if (isPending) return <h2>Cargando...</h2>;
-  if (!dbData) return null;
 
   const emptyProductData: ReadProductDBType = {
     external_id: "",
@@ -73,7 +71,7 @@ const ProductsDataTable: React.FC = () => {
 
   return (
     <DataTableContextProvider defaultItemData={emptyProductData} defaultBatchData={emptyProductBatchData}>
-      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo producto" />
+      <DataTable columns={columns} data={dbData || []} newItemLabel="Nuevo producto" isPending={isPending} />
       <NewItemDialog RecordForm={NewProductForm} />
       <UpdateItemDialog RecordForm={UpdateProductForm} />
       <NewBatchDialog RecordForm={NewProductBatchForm} isBatch={true} />
