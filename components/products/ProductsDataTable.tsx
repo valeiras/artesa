@@ -18,7 +18,7 @@ import UpdateProductBatchForm from "../productBatches/UpdateProductBatchForm";
 const ProductsDataTable: React.FC = () => {
   const productSuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Producto eliminado con éxito",
-    queryKeys: [["productsWithBatchesAndIngredients"], ["stats"], ["charts"]],
+    queryKeys: [["productsWithBatchesAndIngredients"], ["products"], ["stats"], ["charts"]],
   });
 
   const productBatchSuccessHandler = useQuerySuccessHandler({

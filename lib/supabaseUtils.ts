@@ -147,7 +147,6 @@ export async function createRecord<TForm extends FieldValues, TTable extends Pub
   const userId = await authenticateAndRedirect();
   const supabase: SupabaseClient = await connectAndRedirect();
 
-  await checkPermissionsAndRedirect(supabase);
   const newRecord: TablesInsert<TTable> = formToDatabaseFn({ values, userId });
   return withErrorHandling(supabase.from(tableName).insert(newRecord).select().maybeSingle());
 }
@@ -168,7 +167,6 @@ export async function updateRecord<TForm extends FieldValues, TTable extends Pub
 }> {
   const userId = await authenticateAndRedirect();
   const supabase: SupabaseClient = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase);
 
   const newRecord: TablesInsert<TTable> = formToDatabaseFn({ values, userId });
 

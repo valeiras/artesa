@@ -2,12 +2,7 @@
 
 import { CreateSaleIngredientDBType, ReadSaleDBType, ReadSaleIngredientDBType, SaleFormValueType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import {
-  connectAndRedirect,
-  authenticateAndRedirect,
-  checkPermissionsAndRedirect,
-  deleteRecordsByField,
-} from "../supabaseUtils";
+import { connectAndRedirect, authenticateAndRedirect, deleteRecordsByField } from "../supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 
 const getBatchIds = (batchIds: { id: string }[]) => {
@@ -49,7 +44,6 @@ export async function createSaleRecipe({ values, saleId }: { values: SaleFormVal
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase);
 
   let dbError: PostgrestError | null = null;
   let dbData: ReadSaleIngredientDBType[] | null = null;

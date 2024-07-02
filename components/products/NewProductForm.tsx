@@ -27,7 +27,7 @@ const NewProductForm: React.FC = () => {
       formSchema={productFormSchema}
       defaultValues={defaultValues}
       successToastMessage="Nuevo producto creado con éxito"
-      queryKeys={[["productsWithBatchesAndIngredients"], ["stats"], ["charts"]]}
+      queryKeys={[["productsWithBatchesAndIngredients"], ["products"], ["stats"], ["charts"]]}
       formHeader="Nuevo producto"
       createRecordFn={createRecordFn}
       FormLayout={ProductForm}

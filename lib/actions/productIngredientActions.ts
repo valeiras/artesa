@@ -2,12 +2,7 @@
 
 import { CreateProductIngredientDBType, ReadProductIngredientDBType } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import {
-  authenticateAndRedirect,
-  checkPermissionsAndRedirect,
-  connectAndRedirect,
-  deleteRecordsByField,
-} from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, deleteRecordsByField } from "../supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 
 export async function createProductRecipe({
@@ -22,7 +17,6 @@ export async function createProductRecipe({
 }> {
   const userId = await authenticateAndRedirect();
   const supabase = await connectAndRedirect();
-  await checkPermissionsAndRedirect(supabase);
 
   let dbError: PostgrestError | null = null;
   let dbData: ReadProductIngredientDBType[] | null = null;

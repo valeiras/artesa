@@ -17,7 +17,7 @@ import UpdateCommodityForm from "./UpdateCommodityForm";
 const CommoditiesDataTable: React.FC = () => {
   const commoditySuccessHandler = useQuerySuccessHandler({
     successToastMessage: "Materia prima eliminada con éxito",
-    queryKeys: [["commoditiesWithBatches"], ["stats"], ["charts"]],
+    queryKeys: [["commoditiesWithBatches"], ["commodities"], ["stats"], ["charts"]],
   });
 
   const commodityBatchSuccessHandler = useQuerySuccessHandler({
