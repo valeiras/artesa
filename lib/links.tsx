@@ -1,4 +1,4 @@
-import { AreaChart, Apple, Milk, User, Tractor, Handshake } from "lucide-react";
+import { AreaChart, Apple, Milk, User, Tractor, Handshake, Settings } from "lucide-react";
 
 type NavLink = {
   href: string;
@@ -39,6 +39,11 @@ const links: NavLink[] = [
   //   label: "Inventario",
   //   icon: <AreaChart strokeWidth={strokeWidth} />,
   // },
+  {
+    href: "/ajustes",
+    label: "Ajustes",
+    icon: <Settings strokeWidth={strokeWidth} />,
+  },
 ];
 
 export default links;
