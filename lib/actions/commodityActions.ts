@@ -9,6 +9,7 @@ import {
   deleteSingleRecordById,
   createRecord,
   updateRecord,
+  withErrorHandling,
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: CommodityFormValueType; userId: string }) {
@@ -56,17 +57,7 @@ export async function getAllCommoditiesWithBatches(): Promise<{
 }> {
   const supabase = await connectAndRedirect();
 
-  let dbData: ReadCommodityWithBatchesType[] | null = null;
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ data: dbData, error: dbError } = await supabase.from("commodities").select(`*, batches:commodity_batches (*)`));
-    if (dbError) throw new Error(dbError.message);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    return { dbData, dbError };
-  }
+  return withErrorHandling(supabase.from("commodities").select(`*, batches:commodity_batches (*)`));
 }
 
 export async function getSingleCommodity({ recordId }: { recordId: number }): Promise<{

@@ -10,6 +10,7 @@ import {
   updateRecord,
   getRecordsByFieldArray,
   getRecordsByField,
+  withErrorHandling,
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductBatchFormValueType; userId: string }) {
@@ -85,18 +86,7 @@ export async function getProductId({
   productBatchId: number;
 }): Promise<{ dbError: PostgrestError | null; dbData: { id: number } | null }> {
   const supabase = await connectAndRedirect();
-  let dbError: PostgrestError | null = null;
-  let dbData: { id: number } | null = null;
-
-  try {
-    ({ error: dbError, data: dbData } = await supabase
-      .from("product_batches")
-      .select("product_id")
-      .eq("id", productBatchId)
-      .maybeSingle());
-    if (dbError) throw new Error(dbError.message);
-  } catch (error) {
-    console.log(error);
-  }
-  return { dbError, dbData };
+  return withErrorHandling(
+    supabase.from("product_batches").select("product_id").eq("id", productBatchId).maybeSingle()
+  );
 }

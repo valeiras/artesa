@@ -6,7 +6,7 @@ import {
   ReadProductBatchIngredientDBType,
 } from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecordsByField } from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, deleteRecordsByField, withErrorHandling } from "../supabaseUtils";
 
 export async function createProductBatchRecipe({
   values,
@@ -55,20 +55,7 @@ export async function getProductBatchRecipeByProductBatchId({
 }): Promise<{ dbData: ReadProductBatchIngredientDBType[] | null; dbError: PostgrestError | null }> {
   const supabase = await connectAndRedirect();
 
-  let dbData: ReadProductBatchIngredientDBType[] | null = null;
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ data: dbData, error: dbError } = await supabase
-      .from("product_batch_ingredients")
-      .select()
-      .eq("product_batch_id", productBatchId));
-    if (dbError) throw new Error(dbError.message);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    return { dbData, dbError };
-  }
+  return withErrorHandling(supabase.from("product_batch_ingredients").select().eq("product_batch_id", productBatchId));
 }
 
 export async function deleteProductBatchRecipeByProductBatchId({

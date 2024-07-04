@@ -26,9 +26,8 @@ export async function connectAndRedirect() {
   return supabase;
 }
 
-export async function checkPermissionsAndRedirect(supabase: SupabaseClient) {
-  const { data } = await supabase.from("user_roles").select("role").maybeSingle();
-  if (!data?.role || data.role === "minimum") redirect("/");
+export async function getUserSettings(supabase: SupabaseClient) {
+  return withErrorHandling(supabase.from("user_settings").select("has_mockup_data: hasMockupData"));
 }
 
 export async function getAllRecords<TTable extends PublicTableName>({
@@ -87,9 +86,6 @@ export async function getRecordsByFieldArray<TTable extends PublicTableName, TFi
   fieldValues: NonNullable<Tables<TTable>[TField][]>;
 }): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
   const supabase = await connectAndRedirect();
-
-  let dbError: PostgrestError | null = null;
-  let dbData: Tables<TTable>[] | null = null;
 
   return withErrorHandling(supabase.from(tableName).select().in(fieldName, fieldValues).returns<Tables<TTable>[]>());
 }
@@ -173,7 +169,7 @@ export async function updateRecord<TForm extends FieldValues, TTable extends Pub
   return withErrorHandling(supabase.from(tableName).update(newRecord).eq("id", recordId).select().maybeSingle());
 }
 
-const withErrorHandling = async <T>(
+export const withErrorHandling = async <T>(
   fn: PostgrestBuilder<T>
 ): Promise<{ dbData: T | null; dbError: PostgrestError | null }> => {
   let dbError: PostgrestError | null = null;

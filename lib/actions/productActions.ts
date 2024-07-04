@@ -15,6 +15,7 @@ import {
   createRecord,
   updateRecord,
   getAllRecords,
+  withErrorHandling,
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductFormValueType; userId: string }) {
@@ -57,17 +58,7 @@ export async function getAllProductsWithBatches(): Promise<{
 }> {
   const supabase = await connectAndRedirect();
 
-  let dbData: ReadProductWithBatchesType[] | null = null;
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ data: dbData, error: dbError } = await supabase.from("products").select(`*, batches:product_batches (*)`));
-    if (dbError) throw new Error(dbError.message);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    return { dbData, dbError };
-  }
+  return withErrorHandling(supabase.from("products").select(`*, batches:product_batches (*)`));
 }
 
 export async function getAllProductsWithBatchesAndIngredients(): Promise<{

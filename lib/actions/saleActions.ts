@@ -8,6 +8,7 @@ import {
   createRecord,
   updateRecord,
   connectAndRedirect,
+  withErrorHandling,
 } from "../supabaseUtils";
 
 const formToDatabaseFn = ({ values, userId }: { values: SaleFormValueType; userId: string }) => {
@@ -46,21 +47,13 @@ export async function updateSale({ values, recordId }: { values: SaleFormValueTy
 export async function getAllSales(): Promise<{ dbData: ReadSaleType[] | null; dbError: PostgrestError | null }> {
   const supabase = await connectAndRedirect();
 
-  let dbData: ReadSaleType[] | null = null;
-  let dbError: PostgrestError | null = null;
-
-  try {
-    ({ data: dbData, error: dbError } = await supabase.from("sales").select(
+  return withErrorHandling(
+    supabase.from("sales").select(
       `*, clients(name), 
         sale_ingredients(sold_amount, commodity_batches(external_id, id, commodities(name, id)),  
                          product_batches(external_id, id, products(name, id)))`
-    ));
-    if (dbError) throw new Error(dbError.message);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    return { dbData, dbError };
-  }
+    )
+  );
 }
 
 export async function getSingleSale({ recordId }: { recordId: number }): Promise<{
