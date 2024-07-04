@@ -1,15 +1,13 @@
 import React from "react";
 
 import ClientsDataTable from "@/components/clients/ClientsDataTable";
+import PageWrapper from "@/components/PageWrapper";
 
 const ClientsPage: React.FC = async () => {
   return (
-    <>
-      <div className="flex flex-row justify-between items-center mb-8">
-        <h2 className="item-list-header">Clientes:</h2>
-      </div>
+    <PageWrapper heading="Clientes">
       <ClientsDataTable />
-    </>
+    </PageWrapper>
   );
 };
 

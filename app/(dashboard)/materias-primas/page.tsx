@@ -1,15 +1,13 @@
 import React from "react";
 
 import CommoditiesDataTable from "@/components/commodities/CommoditiesDataTable";
+import PageWrapper from "@/components/PageWrapper";
 
 const CommoditiesPage: React.FC = async () => {
   return (
-    <>
-      <div className="flex flex-row justify-between items-center mb-8">
-        <h2 className="item-list-header">Materias primas:</h2>
-      </div>
+    <PageWrapper heading="Materias primas">
       <CommoditiesDataTable />
-    </>
+    </PageWrapper>
   );
 };
 

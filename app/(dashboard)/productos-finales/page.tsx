@@ -1,15 +1,13 @@
 import React from "react";
 
 import ProductsDataTable from "@/components/products/ProductsDataTable";
+import PageWrapper from "@/components/PageWrapper";
 
 const ProductsPage: React.FC = async () => {
   return (
-    <>
-      <div className="flex flex-row justify-between items-center mb-8">
-        <h2 className="item-list-header">Productos finales:</h2>
-      </div>
+    <PageWrapper heading="Productos finales">
       <ProductsDataTable />
-    </>
+    </PageWrapper>
   );
 };
 
