@@ -34,11 +34,11 @@ const links: NavLink[] = [
     label: "Ventas",
     icon: <Handshake strokeWidth={strokeWidth} />,
   },
-  {
-    href: "/inventario",
-    label: "Inventario",
-    icon: <AreaChart strokeWidth={strokeWidth} />,
-  },
+  // {
+  //   href: "/inventario",
+  //   label: "Inventario",
+  //   icon: <AreaChart strokeWidth={strokeWidth} />,
+  // },
 ];
 
 export default links;

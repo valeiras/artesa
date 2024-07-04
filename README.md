@@ -4,9 +4,7 @@ Next app designed for product traceability.
 
 # TODO:
 
-- Rethink fetching strategies: the prefetch is causing undesired delays.
-- Create skeletons
-- Rethink SSR and CSR strategies
+- Create a button to populate the DB with random data
 
 - Use pagination to lighten the request to the database.
 - Add "updated_at" column and order records by this field
