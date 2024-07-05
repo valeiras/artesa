@@ -1,5 +1,4 @@
 CREATE TYPE public.unit AS ENUM('unit', 'box', 'jar', 'g', 'mg', 'kg', 'l', 'dl', 'cl', 'ml');
-CREATE TYPE public.role AS ENUM('minimum', 'limited', 'full');
 
 CREATE TABLE public.clients(
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -34,7 +33,8 @@ CREATE TABLE public.commodities(
   unit unit NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   user_id text NOT NULL DEFAULT requesting_user_id(),
-  CONSTRAINT unique_commodity_name_per_user UNIQUE (user_id, name)
+  CONSTRAINT unique_commodity_name_per_user UNIQUE (user_id, name),
+  CONSTRAINT unique_commodity_external_id_per_user UNIQUE (user_id, external_id)
 );
 ALTER TABLE commodities ENABLE ROW LEVEL SECURITY;
 
@@ -151,10 +151,10 @@ CREATE table public.sale_ingredients(
 );
 ALTER TABLE sale_ingredients ENABLE ROW LEVEL SECURITY;
 
-CREATE TABLE public.user_roles(
+CREATE TABLE public.user_settings(
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
   created_at timestamp with time zone DEFAULT now(),
   user_id text NOT NULL DEFAULT requesting_user_id() UNIQUE,
-  role role
+  has_mockup_data boolean
 );
-ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_settings ENABLE ROW LEVEL SECURITY;

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS public.user_roles;
+DROP TABLE IF EXISTS public.user_settings;
 DROP TABLE IF EXISTS public.sale_ingredients;
 DROP TABLE IF EXISTS public.sales;
 DROP TABLE IF EXISTS public.product_batch_ingredients;
@@ -11,4 +11,3 @@ DROP TABLE IF EXISTS public.suppliers;
 DROP TABLE IF EXISTS public.clients;
 
 DROP TYPE IF EXISTS public.unit;
-DROP TYPE IF EXISTS public.role;

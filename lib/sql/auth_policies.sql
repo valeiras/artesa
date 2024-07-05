@@ -88,10 +88,10 @@ using (
     user_id = requesting_user_id()
 );
 
-CREATE POLICY "Users can read their own role"
-ON "public"."user_roles"
+CREATE POLICY "Users can peform CRUD operations on their own settings"
+ON "public"."user_settings"
 AS PERMISSIVE
-for SELECT
+for ALL
 to public
 using (
     user_id = requesting_user_id()
