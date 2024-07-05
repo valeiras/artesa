@@ -50,8 +50,13 @@ function productColumns({
       accessorKey: "ingredients",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Ingredientes" />,
       enableSorting: false,
-      meta: { columnName: "Lotes" },
+      meta: { columnName: "Ingredientes" },
       cell: ({ row }) => <RecipeContainer itemData={row.original} />,
+    },
+    {
+      accessorKey: "external_id",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Referencia" />,
+      meta: { columnName: "Referencia" },
     },
     {
       accessorKey: "created_at",

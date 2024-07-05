@@ -28,7 +28,12 @@ const UpdateProductForm: React.FC = () => {
   return (
     <UpdateItemForm<ProductFormValueType>
       formSchema={productFormSchema}
-      defaultValues={{ name: itemData.name, unit: itemData.unit || undefined, ingredientIds }}
+      defaultValues={{
+        name: itemData.name,
+        unit: itemData.unit || undefined,
+        ingredientIds,
+        externalId: itemData.external_id || "",
+      }}
       successToastMessage="Producto actualizado con éxito"
       queryKeys={[
         ["product", String(itemData.id)],

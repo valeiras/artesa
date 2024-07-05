@@ -13,7 +13,7 @@ import {
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: CommodityFormValueType; userId: string }) {
-  return { name: values.name, unit: values.unit, user_id: userId };
+  return { name: values.name, unit: values.unit, external_id: values.externalId, user_id: userId };
 }
 
 export async function createCommodity({ values }: { values: CommodityFormValueType }): Promise<{

@@ -9,6 +9,7 @@ const NewProductForm: React.FC = () => {
   const defaultValues: ProductFormValueType = {
     name: "",
     unit: "kg",
+    externalId: "",
     ingredientIds: [],
   };
 

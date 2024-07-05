@@ -39,6 +39,12 @@ const ProductForm: RecordFormType<ProductFormValueType> = ({
             placeholder="kg"
             className="justify-start"
           />
+          <CustomFormField
+            name="externalId"
+            control={form.control}
+            label="Referencia (opcional)"
+            placeholder="MA-2398"
+          />
           <CustomFormSelectFieldArray
             name="ingredientIds"
             form={form}
