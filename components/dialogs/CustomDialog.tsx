@@ -41,10 +41,16 @@ const CustomDialog: React.FC<Props> = ({
               <DialogTitle>{title}</DialogTitle>
             ) : (
               <VisuallyHidden.Root>
-                <DialogTitle>Untitled Dialog</DialogTitle>
+                <DialogTitle>Custom Dialog</DialogTitle>
               </VisuallyHidden.Root>
             )}
-            {description && <DialogDescription>{description}</DialogDescription>}
+            {description ? (
+              <DialogDescription>{description}</DialogDescription>
+            ) : (
+              <VisuallyHidden.Root>
+                <DialogDescription>Custom dialog</DialogDescription>
+              </VisuallyHidden.Root>
+            )}
           </DialogHeader>
           {children}
           {dialogFooter && <DialogFooter>{dialogFooter}</DialogFooter>}
