@@ -59,7 +59,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
         form={form}
         independentItems={items}
         placeholder="Selecciona un lote"
-        emptyPlaceholder="No hay lotes disponibles"
+        emptyPlaceholder="No hay lotes"
         hasVariableAmount={false}
       />
       <CustomFormFieldArray
