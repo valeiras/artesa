@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from "react";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
 import {
   Dialog,
@@ -36,7 +37,13 @@ const CustomDialog: React.FC<Props> = ({
       <DialogContent className="max-w-full w-4/5 xl:p-16">
         <ScrollArea viewportClassName="max-h-[80dvh]">
           <DialogHeader>
-            {title && <DialogTitle>{title}</DialogTitle>}
+            {title ? (
+              <DialogTitle>{title}</DialogTitle>
+            ) : (
+              <VisuallyHidden.Root>
+                <DialogTitle>Untitled Dialog</DialogTitle>
+              </VisuallyHidden.Root>
+            )}
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
           {children}
