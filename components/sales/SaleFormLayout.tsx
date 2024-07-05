@@ -50,7 +50,7 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
     commonItems: availableArticles,
     hasVariableAmount: false,
     label: "Artículo",
-    placeholder: "Selecciona artículo",
+    placeholder: "Selecciona un artículo",
   });
 
   const {
@@ -64,7 +64,7 @@ const SaleFormLayout: RecordFormType<SaleFormValueType> = ({
     independentItems: independentItems,
     hasVariableAmount: false,
     label: "Lote",
-    placeholder: "Selecciona Lote",
+    placeholder: "Selecciona un lote",
     emptyPlaceholder: "No hay lotes",
   });
 
