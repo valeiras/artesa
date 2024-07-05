@@ -56,6 +56,7 @@ const CommoditiesDataTable: React.FC = () => {
     user_id: "",
     external_id: "",
   };
+
   const emptyCommodityBatchData: ReadCommodityBatchDBType = {
     comments: "",
     commodity_id: 0,

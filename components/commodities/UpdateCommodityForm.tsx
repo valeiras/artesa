@@ -16,7 +16,11 @@ const UpdateCommodityForm: React.FC = () => {
   return (
     <UpdateItemForm<CommodityFormValueType>
       formSchema={commodityFormSchema}
-      defaultValues={{ name: itemData.name || "", unit: itemData.unit || undefined }}
+      defaultValues={{
+        name: itemData.name || "",
+        unit: itemData.unit || undefined,
+        externalId: itemData.external_id || "",
+      }}
       successToastMessage="Materia prima actualizada con éxito"
       queryKeys={[
         ["commodity", String(itemData.id)],

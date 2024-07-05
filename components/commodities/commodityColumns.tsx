@@ -46,6 +46,11 @@ function commodityColumns({
       ),
     },
     {
+      accessorKey: "external_id",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Referencia" />,
+      meta: { columnName: "Referencia" },
+    },
+    {
       accessorKey: "created_at",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
       meta: { columnName: "Fecha" },

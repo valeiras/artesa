@@ -10,7 +10,7 @@ const NewCommodityForm: React.FC = () => {
   return (
     <NewItemForm<CommodityFormValueType>
       formSchema={commodityFormSchema}
-      defaultValues={{ name: "", unit: "kg" }}
+      defaultValues={{ name: "", unit: "kg", externalId: "" }}
       successToastMessage="Nueva materia prima creada con éxito"
       queryKeys={[["commoditiesWithBatches"], ["commodities"], ["stats"], ["charts"]]}
       formHeader="Nueva materia prima"

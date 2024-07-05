@@ -13,6 +13,7 @@ const CommodityFormLayout: RecordFormType<CommodityFormValueType> = ({
   setIsFormOpen,
 }) => {
   function onSubmit(values: CommodityFormValueType) {
+    console.log(values);
     mutate(values);
   }
 
@@ -26,6 +27,12 @@ const CommodityFormLayout: RecordFormType<CommodityFormValueType> = ({
             control={form.control}
             label="Nombre de la materia prima"
             placeholder="Manzana"
+          />
+          <CustomFormField
+            name="externalId"
+            control={form.control}
+            label="Referencia (opcional)"
+            placeholder="MA-2398"
           />
           <CustomFormSelect
             name="unit"
