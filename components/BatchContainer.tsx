@@ -51,10 +51,10 @@ function BatchContainer<
 
   return (
     <div className="flex flex-row items-end justify-start">
-      <ScrollArea className="w-48 h-fit rounded-md border" viewportClassName="max-h-[110px]">
-        <div className="p-2 w-48">
+      <ScrollArea className="w-36 h-fit rounded-md border" viewportClassName="max-h-[110px]">
+        <div className="p-2 w-36">
           {!batches || batches.length === 0
-            ? "No hay lotes disponibles"
+            ? "No hay lotes"
             : batches.map((batchData, idx) => (
                 <React.Fragment key={batchData.id}>
                   {idx !== 0 && <Separator className="my-2" />}
