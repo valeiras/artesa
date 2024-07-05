@@ -11,12 +11,14 @@ function RecipeContainer({ itemData }: { itemData: ReadProductWithBatchesAndIngr
         <div className="p-2 w-48">
           {allIngredients.length === 0
             ? "Sin ingredientes"
-            : allIngredients.map(({ id, name }, idx) => (
-                <React.Fragment key={id}>
-                  {idx !== 0 && <Separator className="my-2" />}
-                  {name}
-                </React.Fragment>
-              ))}
+            : allIngredients.map(({ id, name }, idx) => {
+                return (
+                  <React.Fragment key={`${name}_${id}`}>
+                    {idx !== 0 && <Separator className="my-2" />}
+                    {name}
+                  </React.Fragment>
+                );
+              })}
         </div>
       </ScrollArea>
     </div>
