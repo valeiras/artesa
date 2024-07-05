@@ -10,7 +10,7 @@ const NewSupplierForm: React.FC = () => {
   return (
     <NewItemForm<SupplierFormValueType>
       formSchema={supplierFormSchema}
-      defaultValues={{ name: "", email: "", phone: "", address: "" }}
+      defaultValues={{ name: "", email: "", phone: "", address: "", comments: "" }}
       successToastMessage="Nuevo proveedor creado con éxito"
       queryKeys={[["suppliers"], ["stats"], ["charts"]]}
       formHeader="Nuevo proveedor"

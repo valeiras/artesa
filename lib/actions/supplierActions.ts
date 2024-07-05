@@ -11,7 +11,14 @@ import {
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: SupplierFormValueType; userId: string }) {
-  return { name: values.name, user_id: userId, email: values.email, phone: values.phone, address: values.address };
+  return {
+    name: values.name,
+    email: values.email,
+    phone: values.phone,
+    address: values.address,
+    comments: values.comments,
+    user_id: userId,
+  };
 }
 
 export async function createSupplier({ values }: { values: SupplierFormValueType }): Promise<{

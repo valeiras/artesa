@@ -5,6 +5,7 @@ import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { ItemRowActions } from "@/components/rowActions";
+import CommentsContainer from "../CommentsContainer";
 
 function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadSaleType>[] = [
@@ -47,6 +48,13 @@ function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null 
         const formattedDate = new Date(row.getValue("date")).toLocaleDateString();
         return <>{formattedDate}</>;
       },
+    },
+    {
+      accessorKey: "comments",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Comentarios" />,
+      enableSorting: false,
+      meta: { columnName: "Comentarios" },
+      cell: ({ row }) => <CommentsContainer comments={row.original.comments} />,
     },
     {
       id: "actions",

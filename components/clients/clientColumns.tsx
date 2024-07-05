@@ -4,6 +4,7 @@ import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { ItemRowActions } from "@/components/rowActions";
+import CommentsContainer from "../CommentsContainer";
 
 export function clientColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null }, Error, number, unknown>) {
   const columns: ColumnDef<ReadClientDBType>[] = [
@@ -29,6 +30,13 @@ export function clientColumns(mutate: UseMutateFunction<{ dbError: PostgrestErro
       header: ({ column }) => <DataTableColumnHeader column={column} title="Dirección" />,
       enableSorting: false,
       meta: { columnName: "Dirección" },
+    },
+    {
+      accessorKey: "comments",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Comentarios" />,
+      enableSorting: false,
+      meta: { columnName: "Comentarios" },
+      cell: ({ row }) => <CommentsContainer comments={row.original.comments} />,
     },
     {
       id: "actions",

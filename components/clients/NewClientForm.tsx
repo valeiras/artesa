@@ -10,7 +10,7 @@ const NewClientForm: React.FC = () => {
   return (
     <NewItemForm<ClientFormValueType>
       formSchema={clientFormSchema}
-      defaultValues={{ name: "", email: "", phone: "", address: "" }}
+      defaultValues={{ name: "", email: "", phone: "", address: "", comments: "" }}
       successToastMessage="Nuevo cliente creado con éxito"
       queryKeys={[["clients"], ["stats"], ["charts"]]}
       formHeader="Nuevo cliente"

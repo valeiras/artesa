@@ -18,6 +18,7 @@ const UpdateSupplierForm: React.FC = () => {
     email: itemData.email || "",
     phone: itemData.phone || "",
     address: itemData.address || "",
+    comments: itemData.comments || "",
   };
   return (
     <UpdateItemForm<SupplierFormValueType>

@@ -19,7 +19,12 @@ import {
 } from "../supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductFormValueType; userId: string }) {
-  return { name: values.name, unit: values.unit, external_id: values.externalId, user_id: userId };
+  return {
+    name: values.name,
+    unit: values.unit,
+    external_id: values.externalId,
+    user_id: userId,
+  };
 }
 
 export async function createProduct({ values }: { values: ProductFormValueType }): Promise<{

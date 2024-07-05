@@ -7,3 +7,4 @@ export { default as Sidebar } from "./Sidebar";
 export { default as SidebarButton } from "./SidebarButton";
 export { default as SuccessMessage } from "./SuccessMessage";
 export { default as ThemeToggle } from "./ThemeToggle";
+export { default as CommentsContainer } from "./CommentsContainer";

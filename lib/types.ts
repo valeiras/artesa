@@ -120,6 +120,7 @@ export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches: Read
 export const supplierFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
   address: z.string().optional(),
+  comments: z.string().optional(),
   phone: z
     .string()
     .refine(esMobileValidator, { message: "Introduce un número de teléfono válido" })
@@ -136,6 +137,7 @@ export type UpdateSupplierDBType = TablesUpdate<"suppliers">;
 export const clientFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),
   address: z.string().optional(),
+  comments: z.string().optional(),
   phone: z
     .string()
     .refine(esMobileValidator, { message: "Introduce un número de teléfono válido" })
