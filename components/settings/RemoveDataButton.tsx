@@ -2,14 +2,14 @@
 
 import React from "react";
 import { Button } from "../ui/button";
-import { FlaskConical } from "lucide-react";
-import { createMockupData } from "@/lib/actions/createMockupData";
+import { Trash } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import Spinner from "../Spinner";
+import { removeAllData } from "@/lib/actions/removeAllData";
 
 const CreateMockDataButton: React.FC = () => {
   return (
-    <form action={createMockupData}>
+    <form action={removeAllData}>
       <SubmitButton />
     </form>
   );
@@ -20,7 +20,7 @@ const SubmitButton = () => {
 
   return (
     <Button
-      variant="default"
+      variant="destructive"
       type="submit"
       disabled={pending}
       className="flex flex-row gap-x-2 cursor-pointer w-44 justify-start"
@@ -28,11 +28,11 @@ const SubmitButton = () => {
       {pending ? (
         <>
           <Spinner strokeColor="white" />
-          Subiendo datos...
+          Borrando datos...
         </>
       ) : (
         <>
-          <FlaskConical strokeWidth={1.5} /> Subir datos
+          <Trash strokeWidth={1.5} /> Borrar datos
         </>
       )}
     </Button>
