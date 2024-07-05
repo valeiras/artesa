@@ -31,15 +31,6 @@ function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | n
       meta: { columnName: "Dirección" },
     },
     {
-      accessorKey: "created_at",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de creación" />,
-      meta: { columnName: "Fecha" },
-      cell: ({ row }) => {
-        const formattedDate = new Date(row.getValue("created_at")).toLocaleDateString();
-        return <>{formattedDate}</>;
-      },
-    },
-    {
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;

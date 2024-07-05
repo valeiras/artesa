@@ -40,11 +40,6 @@ function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null 
       meta: { columnName: "Identificador" },
     },
     {
-      accessorKey: "comments",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Comentarios" />,
-      meta: { columnName: "Comentarios" },
-    },
-    {
       accessorKey: "date",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha de venta" />,
       meta: { columnName: "Fecha venta" },
