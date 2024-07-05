@@ -40,6 +40,7 @@ export type PublicTableName = keyof PublicSchema["Tables"];
 export const productFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
   unit: unitEnum,
+  externalId: z.string().optional(),
   ingredientIds: z.object({ id: z.string() }).array(),
 });
 
@@ -86,6 +87,7 @@ export type ReadProductWithIngredientsType = ReadProductDBType & ReadIngredients
 
 export const commodityFormSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres" }),
+  externalId: z.string().optional(),
   unit: unitEnum,
 });
 
