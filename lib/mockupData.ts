@@ -3,10 +3,13 @@ import {
   CreateCommodityBatchDBType,
   CreateCommodityDBType,
   CreateProductBatchDBType,
+  CreateProductBatchIngredientDBType,
   CreateProductDBType,
   CreateProductIngredientDBType,
   CreateSupplierDBType,
+  ReadCommodityBatchDBType,
   ReadCommodityDBType,
+  ReadProductBatchDBType,
   ReadProductDBType,
   ReadSupplierDBType,
 } from "./types";
@@ -104,8 +107,8 @@ export function getMockupProductIngredients({
   if (!commoditiesData) return [];
   if (!productsData) return [];
 
-  const commoditiesMap = getItemMap(commoditiesData, mockupCommodities);
-  const productsMap = getItemMap(productsData, mockupProducts);
+  const commoditiesMap = getItemMapByName(commoditiesData, mockupCommodities);
+  const productsMap = getItemMapByName(productsData, mockupProducts);
 
   const mockupProductIngredients: CreateProductIngredientDBType[] = [
     {
@@ -154,14 +157,14 @@ export function getMockupCommodityBatches({
   if (!commoditiesData) return [];
   if (!suppliersData) return [];
 
-  const commoditiesMap = getItemMap(commoditiesData, mockupCommodities);
-  const suppliersMap = getItemMap(suppliersData, mockupSuppliers);
+  const commoditiesMap = getItemMapByName(commoditiesData, mockupCommodities);
+  const suppliersMap = getItemMapByName(suppliersData, mockupSuppliers);
 
   const mockupCommodityBatches: MockupCommodityBatch[] = [
     {
       commodity_id: commoditiesMap.get("Manzanas") || 0,
       supplier_id: suppliersMap.get("Fruterías El Bosque") || 0,
-      external_id: "MA-FEL-221",
+      external_id: "LMA-FEL-221",
       initial_amount: 50,
       date: getDateNDaysAgo(10).toISOString(),
       comments: "Muy maduras",
@@ -169,70 +172,70 @@ export function getMockupCommodityBatches({
     {
       commodity_id: commoditiesMap.get("Manzanas") || 0,
       supplier_id: suppliersMap.get("Fruver S.L.") || 0,
-      external_id: "MA-FRU-336",
+      external_id: "LMA-FRU-336",
       initial_amount: 40,
       date: getDateNDaysAgo(8).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Manzanas") || 0,
       supplier_id: suppliersMap.get("Fruterías El Bosque") || 0,
-      external_id: "MA-FEL-222",
+      external_id: "LMA-FEL-222",
       initial_amount: 60,
       date: getDateNDaysAgo(6).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Peras") || 0,
       supplier_id: suppliersMap.get("Fruterías El Bosque") || 0,
-      external_id: "PE-FEL-051",
+      external_id: "LPE-FEL-051",
       initial_amount: 32,
       date: getDateNDaysAgo(6).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Azúcar") || 0,
       supplier_id: suppliersMap.get("Suministros María") || 0,
-      external_id: "AZ-SUM-026",
+      external_id: "LAZ-SUM-026",
       initial_amount: 50,
       date: getDateNDaysAgo(50).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Harina") || 0,
       supplier_id: suppliersMap.get("Harinas la Mancha") || 0,
-      external_id: "HA-HLM-554",
+      external_id: "LHA-HLM-554",
       initial_amount: 50,
       date: getDateNDaysAgo(50).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Harina") || 0,
       supplier_id: suppliersMap.get("Panadería La Campiña") || 0,
-      external_id: "HA-PLC-054",
+      external_id: "LHA-PLC-054",
       initial_amount: 100,
       date: getDateNDaysAgo(100).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Harina") || 0,
       supplier_id: suppliersMap.get("Panadería La Campiña") || 0,
-      external_id: "HA-PLC-055",
+      external_id: "LHA-PLC-055",
       initial_amount: 100,
       date: getDateNDaysAgo(25).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Levadura") || 0,
       supplier_id: suppliersMap.get("Panadería La Campiña") || 0,
-      external_id: "LE-PLC-055",
+      external_id: "LLE-PLC-055",
       initial_amount: 1000,
       date: getDateNDaysAgo(25).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Vino dulce") || 0,
       supplier_id: suppliersMap.get("Vinos de Castilla") || 0,
-      external_id: "VD-VDC-036",
+      external_id: "LVD-VDC-036",
       initial_amount: 10,
       date: getDateNDaysAgo(75).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Vino dulce") || 0,
       supplier_id: suppliersMap.get("Vinos de Castilla") || 0,
-      external_id: "VD-VDC-037",
+      external_id: "LVD-VDC-037",
       initial_amount: 10,
       date: getDateNDaysAgo(25).toISOString(),
     },
@@ -247,11 +250,11 @@ export function getMockupProductBatches({
   mockupProducts,
 }: {
   productsData: ReadProductDBType[] | null;
-  mockupProducts: MockupCommodity[];
+  mockupProducts: MockupProduct[];
 }): MockupProductBatch[] {
   if (!productsData) return [];
 
-  const productsMap = getItemMap(productsData, mockupProducts);
+  const productsMap = getItemMapByName(productsData, mockupProducts);
 
   const mockupProductBatches: MockupProductBatch[] = [
     {
@@ -302,7 +305,132 @@ export function getMockupProductBatches({
   return mockupProductBatches;
 }
 
-function getItemMap<T extends { name: string }>(
+export type MockupProductBatchIngredient = Omit<CreateProductBatchIngredientDBType, "id">;
+export function getMockupProductBatchIngredients({
+  productBatchesData,
+  commodityBatchesData,
+  mockupProductBatches,
+  mockupCommodityBatches,
+}: {
+  productBatchesData: ReadProductBatchDBType[] | null;
+  commodityBatchesData: ReadCommodityBatchDBType[] | null;
+  mockupProductBatches: MockupProductBatch[];
+  mockupCommodityBatches: MockupCommodityBatch[];
+}): MockupProductBatchIngredient[] {
+  if (!productBatchesData) return [];
+  if (!commodityBatchesData) return [];
+
+  const productBatchesMap = getItemMapByExternalId(productBatchesData, mockupProductBatches);
+  const commodityBatchesMap = getItemMapByExternalId(commodityBatchesData, mockupCommodityBatches);
+
+  const mockupProductBatchIngredients: MockupProductBatchIngredient[] = [
+    {
+      product_batch_id: productBatchesMap.get("LMM-FFL-321") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LMA-FRU-336") || 0,
+      used_amount: 2,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMM-FFL-321") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LAZ-SUM-026") || 0,
+      used_amount: 3,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMM-FFL-321") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LVD-VDC-037") || 0,
+      used_amount: 1,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMM-FPO-225") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LMA-FEL-222") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMM-FPO-225") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LAZ-SUM-026") || 0,
+      used_amount: 2,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMM-FPO-225") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LVD-VDC-037") || 0,
+      used_amount: 3,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-FOL-021") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LPE-FEL-051") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-FOL-021") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LAZ-SUM-026") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-FOL-021") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LVD-VDC-037") || 0,
+      used_amount: 3,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-FKL-121") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LPE-FEL-051") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-FKL-121") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LAZ-SUM-026") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-FKL-121") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LVD-VDC-037") || 0,
+      used_amount: 2,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-GPO-125") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LPE-FEL-051") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-GPO-125") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LAZ-SUM-026") || 0,
+      used_amount: 4,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMP-GPO-125") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LVD-VDC-036") || 0,
+      used_amount: 2,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMQ-LOO-214") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LHA-PLC-055") || 0,
+      used_amount: 5,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LMQ-LOO-214") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LLE-PLC-055") || 0,
+      used_amount: 200,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LTM-LOO-214") || 0,
+      commodity_ingredient_batch_id: commodityBatchesMap.get("LMA-FRU-336") || 0,
+      used_amount: 5,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LTM-LOO-214") || 0,
+      product_ingredient_batch_id: productBatchesMap.get("LMQ-LOO-214") || 0,
+      used_amount: 200,
+    },
+    {
+      product_batch_id: productBatchesMap.get("LTM-LOO-214") || 0,
+      product_ingredient_batch_id: productBatchesMap.get("LMM-FPO-225") || 0,
+      used_amount: 200,
+    },
+  ];
+
+  console.log(mockupProductBatchIngredients);
+  return mockupProductBatchIngredients;
+}
+
+function getItemMapByName<T extends { name: string }>(
   itemsData: (T & { id: number })[],
   mockupItems: T[]
 ): Map<string, number> {
@@ -311,6 +439,20 @@ function getItemMap<T extends { name: string }>(
   for (let item of mockupItems) {
     const itemId = getItemId({ itemData: itemsData, key: "name", value: item.name });
     if (itemId) itemsMap.set(item.name!, itemId);
+  }
+
+  return itemsMap;
+}
+
+function getItemMapByExternalId<T extends { external_id: string }>(
+  itemsData: (T & { id: number })[],
+  mockupItems: T[]
+): Map<string, number> {
+  const itemsMap = new Map<string, number>();
+
+  for (let item of mockupItems) {
+    const itemId = getItemId({ itemData: itemsData, key: "external_id", value: item.external_id });
+    if (itemId) itemsMap.set(item.external_id!, itemId);
   }
 
   return itemsMap;

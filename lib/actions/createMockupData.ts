@@ -4,17 +4,14 @@ import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { connectAndRedirect, withErrorHandling } from "../supabaseUtils";
 import { DBError } from "../errors";
 import {
-  CreateClientDBType,
-  CreateCommodityBatchDBType,
-  CreateCommodityDBType,
   CreateProductBatchDBType,
-  CreateProductDBType,
+  CreateProductBatchIngredientDBType,
   CreateProductIngredientDBType,
-  CreateSupplierDBType,
   ReadClientDBType,
   ReadCommodityBatchDBType,
   ReadCommodityDBType,
   ReadProductBatchDBType,
+  ReadProductBatchIngredientDBType,
   ReadProductDBType,
   ReadProductIngredientDBType,
   ReadSupplierDBType,
@@ -22,6 +19,7 @@ import {
 import {
   getMockupCommodityBatches,
   getMockupProductBatches,
+  getMockupProductBatchIngredients,
   getMockupProductIngredients,
   MockupClient,
   mockupClients,
@@ -77,16 +75,26 @@ export async function createMockupData(): Promise<{
       productsData,
       mockupProducts,
     });
-    const { dbData: productBatchesData, dbError: productBacthesError } = await upsertProductBatches(
+    const { dbData: productBatchesData, dbError: productBatchesError } = await upsertProductBatches(
       supabase,
       mockupProductBatches
     );
-    if (productBacthesError) throw new DBError(productBacthesError?.message || "Something went wrong");
+    if (productBatchesError) throw new DBError(productBatchesError?.message || "Something went wrong");
+
+    const mockupProductBatchIngredients = getMockupProductBatchIngredients({
+      productBatchesData,
+      commodityBatchesData,
+      mockupProductBatches,
+      mockupCommodityBatches,
+    });
+    const { dbData: productBatchIngredientsData, dbError: productBatchIngredientsError } =
+      await upsertProductBatchIngredients(supabase, mockupProductBatchIngredients);
+    if (productBatchIngredientsError)
+      throw new DBError(productBatchIngredientsError?.message || "Something went wrong");
 
     const { dbData: clientsData, dbError: clientsError } = await upsertClients(supabase, mockupClients);
     if (clientsError) throw new DBError(clientsError?.message || "Something went wrong");
 
-    // console.log("Commodities: ", commoditiesData);
     // console.log("Products: ", productsData);
     // console.log("Product Ingredients: ", productIngredientsData);
     // console.log("Clients: ", clientsData);
@@ -163,13 +171,29 @@ export async function upsertProductIngredients(
 
 export async function upsertProductBatches(
   supabase: SupabaseClient,
-  mockupProductBacthes: CreateProductBatchDBType[]
+  mockupProductBatches: CreateProductBatchDBType[]
 ): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadProductBatchDBType[] | null;
 }> {
   return withErrorHandling(
-    supabase.from("product_batches").upsert(mockupProductBacthes).select("*").returns<ReadProductBatchDBType[]>()
+    supabase.from("product_batches").upsert(mockupProductBatches).select("*").returns<ReadProductBatchDBType[]>()
+  );
+}
+
+export async function upsertProductBatchIngredients(
+  supabase: SupabaseClient,
+  mockupProductBatchIngredients: CreateProductBatchIngredientDBType[]
+): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadProductBatchIngredientDBType[] | null;
+}> {
+  return withErrorHandling(
+    supabase
+      .from("product_batch_ingredients")
+      .upsert(mockupProductBatchIngredients)
+      .select("*")
+      .returns<ReadProductBatchIngredientDBType[]>()
   );
 }
 
