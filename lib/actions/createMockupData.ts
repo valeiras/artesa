@@ -33,7 +33,6 @@ import {
 export async function createMockupData(): Promise<{
   dbError: PostgrestError | null;
 }> {
-  console.log("Creating mockup data");
   const supabase: SupabaseClient = await connectAndRedirect();
   const dbError: PostgrestError | null = null;
   try {

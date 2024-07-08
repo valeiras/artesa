@@ -7,11 +7,12 @@ import Spinner from "../Spinner";
 import { removeAllData } from "@/lib/actions/removeAllData";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from "../ui/use-toast";
 
 type Props = { setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>> };
 const RemoveDataForm: React.FC<Props> = ({ setIsDialogOpen }) => {
   const queryClient = useQueryClient();
-
+  const { toast } = useToast();
   const {
     handleSubmit,
     formState: { isSubmitting },
@@ -21,6 +22,7 @@ const RemoveDataForm: React.FC<Props> = ({ setIsDialogOpen }) => {
     await removeAllData();
     queryClient.invalidateQueries();
     setIsDialogOpen(false);
+    toast({ title: "Datos eliminados con éxito" });
   };
 
   return (
@@ -39,12 +41,12 @@ const SubmitButton = ({ isSubmitting }: { isSubmitting: boolean }) => {
       variant="destructive"
       type="submit"
       disabled={isSubmitting}
-      className="flex flex-row gap-x-2 cursor-pointer w-44 justify-start"
+      className="flex flex-row gap-x-2 cursor-pointer w-36 justify-start"
     >
       {isSubmitting ? (
         <>
           <Spinner strokeColor="white" />
-          Borrando datos...
+          Borrando...
         </>
       ) : (
         <>
@@ -67,15 +69,15 @@ const CancelButton = ({
       variant="outline"
       type="button"
       disabled={isSubmitting}
-      className="flex flex-row gap-x-2 cursor-pointer w-44 justify-start"
+      className="flex flex-row gap-x-2 cursor-pointer w-36 justify-start"
       onClick={() => {
         setIsDialogOpen(false);
       }}
     >
       {isSubmitting ? (
         <>
-          <Spinner strokeColor="white" />
-          Borrando datos...
+          <Spinner />
+          Borrando...
         </>
       ) : (
         <>

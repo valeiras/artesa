@@ -15,7 +15,7 @@ const CreateMockDataButton: React.FC = () => {
         variant="destructive"
         type="submit"
         onClick={() => setIsDialogOpen(true)}
-        className="flex flex-row gap-x-2 cursor-pointer w-44 justify-start"
+        className="flex flex-row gap-x-2 cursor-pointer w-36 justify-start"
       >
         <Trash strokeWidth={1.5} /> Borrar datos
       </Button>
