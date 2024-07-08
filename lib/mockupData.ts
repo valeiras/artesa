@@ -2,6 +2,7 @@ import {
   CreateClientDBType,
   CreateCommodityBatchDBType,
   CreateCommodityDBType,
+  CreateProductBatchDBType,
   CreateProductDBType,
   CreateProductIngredientDBType,
   CreateSupplierDBType,
@@ -238,6 +239,67 @@ export function getMockupCommodityBatches({
   ];
 
   return mockupCommodityBatches;
+}
+
+export type MockupProductBatch = Omit<CreateProductBatchDBType, "id">;
+export function getMockupProductBatches({
+  productsData,
+  mockupProducts,
+}: {
+  productsData: ReadProductDBType[] | null;
+  mockupProducts: MockupCommodity[];
+}): MockupProductBatch[] {
+  if (!productsData) return [];
+
+  const productsMap = getItemMap(productsData, mockupProducts);
+
+  const mockupProductBatches: MockupProductBatch[] = [
+    {
+      product_id: productsMap.get("Mermelada de manzana") || 0,
+      external_id: "LMM-FFL-321",
+      initial_amount: 20,
+      date: getDateNDaysAgo(15).toISOString(),
+      comments: "Más dulce de lo habitual",
+    },
+    {
+      product_id: productsMap.get("Mermelada de manzana") || 0,
+      external_id: "LMM-FPO-225",
+      initial_amount: 15,
+      date: getDateNDaysAgo(2).toISOString(),
+    },
+    {
+      product_id: productsMap.get("Mermelada de pera") || 0,
+      external_id: "LMP-FOL-021",
+      initial_amount: 10,
+      date: getDateNDaysAgo(20).toISOString(),
+    },
+    {
+      product_id: productsMap.get("Mermelada de pera") || 0,
+      external_id: "LMP-FKL-121",
+      initial_amount: 12,
+      date: getDateNDaysAgo(15).toISOString(),
+    },
+    {
+      product_id: productsMap.get("Mermelada de pera") || 0,
+      external_id: "LMP-GPO-125",
+      initial_amount: 15,
+      date: getDateNDaysAgo(2).toISOString(),
+    },
+    {
+      product_id: productsMap.get("Masa quebrada") || 0,
+      external_id: "LMQ-LOO-214",
+      initial_amount: 5,
+      date: getDateNDaysAgo(3).toISOString(),
+    },
+    {
+      product_id: productsMap.get("Tarta de manzana") || 0,
+      external_id: "LTM-LOO-214",
+      initial_amount: 5,
+      date: getDateNDaysAgo(5).toISOString(),
+    },
+  ];
+
+  return mockupProductBatches;
 }
 
 function getItemMap<T extends { name: string }>(

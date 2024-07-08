@@ -7,17 +7,21 @@ import {
   CreateClientDBType,
   CreateCommodityBatchDBType,
   CreateCommodityDBType,
+  CreateProductBatchDBType,
   CreateProductDBType,
   CreateProductIngredientDBType,
   CreateSupplierDBType,
   ReadClientDBType,
   ReadCommodityBatchDBType,
   ReadCommodityDBType,
+  ReadProductBatchDBType,
   ReadProductDBType,
+  ReadProductIngredientDBType,
   ReadSupplierDBType,
 } from "../types";
 import {
   getMockupCommodityBatches,
+  getMockupProductBatches,
   getMockupProductIngredients,
   MockupClient,
   mockupClients,
@@ -68,6 +72,16 @@ export async function createMockupData(): Promise<{
       mockupProductIngredients
     );
     if (productIngredientsError) throw new DBError(productIngredientsError?.message || "Something went wrong");
+
+    const mockupProductBatches = getMockupProductBatches({
+      productsData,
+      mockupProducts,
+    });
+    const { dbData: productBatchesData, dbError: productBacthesError } = await upsertProductBatches(
+      supabase,
+      mockupProductBatches
+    );
+    if (productBacthesError) throw new DBError(productBacthesError?.message || "Something went wrong");
 
     const { dbData: clientsData, dbError: clientsError } = await upsertClients(supabase, mockupClients);
     if (clientsError) throw new DBError(clientsError?.message || "Something went wrong");
@@ -136,10 +150,26 @@ export async function upsertProductIngredients(
   mockupProductIngredients: CreateProductIngredientDBType[]
 ): Promise<{
   dbError: PostgrestError | null;
-  dbData: ReadCommodityDBType[] | null;
+  dbData: ReadProductIngredientDBType[] | null;
 }> {
   return withErrorHandling(
-    supabase.from("product_ingredients").upsert(mockupProductIngredients).select("*").returns<ReadCommodityDBType[]>()
+    supabase
+      .from("product_ingredients")
+      .upsert(mockupProductIngredients)
+      .select("*")
+      .returns<ReadProductIngredientDBType[]>()
+  );
+}
+
+export async function upsertProductBatches(
+  supabase: SupabaseClient,
+  mockupProductBacthes: CreateProductBatchDBType[]
+): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadProductBatchDBType[] | null;
+}> {
+  return withErrorHandling(
+    supabase.from("product_batches").upsert(mockupProductBacthes).select("*").returns<ReadProductBatchDBType[]>()
   );
 }
 
