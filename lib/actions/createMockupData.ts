@@ -5,12 +5,30 @@ import { connectAndRedirect, withErrorHandling } from "../supabaseUtils";
 import { DBError } from "../errors";
 import {
   CreateClientDBType,
+  CreateCommodityBatchDBType,
   CreateCommodityDBType,
+  CreateProductDBType,
+  CreateProductIngredientDBType,
   CreateSupplierDBType,
   ReadClientDBType,
+  ReadCommodityBatchDBType,
   ReadCommodityDBType,
+  ReadProductDBType,
   ReadSupplierDBType,
 } from "../types";
+import {
+  getMockupCommodityBatches,
+  getMockupProductIngredients,
+  MockupClient,
+  mockupClients,
+  mockupCommodities,
+  MockupCommodity,
+  MockupCommodityBatch,
+  MockupProduct,
+  mockupProducts,
+  MockupSupplier,
+  mockupSuppliers,
+} from "../mockupData";
 
 export async function createMockupData(): Promise<{
   dbError: PostgrestError | null;
@@ -19,18 +37,47 @@ export async function createMockupData(): Promise<{
   const supabase: SupabaseClient = await connectAndRedirect();
   const dbError: PostgrestError | null = null;
   try {
-    const { dbData: commoditiesData, dbError: commoditiesError } = await upsertCommodities(supabase);
+    const { dbData: commoditiesData, dbError: commoditiesError } = await upsertCommodities(supabase, mockupCommodities);
     if (commoditiesError) throw new DBError(commoditiesError?.message || "Something went wrong");
 
-    const { dbData: clientsData, dbError: clientsError } = await upsertClients(supabase);
-    if (clientsError) throw new DBError(clientsError?.message || "Something went wrong");
-
-    const { dbData: suppliersData, dbError: supplierError } = await upsertSuppliers(supabase);
+    const { dbData: suppliersData, dbError: supplierError } = await upsertSuppliers(supabase, mockupSuppliers);
     if (supplierError) throw new DBError(supplierError?.message || "Something went wrong");
 
-    console.log("Commodities: ", commoditiesData);
-    console.log("Clients: ", clientsData);
-    console.log("Suppliers: ", suppliersData);
+    const mockupCommodityBatches = getMockupCommodityBatches({
+      commoditiesData,
+      suppliersData,
+      mockupCommodities,
+      mockupSuppliers,
+    });
+    const { dbData: commodityBatchesData, dbError: commodityBatchesError } = await upsertCommodityBatches(
+      supabase,
+      mockupCommodityBatches
+    );
+    if (commodityBatchesError) throw new DBError(commodityBatchesError?.message || "Something went wrong");
+
+    const { dbData: productsData, dbError: productsError } = await upsertProducts(supabase, mockupProducts);
+    if (productsError) throw new DBError(productsError?.message || "Something went wrong");
+
+    const mockupProductIngredients = getMockupProductIngredients({
+      commoditiesData,
+      productsData,
+      mockupCommodities,
+      mockupProducts,
+    });
+    const { dbData: productIngredientsData, dbError: productIngredientsError } = await upsertProductIngredients(
+      supabase,
+      mockupProductIngredients
+    );
+    if (productIngredientsError) throw new DBError(productIngredientsError?.message || "Something went wrong");
+
+    const { dbData: clientsData, dbError: clientsError } = await upsertClients(supabase, mockupClients);
+    if (clientsError) throw new DBError(clientsError?.message || "Something went wrong");
+
+    // console.log("Commodities: ", commoditiesData);
+    // console.log("Products: ", productsData);
+    // console.log("Product Ingredients: ", productIngredientsData);
+    // console.log("Clients: ", clientsData);
+    // console.log("Suppliers: ", suppliersData);
   } catch (e) {
     if (e instanceof DBError) {
       console.error(e.message);
@@ -41,33 +88,82 @@ export async function createMockupData(): Promise<{
 
   return { dbError };
 }
-export async function upsertCommodities(supabase: SupabaseClient): Promise<{
+export async function upsertCommodities(
+  supabase: SupabaseClient,
+  mockupCommodities: MockupCommodity[]
+): Promise<{
   dbError: PostgrestError | null;
-  dbData: ReadCommodityDBType | null;
+  dbData: ReadCommodityDBType[] | null;
 }> {
   return withErrorHandling(
     supabase
       .from("commodities")
       .upsert(mockupCommodities, { onConflict: "name, user_id", ignoreDuplicates: true })
       .select("*")
-      .returns<ReadCommodityDBType>()
+      .returns<ReadCommodityDBType[]>()
   );
 }
 
-export async function upsertSuppliers(supabase: SupabaseClient): Promise<{
+export async function upsertCommodityBatches(
+  supabase: SupabaseClient,
+  mockupCommodityBatches: MockupCommodityBatch[]
+): Promise<{
   dbError: PostgrestError | null;
-  dbData: ReadSupplierDBType | null;
+  dbData: ReadCommodityBatchDBType[] | null;
+}> {
+  return withErrorHandling(
+    supabase.from("commodity_batches").upsert(mockupCommodityBatches).select("*").returns<ReadCommodityBatchDBType[]>()
+  );
+}
+
+export async function upsertProducts(
+  supabase: SupabaseClient,
+  mockupProducts: MockupProduct[]
+): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadProductDBType[] | null;
+}> {
+  return withErrorHandling(
+    supabase
+      .from("products")
+      .upsert(mockupProducts, { onConflict: "name, user_id", ignoreDuplicates: true })
+      .select("*")
+      .returns<ReadProductDBType[]>()
+  );
+}
+
+export async function upsertProductIngredients(
+  supabase: SupabaseClient,
+  mockupProductIngredients: CreateProductIngredientDBType[]
+): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadCommodityDBType[] | null;
+}> {
+  return withErrorHandling(
+    supabase.from("product_ingredients").upsert(mockupProductIngredients).select("*").returns<ReadCommodityDBType[]>()
+  );
+}
+
+export async function upsertSuppliers(
+  supabase: SupabaseClient,
+  mockupSuppliers: MockupSupplier[]
+): Promise<{
+  dbError: PostgrestError | null;
+  dbData: ReadSupplierDBType[] | null;
 }> {
   return withErrorHandling(
     supabase
       .from("suppliers")
       .upsert(mockupSuppliers, { onConflict: "name, user_id", ignoreDuplicates: true })
       .select("*")
-      .returns<ReadSupplierDBType>()
+      .returns<ReadSupplierDBType[]>()
   );
 }
 
-export async function upsertClients(supabase: SupabaseClient): Promise<{
+export async function upsertClients(
+  supabase: SupabaseClient,
+  mockupClients: MockupClient[]
+): Promise<{
   dbError: PostgrestError | null;
   dbData: ReadClientDBType | null;
 }> {
@@ -79,50 +175,3 @@ export async function upsertClients(supabase: SupabaseClient): Promise<{
       .returns<ReadClientDBType>()
   );
 }
-
-const mockupCommodities: CreateCommodityDBType[] = [
-  { name: "Manzanas", external_id: "MA-xbr", unit: "kg" },
-  { name: "Peras", external_id: "PE-xsr", unit: "kg" },
-  { name: "Azúcar", external_id: "AZ-cre", unit: "kg" },
-  { name: "Harina", external_id: "HA-tt2", unit: "kg" },
-  { name: "Levadura", external_id: "LE-4r3", unit: "mg" },
-  { name: "Vino dulce", external_id: "VD-jop", unit: "l" },
-];
-
-const mockupClients: CreateClientDBType[] = [
-  { name: "Jorge Gutiérrez", email: "jorge@gutieres.com", address: "C/ de los Olmos, sn", phone: "657439802" },
-  { name: "Ana Martínez", email: "ana.martinez@gmail.com", address: "C/ de la Luna, 91", phone: "678901234" },
-  {
-    name: "Pedro Ruiz",
-    email: "pedro.ruiz@hotmail.com",
-    address: "C/ de la Estrella, 43",
-    phone: "612345678",
-    comments: "Es alérgico al calamar",
-  },
-  { name: "María Pérez", email: "maria.perez@yahoo.com", address: "C/ de la Fuente, sn", phone: "698765432" },
-  {
-    name: "Isabel García",
-    email: "isabel.garcia@outlook.com",
-    address: "C/ de la Montaña Pelada, 53",
-    phone: "632109876",
-  },
-];
-
-const mockupSuppliers: CreateSupplierDBType[] = [
-  { name: "Harinas la Mancha", email: "harinas@lamancha.com", address: "C/ del Molino, 43", phone: "657439802" },
-  { name: "Fruver S.L.", email: "fruver@fruver.com", address: "C/ de la Cruz, 23", phone: "678901234" },
-  {
-    name: "Fruterías El Bosque",
-    email: "fruterias@elbosque.com",
-    address: "C/ de la Paz, 53",
-    phone: "612345678",
-    comments: "Reparten a partir de las 3 de la tarde",
-  },
-  { name: "Vinos de Castilla", email: "vinos@castilla.com", address: "C/ de la Alhambra, 91", phone: "698765432" },
-  {
-    name: "Panadería La Campiña",
-    email: "panaderia@lacampina.com",
-    address: "C/ de la Catedral, 33",
-    phone: "632109876",
-  },
-];
