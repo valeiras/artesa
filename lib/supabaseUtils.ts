@@ -87,7 +87,9 @@ export async function getRecordsByFieldArray<TTable extends PublicTableName, TFi
 }): Promise<{ dbError: PostgrestError | null; dbData: Tables<TTable>[] | null }> {
   const supabase = await connectAndRedirect();
 
-  return withErrorHandling(supabase.from(tableName).select().in(fieldName, fieldValues).returns<Tables<TTable>[]>());
+  return withErrorHandling(
+    supabase.from(tableName).select().in(fieldName, fieldValues).order("id").returns<Tables<TTable>[]>()
+  );
 }
 
 export async function deleteSingleRecordById<TTable extends PublicTableName>({

@@ -55,7 +55,14 @@ export async function getProductBatchRecipeByProductBatchId({
 }): Promise<{ dbData: ReadProductBatchIngredientDBType[] | null; dbError: PostgrestError | null }> {
   const supabase = await connectAndRedirect();
 
-  return withErrorHandling(supabase.from("product_batch_ingredients").select().eq("product_batch_id", productBatchId));
+  return withErrorHandling(
+    supabase
+      .from("product_batch_ingredients")
+      .select()
+      .eq("product_batch_id", productBatchId)
+      .order("commodity_ingredient_batch_id")
+      .order("product_ingredient_batch_id")
+  );
 }
 
 export async function deleteProductBatchRecipeByProductBatchId({

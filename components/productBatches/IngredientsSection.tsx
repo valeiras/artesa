@@ -1,6 +1,5 @@
 import { ProductBatchFormValueType, ReadCommodityBatchDBType, ReadProductBatchDBType } from "@/lib/types";
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import { PostgrestError } from "@supabase/supabase-js";
 import { PRODUCT_PREFIX, COMMODITY_PREFIX } from "@/lib/constants";
 import { CustomFormSelectFieldArray, CustomFormFieldArray } from "../forms";
@@ -29,9 +28,13 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
   const ingredientIds = ingredients.map(({ id }) => parseInt(id));
 
   const { dbData } = useDatabase({
-    queryKey: [`${ingredientType}Batches`],
+    queryKey: [`${ingredientType}Batches`, ...ingredients.map(({ id }) => id)],
     queryFn: () => getBatches({ recordIds: ingredientIds }),
   });
+
+  if (ingredientType === "product") {
+    console.log("data: ", dbData);
+  }
 
   const { items, ingredientsWithBatches } = organizeBatchesAndIngredients({
     ingredients,
@@ -39,6 +42,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
     idField,
   });
 
+  console.log("items: ", items);
   return (
     <>
       <div className="flex flex-col gap-5 justify-between">

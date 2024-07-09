@@ -29,8 +29,6 @@ const UpdateSaleForm: React.FC = () => {
     return { amount: sold_amount };
   });
 
-  console.log(itemData.client_id);
-
   const defaultValues = {
     articleIds,
     batchIds,
