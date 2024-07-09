@@ -6,11 +6,15 @@ import {
   CreateProductBatchIngredientDBType,
   CreateProductDBType,
   CreateProductIngredientDBType,
+  CreateSaleDBType,
+  CreateSaleIngredientDBType,
   CreateSupplierDBType,
+  ReadClientDBType,
   ReadCommodityBatchDBType,
   ReadCommodityDBType,
   ReadProductBatchDBType,
   ReadProductDBType,
+  ReadSaleDBType,
   ReadSupplierDBType,
 } from "./types";
 
@@ -49,19 +53,19 @@ export const mockupProducts: MockupProduct[] = [
 export type MockupClient = Omit<CreateClientDBType, "id">;
 export const mockupClients: MockupClient[] = [
   { name: "Jorge Gutiérrez", email: "jorge@gutieres.com", address: "C/ de los Olmos, sn", phone: "657439802" },
-  { name: "Ana Martínez", email: "ana.martinez@gmail.com", address: "C/ de la Luna, 91", phone: "678901234" },
+  { name: "Ana Martínez", email: "ana.martinez@gmail.com", address: "C/ Dolores Ibárruri, 91", phone: "678901234" },
   {
     name: "Pedro Ruiz",
     email: "pedro.ruiz@hotmail.com",
-    address: "C/ de la Estrella, 43",
+    address: "C/ Cruz, 43",
     phone: "612345678",
     comments: "Es alérgico al calamar",
   },
-  { name: "María Pérez", email: "maria.perez@yahoo.com", address: "C/ de la Fuente, sn", phone: "698765432" },
+  { name: "María Pérez", email: "maria.perez@yahoo.com", address: "C/ Fuente, sn", phone: "698765432" },
   {
     name: "Isabel García",
     email: "isabel.garcia@outlook.com",
-    address: "C/ de la Montaña Pelada, 53",
+    address: "C/ de la Montaña Mágica, 53",
     phone: "632109876",
   },
 ];
@@ -69,7 +73,7 @@ export const mockupClients: MockupClient[] = [
 export type MockupSupplier = Omit<CreateSupplierDBType, "id">;
 export const mockupSuppliers: MockupSupplier[] = [
   { name: "Harinas la Mancha", email: "harinas@lamancha.com", address: "C/ del Molino, 43", phone: "657439802" },
-  { name: "Fruver S.L.", email: "fruver@fruver.com", address: "C/ de la Cruz, 23", phone: "678901234" },
+  { name: "Fruver S.L.", email: "fruver@fruver.com", address: "C/ Cruz, 23", phone: "678901234" },
   {
     name: "Fruterías El Bosque",
     email: "fruterias@elbosque.com",
@@ -89,6 +93,12 @@ export const mockupSuppliers: MockupSupplier[] = [
     email: "suministros@lamari.com",
     address: "C/ del Oso, 23",
     phone: "632109548",
+  },
+  {
+    name: "Alimentación Jose Luis",
+    email: "alientacion@joseluis.com",
+    address: "Plaza de los Lobos, sn",
+    phone: "667899876",
   },
 ];
 
@@ -426,8 +436,68 @@ export function getMockupProductBatchIngredients({
     },
   ];
 
-  console.log(mockupProductBatchIngredients);
   return mockupProductBatchIngredients;
+}
+
+export type MockupSale = Omit<CreateSaleDBType, "id">;
+export function getMockupSales({
+  clientsData,
+  mockupClients,
+}: {
+  clientsData: ReadClientDBType[] | null;
+  mockupClients: MockupClient[];
+}): MockupSale[] {
+  if (!clientsData) return [];
+
+  const clientsMap = getItemMapByName(clientsData, mockupClients);
+
+  const mockupSales: MockupSale[] = [
+    { date: getDateNDaysAgo(5).toISOString(), client_id: clientsMap.get("Jorge Gutiérrez") || 0 },
+    { date: getDateNDaysAgo(10).toISOString(), client_id: clientsMap.get("María Pérez") || 0 },
+    { date: getDateNDaysAgo(15).toISOString(), client_id: clientsMap.get("María Pérez") || 0 },
+    { date: getDateNDaysAgo(7).toISOString(), client_id: clientsMap.get("Pedro Ruiz") || 0 },
+    { date: getDateNDaysAgo(3).toISOString(), client_id: clientsMap.get("Pedro Ruiz") || 0 },
+    { date: getDateNDaysAgo(2).toISOString(), client_id: clientsMap.get("Pedro Ruiz") || 0 },
+    { date: getDateNDaysAgo(1).toISOString(), client_id: clientsMap.get("Isabel García") || 0 },
+  ];
+
+  return mockupSales;
+}
+
+export type MockupSaleIngredient = Omit<CreateSaleIngredientDBType, "id">;
+export function getMockupSaleIngredients({
+  salesData,
+  commodityBatchesData,
+  productBatchesData,
+  mockupCommodityBatches,
+  mockupProductBatches,
+}: {
+  salesData: ReadSaleDBType[] | null;
+  commodityBatchesData: ReadCommodityBatchDBType[] | null;
+  productBatchesData: ReadProductBatchDBType[] | null;
+  mockupCommodityBatches: MockupCommodityBatch[];
+  mockupProductBatches: MockupProductBatch[];
+}): MockupSaleIngredient[] {
+  if (!salesData || !commodityBatchesData || !productBatchesData) return [];
+
+  const commodityBatchesMap = getItemMapByExternalId(commodityBatchesData, mockupCommodityBatches);
+  const productBatchesMap = getItemMapByExternalId(productBatchesData, mockupProductBatches);
+
+  const mockupSaleIngredients: MockupSaleIngredient[] = [
+    { sale_id: salesData[0].id, sold_amount: 3, product_batch_id: productBatchesMap.get("LMM-FFL-321") },
+    { sale_id: salesData[0].id, sold_amount: 2, product_batch_id: productBatchesMap.get("LMM-FPO-225") },
+    { sale_id: salesData[0].id, sold_amount: 5, product_batch_id: productBatchesMap.get("LMP-FOL-021") },
+    { sale_id: salesData[1].id, sold_amount: 2, product_batch_id: productBatchesMap.get("LTM-LOO-214") },
+    { sale_id: salesData[2].id, sold_amount: 2, product_batch_id: productBatchesMap.get("LMQ-LOO-214") },
+    { sale_id: salesData[2].id, sold_amount: 3, product_batch_id: productBatchesMap.get("LMP-FOL-021") },
+    { sale_id: salesData[3].id, sold_amount: 2, commodity_batch_id: commodityBatchesMap.get("LMA-FEL-222") },
+    { sale_id: salesData[3].id, sold_amount: 1, commodity_batch_id: commodityBatchesMap.get("LPE-FEL-051") },
+    { sale_id: salesData[4].id, sold_amount: 1, product_batch_id: productBatchesMap.get("LTM-LOO-214") },
+    { sale_id: salesData[5].id, sold_amount: 2, commodity_batch_id: commodityBatchesMap.get("LPE-FEL-051") },
+    { sale_id: salesData[6].id, sold_amount: 1, product_batch_id: productBatchesMap.get("LMP-GPO-125") },
+  ];
+
+  return mockupSaleIngredients;
 }
 
 function getItemMapByName<T extends { name: string }>(
