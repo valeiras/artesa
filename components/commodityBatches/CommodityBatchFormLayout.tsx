@@ -14,7 +14,7 @@ const CommodityBatchFormLayout: RecordFormType<CommodityBatchFormValueType> = ({
   submitButtonLabel,
   setIsFormOpen,
 }) => {
-  const { data: suppliersData } = useQuery({
+  const { data: suppliersData, isPending: isDataPending } = useQuery({
     queryKey: ["suppliers"],
     queryFn: () => getAllSuppliers(),
   });
@@ -44,6 +44,7 @@ const CommodityBatchFormLayout: RecordFormType<CommodityBatchFormValueType> = ({
             label="Proveedor"
             placeholder="Selecciona un proveedor"
             emptyPlaceholder="No hay proveedores disponibles"
+            isPending={isDataPending}
           />
           <CustomFormDatePicker name="date" control={form.control} label="Fecha" />
           <CustomFormField name="externalId" control={form.control} label="Identificador del lote" />

@@ -39,12 +39,12 @@ const UpdateProductBatchForm: React.FC = () => {
     throw new Error("El tipo de artículo no coincide con el esperado");
   if (!isReadProductBatchDBType(batchData)) throw new Error("El tipo de lote no coincide con el esperado");
 
-  const { data: productBatchRecipeData, isPending: isProductBatchRecipeDataPending } = useQuery({
+  const { data: productBatchRecipeData, isPending: isDataPending } = useQuery({
     queryKey: ["batchRecipe", String(batchData.id)],
     queryFn: () => getProductBatchRecipeByProductBatchId({ productBatchId: batchData.id }),
   });
 
-  if (isProductBatchRecipeDataPending) return <FormSkeleton formHeader="Editar lote" />;
+  if (isDataPending) return <FormSkeleton formHeader="Editar lote" />;
 
   const {
     commodityIngredientAmounts,
