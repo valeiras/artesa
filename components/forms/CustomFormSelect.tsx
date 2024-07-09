@@ -10,11 +10,13 @@ type CustomFormSelectProps = {
   items: { value: string; label?: string }[];
   label?: string;
   placeholder?: string;
+  loadingPlaceholder?: string;
   emptyPlaceholder?: string;
   className?: string;
   hasLabel?: boolean;
   hasMessage?: boolean;
   forceRefresh?: number;
+  isPending?: boolean;
 };
 
 const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>(function CustomFormSelect(
@@ -24,17 +26,18 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
     items,
     label,
     placeholder,
+    loadingPlaceholder = "Cargando...",
     emptyPlaceholder,
     className,
     hasLabel = true,
     hasMessage = true,
     forceRefresh,
+    isPending = false,
   },
   ref
 ) {
-  let conditionalPlaceholder;
-  if (items.length < 1) conditionalPlaceholder = emptyPlaceholder || placeholder || "";
-  else conditionalPlaceholder = placeholder || items?.[0].label || items?.[0].value;
+  const conditionalPlaceholder: string =
+    items.length < 1 ? emptyPlaceholder || placeholder || "" : placeholder || items?.[0].label || items?.[0].value;
 
   return (
     <FormField
@@ -43,27 +46,31 @@ const CustomFormSelect = React.forwardRef<HTMLDivElement, CustomFormSelectProps>
       render={({ field }) => (
         <FormItem className={cn("flex flex-col h-full justify-between relative", className)}>
           {hasLabel && <FormLabel>{label || name}</FormLabel>}
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-            disabled={items.length < 1}
-            key={forceRefresh}
-          >
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder={conditionalPlaceholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {items.map(({ value, label }) => {
-                return (
-                  <SelectItem key={value} value={value} ref={ref}>
-                    {label || value}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
+          {isPending ? (
+            <div className="fake-input">{loadingPlaceholder}</div>
+          ) : (
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              disabled={items.length < 1}
+              key={forceRefresh}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={conditionalPlaceholder} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {items.map(({ value, label }) => {
+                  return (
+                    <SelectItem key={value} value={value} ref={ref}>
+                      {label || value}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          )}
           {hasMessage && <FormMessage className="absolute -bottom-5" />}
         </FormItem>
       )}

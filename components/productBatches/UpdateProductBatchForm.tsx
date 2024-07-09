@@ -9,7 +9,7 @@ import {
   isReadProductWithBatchesAndIngredientsType,
   productBatchFormSchema,
 } from "@/lib/types";
-import { UpdateBatchForm } from "@/components/forms";
+import { FormSkeleton, UpdateBatchForm } from "@/components/forms";
 import { updateProductBatch } from "@/lib/actions/productBatchActions";
 import { useDataTableContext } from "@/components/dataTable";
 import ProductBatchFormLayout from "./ProductBatchFormLayout";
@@ -44,7 +44,7 @@ const UpdateProductBatchForm: React.FC = () => {
     queryFn: () => getProductBatchRecipeByProductBatchId({ productBatchId: batchData.id }),
   });
 
-  if (isProductBatchRecipeDataPending) return null;
+  if (isProductBatchRecipeDataPending) return <FormSkeleton formHeader="Editar lote" />;
 
   const {
     commodityIngredientAmounts,

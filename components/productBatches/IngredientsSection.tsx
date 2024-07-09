@@ -5,6 +5,7 @@ import { PRODUCT_PREFIX, COMMODITY_PREFIX } from "@/lib/constants";
 import { CustomFormSelectFieldArray, CustomFormFieldArray } from "../forms";
 import { UseFormReturn } from "react-hook-form";
 import { useDatabase } from "@/lib/hooks";
+import { Skeleton } from "../ui/skeleton";
 
 function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatchDBType>({
   ingredients,
@@ -27,7 +28,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
 }) {
   const ingredientIds = ingredients.map(({ id }) => parseInt(id));
 
-  const { dbData } = useDatabase({
+  const { dbData, isPending } = useDatabase({
     queryKey: [`${ingredientType}Batches`, ...ingredients.map(({ id }) => id)],
     queryFn: () => getBatches({ recordIds: ingredientIds }),
   });
@@ -57,6 +58,7 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
         placeholder="Selecciona un lote"
         emptyPlaceholder="No hay lotes"
         hasVariableAmount={false}
+        isPending={isPending}
       />
       <CustomFormFieldArray
         name={`${ingredientType}IngredientAmounts`}

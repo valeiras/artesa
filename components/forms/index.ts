@@ -11,3 +11,4 @@ export { default as NewBatchForm } from "./NewBatchForm";
 export { default as UpdateItemForm } from "./UpdateItemForm";
 export { default as UpdateBatchForm } from "./UpdateBatchForm";
 export { default as RemoveButtons } from "./RemoveButtons";
+export { default as FormSkeleton } from "./FormSkeleton";

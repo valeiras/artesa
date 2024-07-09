@@ -12,12 +12,14 @@ type CustomFormSelectFieldArrayProps<T extends FieldValues> = {
   commonItems?: { value: string; label?: string }[];
   independentItems?: { value: string; label: string }[][];
   placeholder?: string;
+  loadingPlaceholder?: string;
   emptyPlaceholder?: string;
   className?: string;
   hasVariableAmount?: boolean;
   label?: string;
   emptyValue?: FieldArray<T, ArrayPath<T>>;
   gap?: string;
+  isPending?: boolean;
 };
 
 function CustomFormSelectFieldArray<T extends FieldValues>({
@@ -27,12 +29,14 @@ function CustomFormSelectFieldArray<T extends FieldValues>({
   commonItems,
   independentItems,
   placeholder,
+  loadingPlaceholder,
   emptyPlaceholder,
   className,
   hasVariableAmount = true,
   label,
   emptyValue,
   gap = "5",
+  isPending = false,
 }: CustomFormSelectFieldArrayProps<T>) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -51,9 +55,11 @@ function CustomFormSelectFieldArray<T extends FieldValues>({
                 items={commonItems ? commonItems : independentItems?.[index] || []}
                 placeholder={placeholder}
                 emptyPlaceholder={emptyPlaceholder}
+                loadingPlaceholder={loadingPlaceholder}
                 hasLabel={false}
                 {...form.register(`${name}.${index}.${objectField}` as Path<T>)}
                 className="flex-1"
+                isPending={isPending}
               />
               {hasVariableAmount && <RemoveButtonFieldArray remove={remove} index={index} />}
             </div>
