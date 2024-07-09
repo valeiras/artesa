@@ -34,7 +34,7 @@ const CustomDialog: React.FC<Props> = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{DialogTriggerContent}</DialogTrigger>
-      <DialogContent className="max-w-full w-4/5 xl:p-16">
+      <DialogContent className="max-w-full w-4/5 md:p-8 xl:p-16">
         <ScrollArea viewportClassName="max-h-[80dvh]">
           <DialogHeader>
             {title ? (
