@@ -32,17 +32,12 @@ function IngredientsSection<T extends ReadCommodityBatchDBType | ReadProductBatc
     queryFn: () => getBatches({ recordIds: ingredientIds }),
   });
 
-  if (ingredientType === "product") {
-    console.log("data: ", dbData);
-  }
-
   const { items, ingredientsWithBatches } = organizeBatchesAndIngredients({
     ingredients,
     batchesData: dbData,
     idField,
   });
 
-  console.log("items: ", items);
   return (
     <>
       <div className="flex flex-col gap-5 justify-between">

@@ -44,15 +44,14 @@ const UpdateProductBatchForm: React.FC = () => {
     queryFn: () => getProductBatchRecipeByProductBatchId({ productBatchId: batchData.id }),
   });
 
+  if (isProductBatchRecipeDataPending) return null;
+
   const {
     commodityIngredientAmounts,
     commodityIngredientBatchIds,
     productIngredientAmounts,
     productIngredientBatchIds,
   } = createDefaultArrays({ recipeData: productBatchRecipeData?.dbData, itemData });
-
-  console.log("p: ", productIngredientBatchIds);
-  console.log("c: ", commodityIngredientBatchIds);
 
   const defaultValues: ProductBatchFormValueType = {
     commodityIngredientAmounts,
@@ -67,7 +66,6 @@ const UpdateProductBatchForm: React.FC = () => {
     comments: batchData.comments || "",
   };
 
-  console.log(defaultValues);
   return (
     <UpdateBatchForm<ProductBatchFormValueType>
       formSchema={productBatchFormSchema}
