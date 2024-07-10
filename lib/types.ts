@@ -116,6 +116,13 @@ export type CreateCommodityBatchDBType = TablesInsert<"commodity_batches">;
 export type UpdateCommodityBatchDBType = TablesUpdate<"commodity_batches">;
 
 export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches: ReadCommodityBatchDBType[] };
+export type ReadCommodityWithBatchesAndAmountsType = ReadCommodityDBType & {
+  batches: ReadCommodityBatchDBType &
+    {
+      containing_product_batches: { used_amount: number; product_batch: { date: string; external_id: string } }[];
+      containing_sales: { sold_amount: number; sale: { date: string; client: { name: string } } }[];
+    }[];
+};
 
 export const supplierFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),

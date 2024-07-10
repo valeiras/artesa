@@ -1,6 +1,11 @@
 "use server";
 
-import { ReadCommodityDBType, CommodityFormValueType, ReadCommodityWithBatchesType } from "../types";
+import {
+  ReadCommodityDBType,
+  CommodityFormValueType,
+  ReadCommodityWithBatchesType,
+  ReadCommodityWithBatchesAndAmountsType,
+} from "../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -58,6 +63,27 @@ export async function getAllCommoditiesWithBatches(): Promise<{
   const supabase = await connectAndRedirect();
 
   return withErrorHandling(supabase.from("commodities").select(`*, batches:commodity_batches (*)`));
+}
+
+export async function getSingleCommodityWithBatches({ recordId }: { recordId: number }): Promise<{
+  dbData: ReadCommodityWithBatchesAndAmountsType | null;
+  dbError: PostgrestError | null;
+}> {
+  const supabase = await connectAndRedirect();
+  return withErrorHandling(
+    supabase
+      .from("commodities")
+      .select(
+        `*, batches:commodity_batches(
+          *, 
+          containing_product_batches:product_batch_ingredients(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
+          containing_sales:sale_ingredients(sold_amount, sale:sales(date, client:clients(name)))
+        )
+        `
+      )
+      .eq("id", recordId)
+      .maybeSingle()
+  );
 }
 
 export async function getSingleCommodity({ recordId }: { recordId: number }): Promise<{

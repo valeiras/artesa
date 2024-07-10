@@ -1,13 +1,33 @@
+"use client";
+
 import React from "react";
-import underConstruction from "@/assets/under_construction.svg";
-import Image from "next/image";
+import { useDatabase } from "@/lib/hooks";
+import { getSingleCommodityWithBatches } from "@/lib/actions/commodityActions";
+import Spinner from "@/components/Spinner";
+import PageWrapper from "@/components/PageWrapper";
+import { CommodityBatchList } from "@/components/commodityBatches";
 
 const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) => {
+  const { dbData, isPending } = useDatabase({
+    queryKey: ["commodityWithBatches", params.id],
+    queryFn: () => getSingleCommodityWithBatches({ recordId: parseInt(params.id) }),
+  });
+
+  const currCommodity = dbData;
+  console.log(currCommodity);
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center align-center h-[70dvh]">
+        <Spinner width="50px" />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col w-full items-center">
-      <h2 className="text-4xl font-bold text-center">Estamos trabajando en ello...</h2>
-      <Image src={underConstruction} alt="Trabajo en curso" className="w-1/2 mt-16" />
-    </div>
+    <PageWrapper heading={currCommodity?.name || ""}>
+      <CommodityBatchList />
+    </PageWrapper>
   );
 };
 
