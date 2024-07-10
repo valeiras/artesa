@@ -42,7 +42,7 @@ function productColumns({
           itemData={row.original}
           batches={row.original.batches || []}
           mutateBatch={deleteProductBatchMutation}
-          seeLinkbase="productos-finales"
+          seeLinkbase="lotes/productos-finales"
         />
       ),
     },
@@ -62,7 +62,13 @@ function productColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <ItemRowActions deleteItemMutation={() => deleteProductMutation(item.id)} itemData={item} />;
+        return (
+          <ItemRowActions
+            deleteItemMutation={() => deleteProductMutation(item.id)}
+            itemData={item}
+            seeLink={`productos-finales/${row.original.id}`}
+          />
+        );
       },
       size: 5,
       minSize: 5,

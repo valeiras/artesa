@@ -41,7 +41,7 @@ function commodityColumns({
           itemData={row.original}
           batches={row.original.batches || []}
           mutateBatch={deleteCommodityBatchMutation}
-          seeLinkbase="materias-primas"
+          seeLinkbase="lotes/materias-primas"
         />
       ),
     },
@@ -54,7 +54,13 @@ function commodityColumns({
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <ItemRowActions deleteItemMutation={() => deleteCommodityMutation(item.id)} itemData={item} />;
+        return (
+          <ItemRowActions
+            deleteItemMutation={() => deleteCommodityMutation(item.id)}
+            itemData={item}
+            seeLink={`materias-primas/${row.original.id}`}
+          />
+        );
       },
       size: 5,
       minSize: 5,
