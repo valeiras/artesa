@@ -1,6 +1,6 @@
 "use server";
 
-import { ReadSaleDBType, ReadSaleType, SaleFormValueType } from "../types";
+import { ReadSaleDBType, ReadSaleType, SaleFormValueType } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   getSingleRecordById,
@@ -9,7 +9,7 @@ import {
   updateRecord,
   connectAndRedirect,
   withErrorHandling,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 const formToDatabaseFn = ({ values, userId }: { values: SaleFormValueType; userId: string }) => {
   return {

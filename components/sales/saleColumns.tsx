@@ -1,5 +1,5 @@
 import React from "react";
-import { ReadSaleType } from "@/lib/types";
+import { ReadSaleType } from "@/lib/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";

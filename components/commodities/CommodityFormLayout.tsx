@@ -1,8 +1,8 @@
-import { CommodityFormValueType, RecordFormType } from "@/lib/types";
+import { CommodityFormValueType, RecordFormType } from "@/lib/types/types";
 import React from "react";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";
-import { availableUnits } from "@/lib/units";
+import { availableUnits } from "@/lib/db/units";
 
 const CommodityFormLayout: RecordFormType<CommodityFormValueType> = ({
   form,

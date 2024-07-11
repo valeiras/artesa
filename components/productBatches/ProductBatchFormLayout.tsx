@@ -1,4 +1,4 @@
-import { ProductBatchFormValueType, RecordFormType, isReadProductWithIngredientsType } from "@/lib/types";
+import { ProductBatchFormValueType, RecordFormType, isReadProductWithIngredientsType } from "@/lib/types/types";
 import React from "react";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, FormButtons } from "@/components/forms";

@@ -1,8 +1,8 @@
 import React from "react";
-import { RecordFormType, ProductFormValueType } from "@/lib/types";
+import { RecordFormType, ProductFormValueType } from "@/lib/types/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, CustomFormSelect, CustomFormSelectFieldArray, FormButtons } from "@/components/forms";
-import { availableUnits } from "@/lib/units";
+import { availableUnits } from "@/lib/db/units";
 import useAvailableArticles from "@/lib/hooks/useAvailableArticles";
 
 const ProductForm: RecordFormType<ProductFormValueType> = ({

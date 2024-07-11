@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SaleFormValueType, saleFormSchema } from "@/lib/types";
+import { SaleFormValueType, saleFormSchema } from "@/lib/types/types";
 import { NewItemForm } from "@/components/forms";
 import { createSale } from "@/lib/actions/saleActions";
 import SaleFormLayout from "./SaleFormLayout";

@@ -5,7 +5,7 @@ import {
   CommodityFormValueType,
   ReadCommodityWithBatchesType,
   ReadCommodityWithBatchesAndAmountsType,
-} from "../types";
+} from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -15,7 +15,7 @@ import {
   createRecord,
   updateRecord,
   withErrorHandling,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: CommodityFormValueType; userId: string }) {
   return { name: values.name, unit: values.unit, external_id: values.externalId, user_id: userId };

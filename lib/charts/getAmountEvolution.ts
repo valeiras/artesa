@@ -1,14 +1,8 @@
-import { CommodityBatchWithAmounts } from "./types";
+import { AmountEvolution, ReadCommodityBatchWithAmountsType } from "../types/types";
 
-type AmountEvolution = {
-  date: Date;
-  amount: number;
-  delta: number;
-  saleId?: string;
-  productBatchId?: string;
-  client?: string;
-}[];
-export function getAmountEvolution(batch: CommodityBatchWithAmounts): AmountEvolution {
+export function getAmountEvolution(batch: ReadCommodityBatchWithAmountsType | null): AmountEvolution {
+  if (!batch) return [];
+
   const initial: AmountEvolution = [
     { date: new Date(batch.date), amount: batch.initial_amount, delta: batch.initial_amount },
   ];

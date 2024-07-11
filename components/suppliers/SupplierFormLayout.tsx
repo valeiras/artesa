@@ -1,5 +1,5 @@
 import React from "react";
-import { RecordFormType, SupplierFormValueType } from "@/lib/types";
+import { RecordFormType, SupplierFormValueType } from "@/lib/types/types";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, FormButtons } from "@/components/forms";
 

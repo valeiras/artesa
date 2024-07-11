@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CommodityFormValueType, commodityFormSchema } from "@/lib/types";
+import { CommodityFormValueType, commodityFormSchema } from "@/lib/types/types";
 import { NewItemForm } from "@/components/forms";
 import { createCommodity } from "@/lib/actions/commodityActions";
 import CommodityFormLayout from "./CommodityFormLayout";

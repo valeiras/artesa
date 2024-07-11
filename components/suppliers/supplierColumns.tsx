@@ -1,4 +1,4 @@
-import { ReadSupplierDBType } from "@/lib/types";
+import { ReadSupplierDBType } from "@/lib/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";

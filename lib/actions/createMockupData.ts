@@ -1,7 +1,7 @@
 "use server";
 
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { connectAndRedirect, withErrorHandling } from "../supabaseUtils";
+import { connectAndRedirect, withErrorHandling } from "../db/supabaseUtils";
 import { DBError } from "../errors";
 import {
   CreateProductBatchDBType,
@@ -17,7 +17,7 @@ import {
   ReadSaleDBType,
   ReadSaleIngredientDBType,
   ReadSupplierDBType,
-} from "../types";
+} from "../types/types";
 import {
   getMockupCommodityBatches,
   getMockupProductBatches,
@@ -36,7 +36,7 @@ import {
   MockupSaleIngredient,
   MockupSupplier,
   mockupSuppliers,
-} from "../mockupData";
+} from "../db/mockupData";
 
 export async function createMockupData(): Promise<{
   dbError: PostgrestError | null;

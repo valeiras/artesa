@@ -3,10 +3,10 @@
 import React from "react";
 import { deleteCommodity, getAllCommoditiesWithBatches } from "@/lib/actions/commodityActions";
 import { useMutation } from "@tanstack/react-query";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
+import { useQuerySuccessHandler } from "@/lib/hooks/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable/";
 import { deleteCommodityBatch } from "@/lib/actions/commodityBatchActions";
-import { ReadCommodityBatchDBType, ReadCommodityDBType } from "@/lib/types";
+import { ReadCommodityBatchDBType, ReadCommodityDBType } from "@/lib/types/types";
 import { NewItemDialog, UpdateItemDialog, NewBatchDialog, UpdateBatchDialog, DeleteAlertDialog } from "../dialogs/";
 import { NewCommodityBatchForm, UpdateCommodityBatchForm } from "@/components/commodityBatches/";
 import { useDatabase } from "@/lib/hooks/";

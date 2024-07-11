@@ -1,7 +1,7 @@
 "use server";
 
 import { SupabaseClient } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, withErrorHandling } from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, withErrorHandling } from "../db/supabaseUtils";
 
 export async function removeAllData() {
   const supabase: SupabaseClient = await connectAndRedirect();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RecordFormType, SaleFormValueType } from "@/lib/types";
+import { RecordFormType, SaleFormValueType } from "@/lib/types/types";
 import { Form } from "@/components/ui/form";
 import {
   CustomFormDatePicker,

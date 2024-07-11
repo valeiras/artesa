@@ -1,14 +1,31 @@
-import React from "react";
-import underConstruction from "@/assets/under_construction.svg";
-import Image from "next/image";
+"use client";
 
-const SingleCommodityBatchPage: React.FC<{ params: { extneralId: string } }> = ({ params }) => {
-  return (
-    <div className="flex flex-col w-full items-center">
-      <h2 className="text-4xl font-bold text-center">Estamos trabajando en ello...</h2>
-      <Image src={underConstruction} alt="Trabajo en curso" className="w-1/2 mt-16" />
-    </div>
-  );
+import React from "react";
+import { useDatabase } from "@/lib/hooks";
+import { getSingleCommodityBatch } from "@/lib/actions/commodityBatchActions";
+import Spinner from "@/components/Spinner";
+import PageWrapper from "@/components/PageWrapper";
+import { getAmountEvolution } from "@/lib/charts/getAmountEvolution";
+import { getChartData } from "@/lib/charts/getChartData";
+
+const SingleCommodityBatchPage: React.FC<{ params: { externalId: string } }> = ({ params: { externalId } }) => {
+  const { dbData: currCommodityBatch, isPending } = useDatabase({
+    queryKey: ["singleCommodityBatch", externalId],
+    queryFn: () => getSingleCommodityBatch({ externalId }),
+  });
+
+  const amountEvolution = getAmountEvolution(currCommodityBatch);
+  const chartData = getChartData(amountEvolution);
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center align-center h-[70dvh]">
+        <Spinner width="50px" />
+      </div>
+    );
+  }
+
+  return <PageWrapper heading={currCommodityBatch?.external_id || ""}></PageWrapper>;
 };
 
 export default SingleCommodityBatchPage;

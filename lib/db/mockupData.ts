@@ -16,7 +16,7 @@ import {
   ReadProductDBType,
   ReadSaleDBType,
   ReadSupplierDBType,
-} from "./types";
+} from "../types/types";
 
 function getItemId<T extends { id: number }, D>({
   itemData,

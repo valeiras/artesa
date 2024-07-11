@@ -1,9 +1,9 @@
-import { getAmountEvolution } from "@/lib/getAmountEvolution";
-import { CommodityBatchWithAmounts } from "@/lib/types";
+import { getAmountEvolution } from "@/lib/charts/getAmountEvolution";
+import { ReadCommodityBatchWithAmountsType } from "@/lib/types/types";
 import Link from "next/link";
 import React from "react";
 
-type Props = { batches: CommodityBatchWithAmounts[] | undefined };
+type Props = { batches: ReadCommodityBatchWithAmountsType[] | undefined };
 
 const CommodityBatchList: React.FC<Props> = ({ batches }) => {
   const amountEvolutionPerBatch = batches?.map((batch) => {

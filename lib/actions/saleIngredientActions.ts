@@ -1,8 +1,13 @@
 "use server";
 
-import { CreateSaleIngredientDBType, ReadSaleDBType, ReadSaleIngredientDBType, SaleFormValueType } from "../types";
+import {
+  CreateSaleIngredientDBType,
+  ReadSaleDBType,
+  ReadSaleIngredientDBType,
+  SaleFormValueType,
+} from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { connectAndRedirect, authenticateAndRedirect, deleteRecordsByField } from "../supabaseUtils";
+import { connectAndRedirect, authenticateAndRedirect, deleteRecordsByField } from "../db/supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 
 const getBatchIds = (batchIds: { id: string }[]) => {

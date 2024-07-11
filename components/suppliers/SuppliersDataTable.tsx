@@ -3,9 +3,9 @@
 import { deleteSupplier, getAllSuppliers } from "@/lib/actions/supplierActions";
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
+import { useQuerySuccessHandler } from "@/lib/hooks/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable";
-import { ReadSupplierDBType } from "@/lib/types";
+import { ReadSupplierDBType } from "@/lib/types/types";
 import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components/dialogs/";
 import UpdateSupplierForm from "./UpdateSupplierForm";
 import NewSupplierForm from "./NewSupplierForm";

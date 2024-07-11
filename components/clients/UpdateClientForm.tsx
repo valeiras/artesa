@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ClientFormValueType, clientFormSchema, isReadClientDBType } from "@/lib/types";
+import { ClientFormValueType, clientFormSchema, isReadClientDBType } from "@/lib/types/types";
 import { UpdateItemForm } from "@/components/forms";
 import { updateClient } from "@/lib/actions/clientActions";
 import { useDataTableContext } from "@/components/dataTable";

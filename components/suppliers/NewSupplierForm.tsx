@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SupplierFormValueType, supplierFormSchema } from "@/lib/types";
+import { SupplierFormValueType, supplierFormSchema } from "@/lib/types/types";
 import { NewItemForm } from "@/components/forms";
 import { createSupplier } from "@/lib/actions/supplierActions";
 import SupplierFormLayout from "./SupplierFormLayout";

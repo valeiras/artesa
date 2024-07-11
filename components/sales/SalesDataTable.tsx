@@ -3,9 +3,9 @@
 import { deleteSale, getAllSales } from "@/lib/actions/saleActions";
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
+import { useQuerySuccessHandler } from "@/lib/hooks/useQuerySuccessHandler";
 import { DataTableContextProvider, DataTable } from "@/components/dataTable";
-import { ReadSaleDBType } from "@/lib/types";
+import { ReadSaleDBType } from "@/lib/types/types";
 import { UpdateItemDialog, NewItemDialog, DeleteAlertDialog } from "@/components/dialogs/";
 import UpdateSaleForm from "./UpdateSaleForm";
 import NewSaleForm from "./NewSaleForm";

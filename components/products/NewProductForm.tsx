@@ -1,5 +1,5 @@
 import React from "react";
-import { ProductFormValueType, productFormSchema } from "@/lib/types";
+import { ProductFormValueType, productFormSchema } from "@/lib/types/types";
 import { NewItemForm } from "@/components/forms";
 import { createProduct } from "@/lib/actions/productActions";
 import ProductForm from "./ProductFormLayout";

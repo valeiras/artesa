@@ -1,4 +1,4 @@
-import { UnitType, unitEnum } from "@/lib/types";
+import { UnitType, unitEnum } from "@/lib/types/types";
 
 export const valueToLabel: { [key in UnitType]: string } = {
   unit: "unidades",

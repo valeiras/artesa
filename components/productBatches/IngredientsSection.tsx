@@ -1,4 +1,4 @@
-import { ProductBatchFormValueType, ReadCommodityBatchDBType, ReadProductBatchDBType } from "@/lib/types";
+import { ProductBatchFormValueType, ReadCommodityBatchDBType, ReadProductBatchDBType } from "@/lib/types/types";
 import React, { useEffect } from "react";
 import { PostgrestError } from "@supabase/supabase-js";
 import { PRODUCT_PREFIX, COMMODITY_PREFIX } from "@/lib/constants";

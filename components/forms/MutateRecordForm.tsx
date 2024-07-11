@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
+import { useQuerySuccessHandler } from "@/lib/hooks/useQuerySuccessHandler";
 import { useMutation } from "@tanstack/react-query";
-import { MutateRecordFormProps } from "@/lib/types";
+import { MutateRecordFormProps } from "@/lib/types/types";
 
 function MutateRecordForm<T extends FieldValues>({
   formSchema,

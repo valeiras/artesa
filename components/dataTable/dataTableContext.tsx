@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react";
-import { ReadBatchDBType, ReadItemDBType } from "@/lib/types";
+import { ReadBatchDBType, ReadItemDBType } from "@/lib/types/types";
 
 type DataTableContext = {
   isNewItemDialogOpen: boolean;

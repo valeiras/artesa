@@ -6,7 +6,7 @@ import {
   ReadProductWithBatchesAndIngredientsType,
   ReadProductWithBatchesType,
   TempReadIngredientsType,
-} from "../types";
+} from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -16,7 +16,7 @@ import {
   updateRecord,
   getAllRecords,
   withErrorHandling,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductFormValueType; userId: string }) {
   return {

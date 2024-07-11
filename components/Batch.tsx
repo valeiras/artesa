@@ -1,5 +1,5 @@
 import React from "react";
-import { ReadBatchDBType, ReadItemDBType } from "@/lib/types";
+import { ReadBatchDBType, ReadItemDBType } from "@/lib/types/types";
 import BatchRowActions from "./rowActions/BatchRowActions";
 
 const Batch: React.FC<{

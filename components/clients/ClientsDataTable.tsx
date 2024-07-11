@@ -3,11 +3,11 @@
 import { deleteClient, getAllClients } from "@/lib/actions/clientActions";
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useQuerySuccessHandler } from "@/lib/useQuerySuccessHandler";
+import { useQuerySuccessHandler } from "@/lib/hooks/useQuerySuccessHandler";
 import { clientColumns } from "./clientColumns";
 import { DataTable, DataTableContextProvider } from "@/components/dataTable";
 import { DeleteAlertDialog, NewItemDialog, UpdateItemDialog } from "@/components/dialogs/";
-import { ReadClientDBType } from "@/lib/types";
+import { ReadClientDBType } from "@/lib/types/types";
 import { useDatabase } from "@/lib/hooks/";
 import NewClientForm from "./NewClientForm";
 import UpdateClientForm from "./UpdateClientForm";

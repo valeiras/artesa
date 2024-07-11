@@ -1,9 +1,9 @@
-import { ReadProductWithBatchesAndIngredientsType } from "@/lib/types";
+import { ReadProductWithBatchesAndIngredientsType } from "@/lib/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/dataTable";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { PostgrestError } from "@supabase/supabase-js";
-import { valueToLabel } from "@/lib/units";
+import { valueToLabel } from "@/lib/db/units";
 import BatchContainer from "@/components/BatchContainer";
 import { ItemRowActions } from "@/components/rowActions";
 import RecipeContainer from "../RecipeContainer";

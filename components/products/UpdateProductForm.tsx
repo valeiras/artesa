@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ProductFormValueType, isReadProductWithBatchesAndIngredientsType, productFormSchema } from "@/lib/types";
+import { ProductFormValueType, isReadProductWithBatchesAndIngredientsType, productFormSchema } from "@/lib/types/types";
 import { UpdateItemForm } from "@/components/forms";
 import { updateProduct } from "@/lib/actions/productActions";
 import { useDataTableContext } from "@/components/dataTable";

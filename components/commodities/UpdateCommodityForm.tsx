@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CommodityFormValueType, commodityFormSchema, isReadCommodityDBType } from "@/lib/types";
+import { CommodityFormValueType, commodityFormSchema, isReadCommodityDBType } from "@/lib/types/types";
 import { UpdateItemForm } from "@/components/forms/";
 import { updateCommodity } from "@/lib/actions/commodityActions";
 import { useDataTableContext } from "@/components/dataTable";

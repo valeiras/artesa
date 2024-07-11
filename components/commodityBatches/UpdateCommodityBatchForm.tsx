@@ -6,7 +6,7 @@ import {
   commodityBatchFormSchema,
   isReadCommodityBatchDBType,
   isReadCommodityDBType,
-} from "@/lib/types";
+} from "@/lib/types/types";
 import { UpdateBatchForm } from "@/components/forms";
 import { updateCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useDataTableContext } from "@/components/dataTable";

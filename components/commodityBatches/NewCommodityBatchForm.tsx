@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CommodityBatchFormValueType, commodityBatchFormSchema, isReadCommodityDBType } from "@/lib/types";
+import { CommodityBatchFormValueType, commodityBatchFormSchema, isReadCommodityDBType } from "@/lib/types/types";
 import { NewBatchForm } from "@/components/forms";
 import { createCommodityBatch } from "@/lib/actions/commodityBatchActions";
 import { useDataTableContext } from "@/components/dataTable";

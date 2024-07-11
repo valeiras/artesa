@@ -1,7 +1,7 @@
 import React from "react";
 import * as z from "zod";
 import { FieldValues } from "react-hook-form";
-import { NewRecordFormProps } from "@/lib/types";
+import { NewRecordFormProps } from "@/lib/types/types";
 import { useDataTableContext } from "../dataTable";
 import MutateRecordForm from "./MutateRecordForm";
 

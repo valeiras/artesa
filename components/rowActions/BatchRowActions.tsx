@@ -1,6 +1,6 @@
 import React from "react";
 import { useDataTableContext } from "@/components/dataTable";
-import { ReadBatchDBType, ReadItemDBType } from "@/lib/types";
+import { ReadBatchDBType, ReadItemDBType } from "@/lib/types/types";
 import RowActions from "./RowActions";
 
 const BatchRowActions = ({

@@ -1,6 +1,6 @@
 "use server";
 
-import { ProductBatchFormValueType, ReadProductBatchDBType } from "../types";
+import { ProductBatchFormValueType, ReadProductBatchDBType } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -11,7 +11,7 @@ import {
   getRecordsByFieldArray,
   getRecordsByField,
   withErrorHandling,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ProductBatchFormValueType; userId: string }) {
   return {

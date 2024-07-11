@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ClientFormValueType, clientFormSchema } from "@/lib/types";
+import { ClientFormValueType, clientFormSchema } from "@/lib/types/types";
 import { NewItemForm } from "@/components/forms";
 import { createClient } from "@/lib/actions/clientActions";
 import ClientFormLayout from "./ClientFormLayout";

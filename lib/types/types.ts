@@ -116,12 +116,12 @@ export type CreateCommodityBatchDBType = TablesInsert<"commodity_batches">;
 export type UpdateCommodityBatchDBType = TablesUpdate<"commodity_batches">;
 
 export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches: ReadCommodityBatchDBType[] };
-export type CommodityBatchWithAmounts = ReadCommodityBatchDBType & {
+export type ReadCommodityBatchWithAmountsType = ReadCommodityBatchDBType & {
   containing_product_batches: { used_amount: number; product_batch: { date: string; external_id: string } }[];
   containing_sales: { sold_amount: number; sale: { id: number; date: string; client: { name: string } } }[];
 };
 export type ReadCommodityWithBatchesAndAmountsType = ReadCommodityDBType & {
-  batches: CommodityBatchWithAmounts[];
+  batches: ReadCommodityBatchWithAmountsType[];
 };
 
 export const supplierFormSchema = z.object({
@@ -255,6 +255,15 @@ export type ReadRecordWithOptionsType =
   | ReadProductWithBatchesType
   | ReadProductWithIngredientsType
   | ReadProductWithBatchesAndIngredientsType;
+
+export type AmountEvolution = {
+  date: Date;
+  amount: number;
+  delta: number;
+  saleId?: string;
+  productBatchId?: string;
+  client?: string;
+}[];
 
 export function isReadCommodityDBType(record: ReadRecordWithOptionsType): record is ReadCommodityDBType {
   return "name" in record && "unit" in record;

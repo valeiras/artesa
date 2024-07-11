@@ -1,6 +1,10 @@
 "use server";
 
-import { CommodityBatchFormValueType, ReadCommodityBatchDBType } from "../types";
+import {
+  CommodityBatchFormValueType,
+  ReadCommodityBatchDBType,
+  ReadCommodityBatchWithAmountsType,
+} from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -11,7 +15,7 @@ import {
   getRecordsByFieldArray,
   updateRecord,
   withErrorHandling,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: CommodityBatchFormValueType; userId: string }) {
   return {
@@ -52,6 +56,25 @@ export async function updateCommodityBatch({
     formToDatabaseFn,
     recordId,
   });
+}
+
+export async function getSingleCommodityBatch({ externalId }: { externalId: string }): Promise<{
+  dbData: ReadCommodityBatchWithAmountsType | null;
+  dbError: PostgrestError | null;
+}> {
+  const supabase = await connectAndRedirect();
+  return withErrorHandling(
+    supabase
+      .from("commodity_batches")
+      .select(
+        `*, 
+          containing_product_batches:product_batch_ingredients(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
+          containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name)))
+        `
+      )
+      .eq("external_id", externalId)
+      .maybeSingle()
+  );
 }
 
 export async function deleteCommodityBatch({ recordId }: { recordId: number }) {

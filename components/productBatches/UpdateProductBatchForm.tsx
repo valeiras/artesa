@@ -8,7 +8,7 @@ import {
   isReadProductBatchDBType,
   isReadProductWithBatchesAndIngredientsType,
   productBatchFormSchema,
-} from "@/lib/types";
+} from "@/lib/types/types";
 import { FormSkeleton, UpdateBatchForm } from "@/components/forms";
 import { updateProductBatch } from "@/lib/actions/productBatchActions";
 import { useDataTableContext } from "@/components/dataTable";

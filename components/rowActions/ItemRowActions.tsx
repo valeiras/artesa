@@ -1,6 +1,6 @@
 import React from "react";
 import { useDataTableContext } from "@/components/dataTable";
-import { ReadItemDBType } from "@/lib/types";
+import { ReadItemDBType } from "@/lib/types/types";
 import RowActions from "./RowActions";
 
 const ItemRowActions = ({

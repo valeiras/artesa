@@ -1,6 +1,6 @@
 "use server";
 
-import { ReadSupplierDBType, SupplierFormValueType } from "../types";
+import { ReadSupplierDBType, SupplierFormValueType } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   getAllRecords,
@@ -8,7 +8,7 @@ import {
   deleteSingleRecordById,
   createRecord,
   updateRecord,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: SupplierFormValueType; userId: string }) {
   return {

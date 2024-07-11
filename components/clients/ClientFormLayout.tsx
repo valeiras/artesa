@@ -1,4 +1,4 @@
-import { ClientFormValueType, RecordFormType } from "@/lib/types";
+import { ClientFormValueType, RecordFormType } from "@/lib/types/types";
 import React from "react";
 import { Form } from "@/components/ui/form";
 import { CustomFormField, FormButtons } from "@/components/forms";

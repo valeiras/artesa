@@ -4,9 +4,14 @@ import {
   CreateProductBatchIngredientDBType,
   ProductBatchFormValueType,
   ReadProductBatchIngredientDBType,
-} from "../types";
+} from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecordsByField, withErrorHandling } from "../supabaseUtils";
+import {
+  authenticateAndRedirect,
+  connectAndRedirect,
+  deleteRecordsByField,
+  withErrorHandling,
+} from "../db/supabaseUtils";
 
 export async function createProductBatchRecipe({
   values,

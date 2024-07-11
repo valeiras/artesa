@@ -1,5 +1,5 @@
 import React from "react";
-import { CommodityBatchFormValueType, RecordFormType } from "@/lib/types";
+import { CommodityBatchFormValueType, RecordFormType } from "@/lib/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { Form } from "@/components/ui/form";
 import { CustomFormDatePicker, CustomFormField, CustomFormSelect, FormButtons } from "@/components/forms";

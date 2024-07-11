@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
-import { createSupabaseClient } from "@/lib/createSupabaseClient";
+import { createSupabaseClient } from "@/lib/db/createSupabaseClient";
 import { auth } from "@clerk/nextjs";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { PostgrestBuilder } from "@supabase/postgrest-js";
 import { FieldValues } from "react-hook-form";
-import { Tables, TablesInsert } from "./database.types";
-import { PublicTableName } from "./types";
+import { Tables, TablesInsert } from "../types/database.types";
+import { PublicTableName } from "../types/types";
 import { DBError } from "@/lib/errors";
 
 export async function authenticateAndRedirect() {

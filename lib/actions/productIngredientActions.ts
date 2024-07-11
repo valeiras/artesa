@@ -1,8 +1,8 @@
 "use server";
 
-import { CreateProductIngredientDBType, ReadProductIngredientDBType } from "../types";
+import { CreateProductIngredientDBType, ReadProductIngredientDBType } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { authenticateAndRedirect, connectAndRedirect, deleteRecordsByField } from "../supabaseUtils";
+import { authenticateAndRedirect, connectAndRedirect, deleteRecordsByField } from "../db/supabaseUtils";
 import { COMMODITY_PREFIX, PRODUCT_PREFIX } from "../constants";
 
 export async function createProductRecipe({

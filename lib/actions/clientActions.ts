@@ -1,6 +1,6 @@
 "use server";
 
-import { ClientFormValueType, ReadClientDBType } from "../types";
+import { ClientFormValueType, ReadClientDBType } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   getAllRecords,
@@ -8,7 +8,7 @@ import {
   deleteSingleRecordById,
   createRecord,
   updateRecord,
-} from "../supabaseUtils";
+} from "../db/supabaseUtils";
 
 function formToDatabaseFn({ values, userId }: { values: ClientFormValueType; userId: string }) {
   return {
