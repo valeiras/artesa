@@ -8,9 +8,9 @@ type Props = { currBatch: ReadProductBatchWithAmountsAndIngredientsType; availab
 const ProductBatchInfoCard: React.FC<Props> = ({ currBatch, availableAmount }) => {
   console.log(currBatch);
   return (
-    <Card className="w-full max-w-[700px]">
+    <Card className="w-full max-w-[800px]">
       <CardContent>
-        <div className="grid grid-cols-2 justify-items-stretch pt-4 gap-2">
+        <div className="grid grid-cols-2 justify-items-stretch pt-5 gap-2">
           <p>
             <span className="font-semibold">Producto:</span> {currBatch.product.name}
           </p>

@@ -291,6 +291,8 @@ export type SimpleChartData = {
   amount: number;
 }[];
 
+export type ComplexChartData = { [dateOrBatchId: string]: number | string }[];
+
 export function isReadCommodityDBType(record: ReadRecordWithOptionsType): record is ReadCommodityDBType {
   return "name" in record && "unit" in record;
 }

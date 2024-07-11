@@ -1,1 +1,2 @@
-export { default as AmountEvolutionChart } from "./AmountEvolutionChart";
+export { default as SimpleAreaChart } from "./SimpleAreaChart";
+export { default as ComplexAreaChart } from "./ComplexAreaChart";

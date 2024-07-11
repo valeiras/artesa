@@ -15,9 +15,9 @@ const chartConfig = {
 
 type Props = { chartData: SimpleChartData; title: string };
 
-const AmountEvolutionChart: React.FC<Props> = ({ chartData, title }) => {
+const SimpleAreaChart: React.FC<Props> = ({ chartData, title }) => {
   return (
-    <Card className="max-w-[700px]">
+    <Card className="max-w-[800px]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
@@ -66,4 +66,4 @@ const AmountEvolutionChart: React.FC<Props> = ({ chartData, title }) => {
   );
 };
 
-export default AmountEvolutionChart;
+export default SimpleAreaChart;

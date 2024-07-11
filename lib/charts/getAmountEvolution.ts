@@ -2,8 +2,8 @@ import { AmountEvolution, ReadCommodityBatchWithAmountsType, ReadProductBatchWit
 
 export function getAmountEvolution(
   batch: ReadCommodityBatchWithAmountsType | ReadProductBatchWithAmountsType | null
-): AmountEvolution | null {
-  if (!batch) return null;
+): AmountEvolution {
+  if (!batch) return [];
 
   const initial: AmountEvolution = [
     { date: new Date(batch.date), amount: batch.initial_amount, delta: batch.initial_amount },

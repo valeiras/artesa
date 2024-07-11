@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import { ReadCommodityBatchWithAmountsType } from "@/lib/types/types";
 import { valueToLabel } from "@/lib/db/units";
 
@@ -7,9 +7,9 @@ type Props = { currBatch: ReadCommodityBatchWithAmountsType; availableAmount: nu
 
 const CommodityBatchInfoCard: React.FC<Props> = ({ currBatch, availableAmount }) => {
   return (
-    <Card className="w-full max-w-[700px]">
+    <Card className="w-full max-w-[800px]">
       <CardContent>
-        <div className="grid grid-cols-2 justify-items-stretch pt-4 gap-2">
+        <div className="grid grid-cols-2 justify-items-stretch pt-5 gap-2">
           <p>
             <span className="font-semibold">Materia prima:</span> {currBatch.commodity.name}
           </p>

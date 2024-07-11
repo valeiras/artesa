@@ -1,7 +1,7 @@
-import { getAmountEvolution } from "@/lib/charts/getAmountEvolution";
 import { ReadCommodityBatchWithAmountsType, ReadProductBatchWithAmountsType } from "@/lib/types/types";
 import Link from "next/link";
 import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 type Props = {
   batches: ReadCommodityBatchWithAmountsType[] | ReadProductBatchWithAmountsType[] | undefined;
@@ -10,18 +10,20 @@ type Props = {
 
 const BatchList: React.FC<Props> = ({ batches, linkBase }) => {
   return (
-    <div className="flex flex-col">
-      <h3 className="text-xl font-bold mb-2">Lotes:</h3>
-      <div className="flex flex-col gap-1">
-        {batches?.map(({ id, external_id }) => {
-          return (
-            <Link href={`/lotes/${linkBase}/${external_id}`} key={id}>
-              {external_id}
-            </Link>
-          );
-        })}
-      </div>
-    </div>
+    <Card className="flex flex-col mb-4 w-full max-w-[800px] pt-5">
+      <CardContent>
+        <h3 className="text-xl font-bold mb-1">Lotes:</h3>
+        <div className="flex flex-col gap-1">
+          {batches?.map(({ id, external_id }) => {
+            return (
+              <Link href={`/lotes/${linkBase}/${external_id}`} key={id} className="text-sm">
+                {external_id}
+              </Link>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

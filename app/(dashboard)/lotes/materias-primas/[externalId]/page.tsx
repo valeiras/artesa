@@ -7,7 +7,7 @@ import Spinner from "@/components/Spinner";
 import PageWrapper from "@/components/PageWrapper";
 import { getAmountEvolution } from "@/lib/charts/getAmountEvolution";
 import { getChartData } from "@/lib/charts/getChartData";
-import { AmountEvolutionChart } from "@/components/charts";
+import { SimpleAreaChart } from "@/components/charts";
 import { valueToLabel } from "@/lib/db/units";
 import { CommodityBatchInfoCard } from "@/components/commodityBatches";
 
@@ -36,7 +36,7 @@ const SingleCommodityBatchPage: React.FC<{ params: { externalId: string } }> = (
     <PageWrapper heading={`${currCommodityBatch.external_id}`}>
       <div className="flex flex-col gap-4">
         <CommodityBatchInfoCard currBatch={currCommodityBatch} availableAmount={amountEvolution?.at(-1)?.amount || 0} />
-        <AmountEvolutionChart
+        <SimpleAreaChart
           chartData={chartData!}
           title={`Cantidad disponible del lote (${valueToLabel[currCommodityBatch.commodity.unit || "unit"]}):`}
         />
