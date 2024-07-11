@@ -14,7 +14,6 @@ const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) =
   });
 
   const currCommodity = dbData;
-  console.log(currCommodity);
 
   if (isPending) {
     return (
@@ -26,7 +25,7 @@ const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) =
 
   return (
     <PageWrapper heading={currCommodity?.name || ""}>
-      <CommodityBatchList />
+      <CommodityBatchList batches={currCommodity?.batches} />
     </PageWrapper>
   );
 };

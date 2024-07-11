@@ -184,14 +184,14 @@ export function getMockupCommodityBatches({
       supplier_id: suppliersMap.get("Fruver S.L.") || 0,
       external_id: "LMA-FRU-336",
       initial_amount: 40,
-      date: getDateNDaysAgo(8).toISOString(),
+      date: getDateNDaysAgo(15).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Manzanas") || 0,
       supplier_id: suppliersMap.get("Fruterías El Bosque") || 0,
       external_id: "LMA-FEL-222",
       initial_amount: 60,
-      date: getDateNDaysAgo(6).toISOString(),
+      date: getDateNDaysAgo(12).toISOString(),
     },
     {
       commodity_id: commoditiesMap.get("Peras") || 0,
