@@ -76,6 +76,8 @@ export async function getSingleCommodityWithBatches({ recordId }: { recordId: nu
       .select(
         `*, batches:commodity_batches(
           *, 
+          commodity:commodities(name, unit),
+          supplier:suppliers(name),
           containing_product_batches:product_batch_ingredients(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
           containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name)))
         )

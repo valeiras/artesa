@@ -5,7 +5,7 @@ import { useDatabase } from "@/lib/hooks";
 import { getSingleCommodityWithBatches } from "@/lib/actions/commodityActions";
 import Spinner from "@/components/Spinner";
 import PageWrapper from "@/components/PageWrapper";
-import { CommodityBatchList } from "@/components/commodityBatches";
+import BatchList from "@/components/batches/BatchList";
 
 const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) => {
   const { dbData: currCommodity, isPending } = useDatabase({
@@ -23,7 +23,7 @@ const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) =
 
   return (
     <PageWrapper heading={currCommodity?.name || ""}>
-      <CommodityBatchList batches={currCommodity?.batches} />
+      <BatchList batches={currCommodity?.batches} linkBase="materias-primas" />
     </PageWrapper>
   );
 };

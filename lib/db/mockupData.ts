@@ -271,7 +271,7 @@ export function getMockupProductBatches({
       product_id: productsMap.get("Mermelada de manzana") || 0,
       external_id: "LMM-FPO-225",
       initial_amount: 15,
-      date: getDateNDaysAgo(2).toISOString(),
+      date: getDateNDaysAgo(6).toISOString(),
     },
     {
       product_id: productsMap.get("Mermelada de pera") || 0,
@@ -313,7 +313,7 @@ export function getMockupProductBatches({
       product_id: productsMap.get("Tarta de manzana") || 0,
       external_id: "LTM-LOP-215",
       initial_amount: 10,
-      date: getDateNDaysAgo(8).toISOString(),
+      date: getDateNDaysAgo(3).toISOString(),
     },
   ];
 
@@ -520,8 +520,8 @@ export function getMockupSaleIngredients({
     { sale_id: salesData[1].id, sold_amount: 2, product_batch_id: productBatchesMap.get("LTM-LOO-214") },
     { sale_id: salesData[2].id, sold_amount: 2, product_batch_id: productBatchesMap.get("LMQ-LOO-214") },
     { sale_id: salesData[2].id, sold_amount: 3, product_batch_id: productBatchesMap.get("LMP-FOL-021") },
+    { sale_id: salesData[2].id, sold_amount: 6, product_batch_id: productBatchesMap.get("LTM-LOP-215") },
     { sale_id: salesData[3].id, sold_amount: 13, commodity_batch_id: commodityBatchesMap.get("LMA-FEL-222") },
-    { sale_id: salesData[3].id, sold_amount: 6, product_batch_id: productBatchesMap.get("LTM-LOP-215") },
     { sale_id: salesData[3].id, sold_amount: 7, commodity_batch_id: commodityBatchesMap.get("LPE-FEL-051") },
     { sale_id: salesData[4].id, sold_amount: 1, product_batch_id: productBatchesMap.get("LTM-LOO-214") },
     { sale_id: salesData[5].id, sold_amount: 2, commodity_batch_id: commodityBatchesMap.get("LPE-FEL-051") },

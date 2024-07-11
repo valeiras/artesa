@@ -6,6 +6,7 @@ import {
   ReadProductWithBatchesAndIngredientsType,
   ReadProductWithBatchesType,
   TempReadIngredientsType,
+  ReadProductWithBatchesAndAmountsType,
 } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
@@ -104,6 +105,28 @@ export async function getSingleProduct({ recordId }: { recordId: number }): Prom
   dbError: PostgrestError | null;
 }> {
   return getSingleRecordById({ tableName: "products", recordId });
+}
+
+export async function getSingleProductWithBatches({ recordId }: { recordId: number }): Promise<{
+  dbData: ReadProductWithBatchesAndAmountsType | null;
+  dbError: PostgrestError | null;
+}> {
+  const supabase = await connectAndRedirect();
+  return withErrorHandling(
+    supabase
+      .from("products")
+      .select(
+        `*, batches:product_batches(
+          *, 
+          product:products(name, unit),
+          containing_product_batches:product_batch_ingredients!product_ingredient_batch_id(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
+          containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name)))
+        )
+        `
+      )
+      .eq("id", recordId)
+      .maybeSingle()
+  );
 }
 
 export async function deleteProduct({ recordId }: { recordId: number }): Promise<{ dbError: PostgrestError | null }> {

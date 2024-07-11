@@ -10,6 +10,7 @@ import { getChartData } from "@/lib/charts/getChartData";
 import { AmountEvolutionChart } from "@/components/charts";
 import { valueToLabel } from "@/lib/db/units";
 import { CommodityBatchInfoCard } from "@/components/commodityBatches";
+import { ProductBatchInfoCard } from "@/components/productBatches";
 
 const SingleProductBatchPage: React.FC<{ params: { externalId: string } }> = ({ params: { externalId } }) => {
   const { dbData: currProductBatch, isPending } = useDatabase({
@@ -35,7 +36,7 @@ const SingleProductBatchPage: React.FC<{ params: { externalId: string } }> = ({ 
   return (
     <PageWrapper heading={`${currProductBatch.external_id}`}>
       <div className="flex flex-col gap-4">
-        {/* <CommodityBatchInfoCard currBatch={currProductBatch} availableAmount={amountEvolution?.at(-1)?.amount || 0} /> */}
+        <ProductBatchInfoCard currBatch={currProductBatch} availableAmount={amountEvolution?.at(-1)?.amount || 0} />
         <AmountEvolutionChart
           chartData={chartData!}
           title={`Cantidad disponible del lote (${valueToLabel[currProductBatch.product.unit || "unit"]}):`}
