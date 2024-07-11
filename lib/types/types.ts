@@ -117,6 +117,8 @@ export type UpdateCommodityBatchDBType = TablesUpdate<"commodity_batches">;
 
 export type ReadCommodityWithBatchesType = ReadCommodityDBType & { batches: ReadCommodityBatchDBType[] };
 export type ReadCommodityBatchWithAmountsType = ReadCommodityBatchDBType & {
+  commodity: { name: string; unit: UnitType };
+  supplier: { name: string };
   containing_product_batches: { used_amount: number; product_batch: { date: string; external_id: string } }[];
   containing_sales: { sold_amount: number; sale: { id: number; date: string; client: { name: string } } }[];
 };
