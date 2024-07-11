@@ -265,6 +265,11 @@ export type AmountEvolution = {
   client?: string;
 }[];
 
+export type SimpleChartData = {
+  date: string;
+  amount: number;
+}[];
+
 export function isReadCommodityDBType(record: ReadRecordWithOptionsType): record is ReadCommodityDBType {
   return "name" in record && "unit" in record;
 }

@@ -7,6 +7,7 @@ import Spinner from "@/components/Spinner";
 import PageWrapper from "@/components/PageWrapper";
 import { getAmountEvolution } from "@/lib/charts/getAmountEvolution";
 import { getChartData } from "@/lib/charts/getChartData";
+import { AmountEvolutionChart } from "@/components/charts";
 
 const SingleCommodityBatchPage: React.FC<{ params: { externalId: string } }> = ({ params: { externalId } }) => {
   const { dbData: currCommodityBatch, isPending } = useDatabase({
@@ -25,7 +26,11 @@ const SingleCommodityBatchPage: React.FC<{ params: { externalId: string } }> = (
     );
   }
 
-  return <PageWrapper heading={currCommodityBatch?.external_id || ""}></PageWrapper>;
+  return (
+    <PageWrapper heading={currCommodityBatch?.external_id || ""}>
+      <AmountEvolutionChart chartData={chartData!} title="Cantidad disponible del lote" />
+    </PageWrapper>
+  );
 };
 
 export default SingleCommodityBatchPage;

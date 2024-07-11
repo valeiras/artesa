@@ -1,7 +1,7 @@
 import { AmountEvolution, ReadCommodityBatchWithAmountsType } from "../types/types";
 
-export function getAmountEvolution(batch: ReadCommodityBatchWithAmountsType | null): AmountEvolution {
-  if (!batch) return [];
+export function getAmountEvolution(batch: ReadCommodityBatchWithAmountsType | null): AmountEvolution | null {
+  if (!batch) return null;
 
   const initial: AmountEvolution = [
     { date: new Date(batch.date), amount: batch.initial_amount, delta: batch.initial_amount },
@@ -26,7 +26,7 @@ export function getAmountEvolution(batch: ReadCommodityBatchWithAmountsType | nu
   });
 
   let evolution: AmountEvolution = [...initial, ...deltaSales, ...deltaProductBatches];
-  evolution = evolution.sort((a, b) => (a.date < b.date ? -1 : 1));
+  evolution = evolution.sort((a, b) => a.date.getTime() - b.date.getTime());
   let lastAmount = 0;
   evolution.forEach((item) => {
     item.amount = lastAmount + item.delta;
