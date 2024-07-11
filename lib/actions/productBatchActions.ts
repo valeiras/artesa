@@ -1,6 +1,10 @@
 "use server";
 
-import { ProductBatchFormValueType, ReadProductBatchDBType, ReadProductBatchWithAmountsType } from "../types/types";
+import {
+  ProductBatchFormValueType,
+  ReadProductBatchDBType,
+  ReadProductBatchWithAmountsAndIngredientsType,
+} from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -54,7 +58,7 @@ export async function updateProductBatch({
 }
 
 export async function getSingleProductBatch({ externalId }: { externalId: string }): Promise<{
-  dbData: ReadProductBatchWithAmountsType | null;
+  dbData: ReadProductBatchWithAmountsAndIngredientsType | null;
   dbError: PostgrestError | null;
 }> {
   const supabase = await connectAndRedirect();
@@ -65,7 +69,10 @@ export async function getSingleProductBatch({ externalId }: { externalId: string
         `*,
           product:products(name, unit),
           containing_product_batches:product_batch_ingredients!product_ingredient_batch_id(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
-          containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name)))
+          containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name))),
+          contained_batches:product_batch_ingredients!product_batch_ingredients_product_batch_id_fkey(id, used_amount, 
+            commodity_batch:commodity_batches(external_id, commodity:commodities(name, unit)), 
+            product_batch:product_batches!product_ingredient_batch_id(external_id, product:products(name, unit)))
         `
       )
       .eq("external_id", externalId)
