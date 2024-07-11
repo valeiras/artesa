@@ -1,13 +1,47 @@
-import React from "react";
-import underConstruction from "@/assets/under_construction.svg";
-import Image from "next/image";
+"use client";
 
-const SingleProductBatchPage: React.FC<{ params: { extneralId: string } }> = ({ params }) => {
+import React from "react";
+import { useDatabase } from "@/lib/hooks";
+import { getSingleProductBatch } from "@/lib/actions/productBatchActions";
+import Spinner from "@/components/Spinner";
+import PageWrapper from "@/components/PageWrapper";
+import { getAmountEvolution } from "@/lib/charts/getAmountEvolution";
+import { getChartData } from "@/lib/charts/getChartData";
+import { AmountEvolutionChart } from "@/components/charts";
+import { valueToLabel } from "@/lib/db/units";
+import { CommodityBatchInfoCard } from "@/components/commodityBatches";
+
+const SingleProductBatchPage: React.FC<{ params: { externalId: string } }> = ({ params: { externalId } }) => {
+  const { dbData: currProductBatch, isPending } = useDatabase({
+    queryKey: ["singleProductBatch", externalId],
+    queryFn: () => getSingleProductBatch({ externalId }),
+  });
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center align-center h-[70dvh]">
+        <Spinner width="50px" />
+      </div>
+    );
+  }
+
+  if (!currProductBatch) {
+    return <p>No se encontró el lote de materia prima.</p>;
+  }
+
+  const amountEvolution = getAmountEvolution(currProductBatch);
+  const chartData = getChartData(amountEvolution);
+
   return (
-    <div className="flex flex-col w-full items-center">
-      <h2 className="text-4xl font-bold text-center">Estamos trabajando en ello...</h2>
-      <Image src={underConstruction} alt="Trabajo en curso" className="w-1/2 mt-16" />
-    </div>
+    <PageWrapper heading={`${currProductBatch.external_id}`}>
+      <div className="flex flex-col gap-4">
+        {/* <CommodityBatchInfoCard currBatch={currProductBatch} availableAmount={amountEvolution?.at(-1)?.amount || 0} /> */}
+        <AmountEvolutionChart
+          chartData={chartData!}
+          title={`Cantidad disponible del lote (${valueToLabel[currProductBatch.product.unit || "unit"]}):`}
+        />
+      </div>
+    </PageWrapper>
   );
 };
 

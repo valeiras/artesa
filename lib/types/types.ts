@@ -73,6 +73,15 @@ export type ReadProductWithBatchesType = ReadProductDBType & {
   batches: ReadProductBatchDBType[];
 };
 
+export type ReadProductBatchWithAmountsType = ReadProductBatchDBType & {
+  product: { name: string; unit: UnitType };
+  containing_product_batches: { used_amount: number; product_batch: { date: string; external_id: string } }[];
+  containing_sales: { sold_amount: number; sale: { id: number; date: string; client: { name: string } } }[];
+};
+export type ReadProductWithBatchesAndAmountsType = ReadProductDBType & {
+  batches: ReadProductBatchWithAmountsType[];
+};
+
 export type TempReadIngredientsType = {
   product_ingredients: { products: { id: string; name: string } }[];
   commodity_ingredients: { commodities: { id: string; name: string } }[];

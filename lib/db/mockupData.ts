@@ -294,7 +294,7 @@ export function getMockupProductBatches({
     {
       product_id: productsMap.get("Masa quebrada") || 0,
       external_id: "LMQ-LOO-214",
-      initial_amount: 5,
+      initial_amount: 8,
       date: getDateNDaysAgo(3).toISOString(),
     },
     {
@@ -483,8 +483,8 @@ export function getMockupSales({
 
   const mockupSales: MockupSale[] = [
     { date: getDateNDaysAgo(5).toISOString(), client_id: clientsMap.get("Jorge Gutiérrez") || 0 },
-    { date: getDateNDaysAgo(10).toISOString(), client_id: clientsMap.get("María Pérez") || 0 },
-    { date: getDateNDaysAgo(15).toISOString(), client_id: clientsMap.get("María Pérez") || 0 },
+    { date: getDateNDaysAgo(1).toISOString(), client_id: clientsMap.get("María Pérez") || 0 },
+    { date: getDateNDaysAgo(1).toISOString(), client_id: clientsMap.get("María Pérez") || 0 },
     { date: getDateNDaysAgo(7).toISOString(), client_id: clientsMap.get("Pedro Ruiz") || 0 },
     { date: getDateNDaysAgo(3).toISOString(), client_id: clientsMap.get("Pedro Ruiz") || 0 },
     { date: getDateNDaysAgo(2).toISOString(), client_id: clientsMap.get("Pedro Ruiz") || 0 },
@@ -521,6 +521,7 @@ export function getMockupSaleIngredients({
     { sale_id: salesData[2].id, sold_amount: 2, product_batch_id: productBatchesMap.get("LMQ-LOO-214") },
     { sale_id: salesData[2].id, sold_amount: 3, product_batch_id: productBatchesMap.get("LMP-FOL-021") },
     { sale_id: salesData[3].id, sold_amount: 13, commodity_batch_id: commodityBatchesMap.get("LMA-FEL-222") },
+    { sale_id: salesData[3].id, sold_amount: 6, product_batch_id: productBatchesMap.get("LTM-LOP-215") },
     { sale_id: salesData[3].id, sold_amount: 7, commodity_batch_id: commodityBatchesMap.get("LPE-FEL-051") },
     { sale_id: salesData[4].id, sold_amount: 1, product_batch_id: productBatchesMap.get("LTM-LOO-214") },
     { sale_id: salesData[5].id, sold_amount: 2, commodity_batch_id: commodityBatchesMap.get("LPE-FEL-051") },

@@ -1,6 +1,6 @@
 "use server";
 
-import { ProductBatchFormValueType, ReadProductBatchDBType } from "../types/types";
+import { ProductBatchFormValueType, ReadProductBatchDBType, ReadProductBatchWithAmountsType } from "../types/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import {
   connectAndRedirect,
@@ -51,6 +51,26 @@ export async function updateProductBatch({
     formToDatabaseFn,
     recordId,
   });
+}
+
+export async function getSingleProductBatch({ externalId }: { externalId: string }): Promise<{
+  dbData: ReadProductBatchWithAmountsType | null;
+  dbError: PostgrestError | null;
+}> {
+  const supabase = await connectAndRedirect();
+  return withErrorHandling(
+    supabase
+      .from("product_batches")
+      .select(
+        `*,
+          product:products(name, unit),
+          containing_product_batches:product_batch_ingredients!product_ingredient_batch_id(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
+          containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name)))
+        `
+      )
+      .eq("external_id", externalId)
+      .maybeSingle()
+  );
 }
 
 export async function deleteProductBatch({ recordId }: { recordId: number }) {

@@ -1,6 +1,8 @@
-import { AmountEvolution, ReadCommodityBatchWithAmountsType } from "../types/types";
+import { AmountEvolution, ReadCommodityBatchWithAmountsType, ReadProductBatchWithAmountsType } from "../types/types";
 
-export function getAmountEvolution(batch: ReadCommodityBatchWithAmountsType | null): AmountEvolution | null {
+export function getAmountEvolution(
+  batch: ReadCommodityBatchWithAmountsType | ReadProductBatchWithAmountsType | null
+): AmountEvolution | null {
   if (!batch) return null;
 
   const initial: AmountEvolution = [

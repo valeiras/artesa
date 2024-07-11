@@ -8,12 +8,10 @@ import PageWrapper from "@/components/PageWrapper";
 import { CommodityBatchList } from "@/components/commodityBatches";
 
 const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) => {
-  const { dbData, isPending } = useDatabase({
+  const { dbData: currCommodity, isPending } = useDatabase({
     queryKey: ["commodityWithBatches", params.id],
     queryFn: () => getSingleCommodityWithBatches({ recordId: parseInt(params.id) }),
   });
-
-  const currCommodity = dbData;
 
   if (isPending) {
     return (

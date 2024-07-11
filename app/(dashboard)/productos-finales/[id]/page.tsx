@@ -1,14 +1,32 @@
-import React from "react";
-import underConstruction from "@/assets/under_construction.svg";
-import Image from "next/image";
+"use client";
 
-const SingleProductPage: React.FC<{ params: { id: string } }> = ({ params }) => {
+import React from "react";
+import { useDatabase } from "@/lib/hooks";
+import { getSingleCommodityWithBatches } from "@/lib/actions/commodityActions";
+import Spinner from "@/components/Spinner";
+import PageWrapper from "@/components/PageWrapper";
+import { CommodityBatchList } from "@/components/commodityBatches";
+
+const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) => {
+  // const { dbData: currProduct, isPending } = useDatabase({
+  //   queryKey: ["productWithBatches", params.id],
+  //   queryFn: () => getSingleProducWithBatches({ recordId: parseInt(params.id) }),
+  // });
+
+  // const currProduct = dbData;
+
+  // if (isPending) {
+  //   return (
+  //     <div className="flex justify-center align-center h-[70dvh]">
+  //       <Spinner width="50px" />
+  //     </div>
+  //   );
+  // }
+
   return (
-    <div className="flex flex-col w-full items-center">
-      <h2 className="text-4xl font-bold text-center">Estamos trabajando en ello...</h2>
-      <Image src={underConstruction} alt="Trabajo en curso" className="w-1/2 mt-16" />
-    </div>
+    // <PageWrapper heading={currProduct?.name || ""}>
+    <PageWrapper heading={""}>{/* <ProductBatchList batches={currCommodity?.batches} /> */}</PageWrapper>
   );
 };
 
-export default SingleProductPage;
+export default SingleCommodityPage;
