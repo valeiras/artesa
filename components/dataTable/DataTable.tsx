@@ -66,12 +66,12 @@ function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-2">
         <Input
           placeholder={lookupPlaceholder}
           value={(table.getColumn(lookupField)?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn(lookupField)?.setFilterValue(event.target.value)}
-          className="w-fit max-w-[180px] md:max-w-xs"
+          className="w-fit max-w-[160px] md:max-w-xs"
         />
         <DataTableColumnSelector table={table} />
       </div>

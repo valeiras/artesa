@@ -19,14 +19,12 @@ function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null 
       accessorKey: "products",
       cell: ({ row }) => {
         return (
-          <div className="grid grid-cols-3 gap-2">
-            {row.original.sale_ingredients.map(({ commodity_batches, product_batches, sold_amount }) => {
+          <div className="flex flex-col gap-2 justify-between">
+            {row.original.sale_ingredients.map(({ commodity_batches, product_batches }) => {
               return (
-                <React.Fragment key={commodity_batches?.id || product_batches?.id}>
-                  <div>{commodity_batches?.commodities?.name || product_batches?.products?.name}</div>
-                  <div>{commodity_batches?.external_id || product_batches?.external_id}</div>
-                  <div>{sold_amount}</div>
-                </React.Fragment>
+                <div key={commodity_batches?.id || product_batches?.id}>
+                  {commodity_batches?.commodities?.name || product_batches?.products?.name}
+                </div>
               );
             })}
           </div>
@@ -34,6 +32,38 @@ function saleColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | null 
       },
       header: ({ column }) => <DataTableColumnHeader column={column} title="Producto" />,
       meta: { columnName: "Producto" },
+    },
+    {
+      accessorKey: "batches",
+      cell: ({ row }) => {
+        return (
+          <div className="flex flex-col gap-2 justify-between">
+            {row.original.sale_ingredients.map(({ commodity_batches, product_batches, sold_amount }) => {
+              return (
+                <div key={commodity_batches?.id || product_batches?.id}>
+                  {commodity_batches?.external_id || product_batches?.external_id}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Lotes" />,
+      meta: { columnName: "Lotes" },
+    },
+    {
+      accessorKey: "quantity",
+      cell: ({ row }) => {
+        return (
+          <div className="flex flex-col gap-2 justify-between h-full">
+            {row.original.sale_ingredients.map(({ commodity_batches, product_batches, sold_amount }) => {
+              return <div key={commodity_batches?.id || product_batches?.id}>{sold_amount}</div>;
+            })}
+          </div>
+        );
+      },
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Cantidad" />,
+      meta: { columnName: "Cantidad" },
     },
     {
       accessorKey: "external_id",
