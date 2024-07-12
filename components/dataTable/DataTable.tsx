@@ -71,7 +71,7 @@ function DataTable<TData, TValue>({
           placeholder={lookupPlaceholder}
           value={(table.getColumn(lookupField)?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn(lookupField)?.setFilterValue(event.target.value)}
-          className="max-w-sm"
+          className="w-fit max-w-[180px] md:max-w-xs"
         />
         <DataTableColumnSelector table={table} />
       </div>
@@ -82,7 +82,7 @@ function DataTable<TData, TValue>({
           <DataTableBody table={table} columns={columns} isPending={isPending} />
         </Table>
       </div>
-      <div className="flex flex-row justify-between mt-5">
+      <div className="flex flex-col sm:flex-row justify-between mt-5 gap-2">
         <NewItemButton newItemLabel={newItemLabel} />
         <DataTablePagination table={table} />
       </div>

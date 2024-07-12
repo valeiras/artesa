@@ -12,7 +12,7 @@ const NewItemButton: React.FC<Props> = ({ newItemLabel }) => {
 
   return (
     <Button variant="default" asChild>
-      <div className="flex flex-row gap-x-2 cursor-pointer" onClick={() => setIsNewItemDialogOpen(true)}>
+      <div className="flex flex-row gap-x-2 cursor-pointer sm:w-fit mb-1" onClick={() => setIsNewItemDialogOpen(true)}>
         <CirclePlus strokeWidth={1.5} /> <span>{newItemLabel}</span>
       </div>
     </Button>

@@ -9,7 +9,7 @@ const layout: React.FC<Props> = async ({ children }) => {
     <main className="relative">
       <Sidebar />
       <Navbar />
-      <div className="py-14 px-4 sm:px-8 lg:px-16 w-full xl:w-4/5 mx-auto">{children}</div>
+      <div className="py-8 sm:py-14 px-2 sm:px-8 lg:px-16 w-full xl:w-4/5 mx-auto">{children}</div>
     </main>
   );
 };

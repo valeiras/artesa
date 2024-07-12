@@ -22,7 +22,7 @@ function commodityColumns({
     },
     {
       accessorKey: "unit",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Unidad de medida" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Unidad" />,
       enableSorting: false,
       meta: { columnName: "Unidad" },
       cell: ({ row }) => {
