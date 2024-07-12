@@ -10,7 +10,7 @@ export default function Home() {
       <header className="lg:max-w-6xl w-full px-4 sm:px-8 py-6">
         <Image src={logo} alt="logo" width={300} className="w-[200px] sm:w-[300px]" />
       </header>
-      <section className="lg:max-w-6xl w-full flex flex-col items-start px-4 sm:px-8 gap-16 sm:gap-4 flex-1 justify-center lg:grid lg:grid-cols-[1fr,400px] lg:justify-start lg:items-center">
+      <section className="pt-8 lg:max-w-6xl w-full flex flex-col items-start px-4 sm:px-8 gap-16 sm:gap-4 flex-1 justify-center lg:grid lg:grid-cols-[1fr,400px] lg:justify-start lg:items-center">
         <div className="flex flex-col gap-6 items-start">
           <h1 className="text-5xl sm:text-7xl font-bold">
             Gestión de <span className="text-primary">trazabilidad</span>
@@ -25,7 +25,7 @@ export default function Home() {
         <Image
           src={landingImg}
           alt="landing"
-          className="w-full max-w-[350px] sm:w-[400px] lg:w-auto mx-auto sm:mx-0 sm:ml-auto"
+          className="w-full max-w-[300px] sm:max-w-[400px] lg:w-auto mx-auto sm:mx-0 sm:ml-auto"
         />
       </section>
     </main>
