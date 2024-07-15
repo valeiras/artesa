@@ -39,12 +39,19 @@ const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) =
 
   return (
     <PageWrapper heading={currCommodity?.name || ""}>
-      <BatchList batches={currCommodity?.batches} linkBase="materias-primas" />
-      <ComplexAreaChart
-        chartData={chartData}
-        title={`Cantidad disponible (${valueToLabel[currCommodity.unit]}):`}
-        labels={labels}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(400px,1fr)_auto] md:max-w-[1000px] items-stretch justify-start gap-4">
+        <BatchList
+          batches={currCommodity?.batches}
+          linkBase="materias-primas"
+          className="md:col-start-2 md:row-start-1"
+        />
+        <ComplexAreaChart
+          chartData={chartData}
+          title={`Cantidad disponible (${valueToLabel[currCommodity.unit]}):`}
+          labels={labels}
+          className="md:col-start-1 md:row-start-1"
+        />
+      </div>
     </PageWrapper>
   );
 };
