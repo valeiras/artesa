@@ -83,8 +83,8 @@ export type ReadProductBatchWithAmountsAndIngredientsType = ReadProductBatchWith
   contained_batches: {
     id: number;
     used_amount: number;
-    product_batch: { external_id: string; product: { name: string; unit: UnitType; id:number } } | null;
-    commodity_batch: { external_id: string; commodity: { name: string; unit: UnitType; id:number } } | null;
+    product_batch: { external_id: string; product: { name: string; unit: UnitType; id: number } } | null;
+    commodity_batch: { external_id: string; commodity: { name: string; unit: UnitType; id: number } } | null;
   }[];
 };
 
@@ -161,6 +161,15 @@ export type SupplierFormValueType = z.infer<typeof supplierFormSchema>;
 export type ReadSupplierDBType = Tables<"suppliers">;
 export type CreateSupplierDBType = TablesInsert<"suppliers">;
 export type UpdateSupplierDBType = TablesUpdate<"suppliers">;
+export type SupplierBatchType = {
+  external_id: string;
+  date: string;
+  initial_amount: number;
+  commodity: { name: string; unit: UnitType; id: number };
+};
+export type ReadSupplierWithBatchesType = ReadSupplierDBType & {
+  commodity_batches: SupplierBatchType[];
+};
 
 export const clientFormSchema = z.object({
   name: z.string({ required_error: "Parámetro requerido" }).min(2, { message: "Introduce al menos 2 caracteres" }),

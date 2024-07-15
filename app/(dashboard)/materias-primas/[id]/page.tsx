@@ -39,7 +39,7 @@ const SingleCommodityPage: React.FC<{ params: { id: string } }> = ({ params }) =
 
   return (
     <PageWrapper heading={currCommodity?.name || ""}>
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(400px,1fr)_auto] md:max-w-[1000px] items-stretch justify-start gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(400px,1fr)_auto] md:max-w-[1000px] items-stretch justify-start gap-4 pt-4">
         <BatchList
           batches={currCommodity?.batches}
           linkBase="materias-primas"

@@ -34,7 +34,7 @@ const SingleCommodityBatchPage: React.FC<{ params: { externalId: string } }> = (
 
   return (
     <PageWrapper heading={`${currCommodityBatch.external_id}`}>
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(400px,1fr)_auto] md:max-w-[1100px] items-stretch justify-start gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(400px,1fr)_auto] md:max-w-[1100px] items-stretch justify-start gap-4 pt-4">
         <CommodityBatchInfoCard
           currBatch={currCommodityBatch}
           availableAmount={amountEvolution?.at(-1)?.amount || 0}

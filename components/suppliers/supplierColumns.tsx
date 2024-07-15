@@ -42,7 +42,13 @@ function supplierColumns(mutate: UseMutateFunction<{ dbError: PostgrestError | n
       id: "actions",
       cell: ({ row }) => {
         const item = row.original;
-        return <ItemRowActions deleteItemMutation={() => mutate(item.id)} itemData={item} />;
+        return (
+          <ItemRowActions
+            deleteItemMutation={() => mutate(item.id)}
+            itemData={item}
+            seeLink={`/proveedores/${row.original.id}`}
+          />
+        );
       },
       size: 5,
       minSize: 5,

@@ -30,7 +30,7 @@ const CommodityBatchInfoCard: React.FC<Props> = ({ currBatch, availableAmount, c
           <>
             &#x2022;
             <span className="font-semibold">Proveedor:</span>
-            <span>{currBatch.supplier.name}</span>
+            <Link href={`/proveedores/${currBatch.supplier_id}`}>{currBatch.supplier.name}</Link>
           </>
           <>
             &#x2022;
