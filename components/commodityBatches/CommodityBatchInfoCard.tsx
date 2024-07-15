@@ -1,28 +1,43 @@
 import React from "react";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ReadCommodityBatchWithAmountsType } from "@/lib/types/types";
 import { valueToLabel } from "@/lib/db/units";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-type Props = { currBatch: ReadCommodityBatchWithAmountsType; availableAmount: number };
+type Props = { currBatch: ReadCommodityBatchWithAmountsType; availableAmount: number; className?: string };
 
-const CommodityBatchInfoCard: React.FC<Props> = ({ currBatch, availableAmount }) => {
+const CommodityBatchInfoCard: React.FC<Props> = ({ currBatch, availableAmount, className }) => {
   return (
-    <Card className="w-full max-w-[800px]">
+    <Card className={cn("w-full max-w-[800px]", className)}>
+      <CardHeader>
+        <CardTitle>Información:</CardTitle>
+      </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 justify-items-stretch pt-5 gap-2">
-          <p>
-            <span className="font-semibold">Materia prima:</span> {currBatch.commodity.name}
-          </p>
-          <p className="justify-self-end">
-            <span className="font-semibold">Cantidad disponible:</span> {availableAmount}{" "}
-            {valueToLabel[currBatch.commodity.unit || "unit"]}
-          </p>
-          <p>
-            <span className="font-semibold">Proveedor:</span> {currBatch.supplier.name}
-          </p>
-          <p className="justify-self-end">
-            <span className="font-semibold">Fecha:</span> {new Date(currBatch.date).toLocaleDateString()}
-          </p>
+        <div className="grid grid-cols-[auto_auto_auto] gap-1 gap-x-3">
+          <>
+            &#x2022;
+            <span className="font-semibold">Materia prima:</span>
+            <Link href={`/materias-primas/${currBatch.commodity.id}`}>{currBatch.commodity.name}</Link>
+          </>
+          <>
+            &#x2022;
+            <span className="font-semibold">Cantidad disponible:</span>
+            <span>
+              {availableAmount}
+              {valueToLabel[currBatch.commodity.unit || "unit"]}
+            </span>
+          </>
+          <>
+            &#x2022;
+            <span className="font-semibold">Proveedor:</span>
+            <span>{currBatch.supplier.name}</span>
+          </>
+          <>
+            &#x2022;
+            <span className="font-semibold">Fecha:</span>
+            <span>{new Date(currBatch.date).toLocaleDateString()}</span>
+          </>
         </div>
       </CardContent>
     </Card>

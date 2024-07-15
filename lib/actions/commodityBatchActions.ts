@@ -68,8 +68,8 @@ export async function getSingleCommodityBatch({ externalId }: { externalId: stri
       .from("commodity_batches")
       .select(
         `*,
-          commodity:commodities(name, unit),
-          supplier:suppliers(name),
+          commodity:commodities(name, unit, id),
+          supplier:suppliers(name, id),
           containing_product_batches:product_batch_ingredients(used_amount, product_batch:product_batches!product_batch_id(date, external_id)),
           containing_sales:sale_ingredients(sold_amount, sale:sales(id, date, client:clients(name)))
         `

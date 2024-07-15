@@ -5,6 +5,7 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { SimpleChartData } from "@/lib/types/types";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   amount: {
@@ -13,11 +14,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type Props = { chartData: SimpleChartData; title: string };
+type Props = { chartData: SimpleChartData; title: string; className?: string };
 
-const SimpleAreaChart: React.FC<Props> = ({ chartData, title }) => {
+const SimpleAreaChart: React.FC<Props> = ({ chartData, title, className }) => {
   return (
-    <Card className="max-w-[800px]">
+    <Card className={cn("w-full", className)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

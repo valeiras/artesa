@@ -12,15 +12,17 @@ type Props = {
 
 const BatchList: React.FC<Props> = ({ batches, linkBase, className }) => {
   return (
-    <Card className={cn("flex flex-col w-full max-w-[800px] pt-5 pr-16", className)}>
+    <Card className={cn("w-full max-w-[800px] md:pr-8", className)}>
+      <CardHeader>
+        <CardTitle>Lotes:</CardTitle>
+      </CardHeader>
       <CardContent>
-        <h3 className="text-xl font-bold mb-1">Lotes:</h3>
-        <ul className="text-sm pl-2 ">
+        <ul className="pl-3 list-disc list-inside">
           {batches?.map(({ id, external_id }) => {
             return (
               <li key={id}>
                 <Link href={`/lotes/${linkBase}/${external_id}`} className="text-sm">
-                  - {external_id}
+                  {external_id}
                 </Link>
               </li>
             );
