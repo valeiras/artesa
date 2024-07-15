@@ -10,12 +10,15 @@ export default function Home() {
       <header className="lg:max-w-6xl w-full px-4 sm:px-8 py-6">
         <Image src={logo} alt="logo" width={300} className="w-[250px] sm:w-[300px]" />
       </header>
-      <section className="pt-8 lg:max-w-6xl w-full flex flex-col items-start px-4 sm:px-8 gap-16 sm:gap-4 flex-1 justify-center lg:grid lg:grid-cols-[1fr,400px] lg:justify-start lg:items-center">
+      <section
+        className={`py-12 sm:pt-8 pb-12 lg:max-w-6xl w-full flex flex-col items-start px-4 sm:px-8 gap-16 
+        sm:gap-4 flex-1 justify-start lg:grid lg:grid-cols-[1fr,400px] lg:justify-start lg:items-center`}
+      >
         <div className="flex flex-col gap-6 items-start">
           <h1 className="text-5xl sm:text-7xl font-bold">
             Gestión de <span className="text-primary">trazabilidad</span>
           </h1>
-          <p className="leading-loose max-w-md text-lg">
+          <p className="leading-loose max-w-md text-md sm:text-lg">
             Gestión simplificada de trazabilidad para pequeños y medianos productores.
           </p>
           <Button asChild className="text-lg">
