@@ -24,8 +24,7 @@ const CommodityBatchInfoCard: React.FC<Props> = ({ currBatch, availableAmount, c
             &#x2022;
             <span className="font-semibold">Cantidad disponible:</span>
             <span>
-              {availableAmount}
-              {valueToLabel[currBatch.commodity.unit || "unit"]}
+              {availableAmount} {valueToLabel[currBatch.commodity.unit || "unit"]}
             </span>
           </>
           <>

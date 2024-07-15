@@ -35,11 +35,16 @@ const SingleProductBatchPage: React.FC<{ params: { externalId: string } }> = ({ 
 
   return (
     <PageWrapper heading={`${currProductBatch.external_id}`}>
-      <div className="flex flex-col gap-4">
-        <ProductBatchInfoCard currBatch={currProductBatch} availableAmount={amountEvolution?.at(-1)?.amount || 0} />
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(400px,1fr)_auto] md:max-w-[1100px] items-stretch justify-start gap-4">
+        <ProductBatchInfoCard
+          currBatch={currProductBatch}
+          availableAmount={amountEvolution?.at(-1)?.amount || 0}
+          className="md:col-start-2 md:row-start-1"
+        />
         <SimpleAreaChart
           chartData={chartData!}
           title={`Cantidad disponible del lote (${valueToLabel[currProductBatch.product.unit || "unit"]}):`}
+          className="md:col-start-1 md:row-start-1"
         />
       </div>
     </PageWrapper>
